@@ -1,0 +1,54 @@
+{% if promos is not empty %}
+<div class="row bg-bottom2top cslider front-box-shadow">                    
+    <div class="col-md-12 badge-front">
+        <b class="floatingtag">{{ 'front.discountslider.header' | trans }}</b>
+        <img class="img-responsive" src="{{ asset('bundles/front/images/badge.png') }}" alt="{{ 'front.discountslider.header' | trans }}"/>
+    </div>
+    <div class="col-md-12">
+        <div class="discountfix">
+            <!-- Jssor Slider Begin -->
+            <!-- You can move inline styles to css file or css block. -->
+            <div id="cover_priceslider">
+                <!-- Slides Container -->
+                <div data-u="slides" class="slides">
+                    {% for promo in promos %}
+                    <div>
+                        <div data-u=image class="jssorslide">
+                            <img src="{{asset( promo.webpath )}}"/>
+                            <div class="discounttag">
+                                <img src="{{asset('bundles/front/images/special.png')}}" alt="special"/>
+                                <b>-{{ promo.discount }}</b>
+                            </div>                  
+                            <div class="jssorprice">
+                                {% set url = promo.url or promo.product ? path('redirectpromo', {'concept' : 'promo', 'id' : promo.id }) : '#' %}
+                                <h3><a href="{{ url }}">{{ promo.name }}</a></h3>
+                                {% if promo.price is not null %}
+
+                                <div class="pricetext"> 
+        {#                            <span class="icon-map-marker"> Vedado</span> #}
+                                    <div>
+                                        <i>{{ promo.price | number_format(2) }} CUC</i>
+                                        <b>{{ (promo.price - (promo.price * promo.discount / 100)) | number_format(2) }} CUC</b>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Arrow Navigator Skin Begin -->
+                <!-- Arrow Left -->
+                <span data-u="arrowleft" class="icon-chevron-left jssora03l">
+                </span>
+                <!-- Arrow Right -->
+                <span data-u="arrowright" class="icon-chevron-right jssora03r">
+                </span>
+                <!-- Arrow Navigator Skin End -->
+            </div>
+            <!-- Jssor Slider End -->    
+        </div>
+    </div>
+</div>
+{% endif %}

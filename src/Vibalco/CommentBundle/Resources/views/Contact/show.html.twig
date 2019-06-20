@@ -1,0 +1,55 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h3 class="muted">{{'admin.action.show' | trans}} {%if  entity.nombre  is defined %}{{entity.nombre}}{%else%}{{module}}{%endif%} </h3>
+        </div>
+
+        <div class="modal-body">  
+
+                       
+                                                                                    <div class="row">
+                    {{ entity.email }}
+            </div>
+                                                                    <div class="row">
+                    {{ entity.token }}
+            </div>
+                                                                    <div class="row">
+                    {{ entity.enabled }}
+            </div>
+                                     
+
+
+        </div>
+        <div class="modal-footer">
+   <button class="btn {{color_button_new}}" data-dismiss="modal" aria-hidden="true">{{ 'admin.action.close' | trans }}</button>
+   <a class="btn {{color_button_delete}}" action="contact-delete" data-toggle="tooltip" title="{{ 'admin.action.delete' | trans }}"><i class="icon-trash"></i> {{ 'admin.action.delete' | trans }}</a>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $('a[action=contact-delete]').on('click', function() {
+        if (confirm('{{ 'contact.delete' | trans }} {{ entity.email }}')) {
+            $.ajax({
+                type: 'delete',
+                dataType: 'json',
+                url: '{{ path('admin_contact_delete', {'id': entity.id}) }}',
+                success: function(response) {
+                    if (response.success) {
+                        $('#contact-modal').modal('hide');
+                        $('#table-contacts').dataTable().fnDraw();
+
+                            $('#admin-entity-viewer').html('<center><p class="muted" style="margin-top: 24px;">{{ 'admin.common.select' | trans }} {{ 'contact.entity' | trans }}...</p></center>');
+
+                        toastr['success'](response.message,  '{{ 'admin.message.succesfully' | trans }}');
+                    } else {
+                        toastr['error'](response.error.message,  '{{ 'admin.message.action.error' | trans }}');
+                    }
+                }
+            });
+        }
+    });
+</script>
+

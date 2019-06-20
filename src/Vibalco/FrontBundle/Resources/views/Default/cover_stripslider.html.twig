@@ -1,0 +1,27 @@
+{% if promos is not empty %}
+<div id="top-news">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <b>{{ 'front.stripslider.header' | trans }}</b>
+                <div id="news-carousel" class="carousel slide">                           
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                    {% for promo in promos %}
+                      <i class="item {{ loop.first ? 'active' : ''}}">{{ promo.name }}</i>
+                    {% endfor %}
+                    </div>
+                    <div id="carousel-controls">
+                        <a class="left" href="#news-carousel" data-slide="prev">
+                            <span class="icon-chevron-left"></span>
+                        </a>
+                        <a class="right" href="#news-carousel" data-slide="next">
+                            <span class="icon-chevron-right"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

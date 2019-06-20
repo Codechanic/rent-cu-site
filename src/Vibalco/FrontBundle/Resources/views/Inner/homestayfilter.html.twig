@@ -1,0 +1,270 @@
+<ul class="list-unstyled" id="filter">
+    
+    {#
+        FILTERED VALUES IN SESSION
+    #}    
+    <li class="blog-tags">
+
+        <span class="icon-filter">
+            <a href="{{ path('homestays') }}"><b>{{ fm.totalresults }} {{ 'front.homestayfilter.results' | trans }}</b></a>
+        </span>
+        {% if fm.entityfilter is not empty %}
+        <ul class="list-unstyled" id="match">
+            {% for key, value in fm.entityfilter %}
+                {% if fm.ismultiple(key) %}
+                    {% for id, entity in value %}
+                        <li><a href="{{ path('homestayfilter_remove', { 'key' : key, 'value' : id}) }}"><i class="icon-remove-sign"></i>{{ entity }}</a></li>
+                    {% endfor %}
+                {% else %}
+                    {% set caption = value %}
+                    {% if key == 'price-min' %}{% set caption = 'Min ' ~ value ~ ' CUC' %}{% endif %}
+                    {% if key == 'price-max' %}{% set caption = 'Max ' ~ value ~ ' CUC' %}{% endif %}
+                    {% if key == 'rooms' %}
+                        {% set roomtext = (value > '1' ? 'front.homestayfilter.rooms' : 'front.homestayfilter.room') | trans %}
+                        {% set caption = value ~ ' ' ~ roomtext %}
+                    {% endif %}
+                    <li><a href="{{ path('homestayfilter_remove', { 'key' : key}) }}"><i class="icon-remove-sign"></i>{{ caption }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </li>
+    <li class="list-separator"></li>
+    
+    
+    {#
+        LOCATION FILTER
+    #}    
+    <li>
+        <span>
+            <a href="#" title="{{ 'front.homestayfilter.morelocations' | trans }}" class="filter-param">
+                {{ 'front.homestayfilter.location' | trans }}<b class="icon-plus"></b>
+            </a>
+        </span>
+        <ul class="list-unstyled" id="location">
+            {% if fm.entityfilter['province'] is not defined %}
+               {% for result in fm.paramcounts('province') %}
+                    <li><a href="{{ path('homestayfilter_add', { 'key' : 'province', 'value' : result['entity'].id}) }}">{{ result['entity'].name }} <b>({{ result['filter_count'] }})</b></a></li>
+               {% endfor %}
+            {% endif %}
+            <li class="form-filter hidden">
+                <select placeholder="{{ 'front.homestayfilter.location' | trans }}" class="form-control input-sm select2">
+                    <option key="province" value=""></option>
+                    {% set selid = fm.entityfilter['province'] is defined ? fm.entityfilter['province'].id : null %}
+                    {% for entity in fm.entities['province'] %}
+                        <option key="province" value="{{ entity.id }}" {% if selid == entity.id %}selected="selected"{% endif %}>{{ entity.name }}</option>
+                        {% for m in entity.municipalities %}
+                            {% set selmid = fm.entityfilter['municipality'] is defined ? fm.entityfilter['municipality'].id : null %}
+                                <option key="municipality" value="{{ m.id }}" {% if selmid == m.id %}selected="selected"{% endif %}>&nbsp;&nbsp; {{ m.name }}</option>
+                        {% endfor %}
+                    {% endfor %}
+                </select>
+            </li>
+        </ul>
+    </li>
+    <li class="list-separator"></li>
+    
+    
+    {#
+        SERVICE FILTER
+    #}
+    <li>
+        <span>
+            <a href="#" title="{{ 'front.homestayfilter.moreservices' | trans }}" class="filter-param">
+                {{ 'front.homestayfilter.service' | trans }}<b class="icon-plus"></b>
+            </a>
+        </span>
+        <ul class="list-unstyled" id="service">
+            {% for result in fm.paramcounts('service') %}
+                <li><a href="{{ path('homestayfilter_add', { 'key' : 'service', 'value' : result['entity'].id}) }}">{{ result['entity'].name }} <b>({{ result['filter_count'] }})</b></a></li>
+            {% endfor %}
+            <li class="form-filter hidden">
+                <select placeholder="{{ 'front.homestayfilter.service' | trans }}" class="form-control input-sm select2">
+                    <option value=""></option>
+                    {% for entity in fm.entities['service'] %}
+                        <option value="{{ entity.id }}">{{ entity.name }}</option>
+                    {% endfor %}
+                </select>
+            </li>
+        </ul>
+    </li>
+    <li class="list-separator"></li>
+    
+    
+    {#
+        ACOMMODATION FILTER
+    #}
+    <li>
+        <span>
+            <a href="#" title="{{ 'front.homestayfilter.moreacommodations' | trans }}" class="filter-param">
+                {{ 'front.homestayfilter.acommodation' | trans }}<b class="icon-plus"></b>
+            </a>
+        </span>
+        <ul class="list-unstyled" id="acommodation">
+            {% if fm.entityfilter['acommodation'] is not defined %}
+                {% for result in fm.paramcounts('acommodation') %}
+                    <li><a href="{{ path('homestayfilter_add', { 'key' : 'acommodation', 'value' : result['entity'].id}) }}">{{ result['entity'].name }} <b>({{ result['filter_count'] }})</b></a></li>
+                {% endfor %}
+             {% endif %}
+            <li class="form-filter hidden">
+                <select placeholder="{{ 'front.homestayfilter.acommodation' | trans }}" class="form-control input-sm select2">
+                    <option value=""></option>
+                    {% set selid = fm.entityfilter['acommodation'] is defined ? fm.entityfilter['acommodation'].id : null %}
+                    {% for entity in fm.entities['acommodation'] %}
+                        <option value="{{ entity.id }}" {% if selid == entity.id %}selected="selected"{% endif %}>{{ entity.name }}</option>
+                    {% endfor %}
+                </select>
+            </li>
+        </ul>
+    </li>
+    <li class="list-separator"></li>
+    
+    {#
+        ROOMS FILTER
+    #}
+    <li>
+        <span>
+            <a href="#" title="{{ 'front.homestayfilter.morerooms' | trans }}" class="filter-param">
+                {{ 'front.homestayfilter.rooms' | trans }}<b class="icon-plus"></b>
+            </a>
+        </span>
+        <ul class="list-unstyled" id="rooms">
+            {% if fm.entityfilter['rooms'] is not defined %}
+                {% for result in fm.paramcounts('rooms') %}
+                    {% set roomtext = (result['entity'].rooms > 1 ? 'front.homestayfilter.rooms' : 'front.homestayfilter.room') | trans %}
+                    {% set caption = result['entity'].rooms ~ ' ' ~ roomtext %}
+                    <li><a href="{{ path('homestayfilter_add', { 'key' : 'rooms', 'value' : result['entity'].rooms}) }}">{{ caption }} <b>({{ result['filter_count'] }})</b></a></li>
+                {% endfor %}
+             {% endif %}
+            <li class="form-filter hidden">
+                <select placeholder="{{ 'front.homestayfilter.rooms' | trans }}" class="form-control input-sm select2">
+                    <option value=""></option>
+                    {% set selid = fm.entityfilter['rooms'] is defined ? fm.entityfilter['rooms'] : null %}
+                    {% for value in fm.entities['rooms'] %}
+                        {% set roomtext = (value > 1 ? 'front.homestayfilter.rooms' : 'front.homestayfilter.room') | trans %}
+                        {% set caption = value ~ ' ' ~ roomtext %}
+                        <option value="{{ value }}" {% if selid == value %}selected="selected"{% endif %}>{{ caption }}</option>
+                    {% endfor %}
+                </select>
+            </li>
+        </ul>
+    </li>
+    <li class="list-separator"></li>
+    
+    
+    {#
+        PRICE FILTER
+    #}
+    <li class="hidden">
+        <span>
+            <a href="#" title="{{ 'front.homestayfilter.changeprices' | trans }}" class="filter-param">
+                {{ 'front.homestayfilter.prices' | trans }}<b class="icon-plus"></b>
+            </a>
+        </span>
+        <ul class="list-unstyled" id="price">
+            <li class="form-filter hidden">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="text" placeholder="{{ 'front.homestayfilter.pricemin' | trans }}" class="form-control input-sm" id="price-min" {% if fm.entityfilter['price-min'] is defined %}value="{{ fm.entityfilter['price-min'] }}"{% endif %}/>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" placeholder="{{ 'front.homestayfilter.pricemax' | trans }}" class="form-control input-sm" id="price-max" {% if fm.entityfilter['price-max'] is defined %}value="{{ fm.entityfilter['price-max'] }}"{% endif %}/>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </li>
+    <li class="list-separator hidden"></li>
+    
+    
+    {#
+        SEARCH FILTER
+    #}
+    <li>
+        <span>
+            <a href="#" title="{{ 'front.homestayfilter.changesearch' | trans }}" class="filter-param">
+                {{ 'front.homestayfilter.search' | trans }}<b class="icon-plus"></b>
+            </a>
+        </span>
+        <ul class="list-unstyled sub-list" id="search">
+            <li class="form-filter">
+                <input type="text" placeholder="{{ 'front.homestayfilter.searchplaceholder' | trans }}" class="form-control input-sm" {% if fm.entityfilter['search'] is defined %}value="{{ fm.entityfilter['search'] }}"{% endif %}/>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<script type="text/javascript">
+    
+    {# SHOW / HIDE FILTER SELECTS AND INPUTS BY CATEGORY #}
+    $('document').ready(function() {
+        $('.filter-param').on('click', function(e){
+            e.preventDefault();
+            
+            var fpli = $(this).parent().parent();
+            
+            fpli.find('.form-filter').toggleClass('hidden');
+        });
+                        
+        {#        
+            TODO - put municipality values
+                 - why data attributes not working in jquery
+        #}
+        $('#location select').on('change', function(){            
+            var key = $('#location select option:selected').attr('key'); 
+            
+            console.info(key);
+            
+            var params = { data : {}};
+            
+            params['data'][key] = $(this).val();
+            
+            notifyFilterChange(params);
+        });
+        
+        $('#service select').on('change', function(){
+            notifyFilterChange({'data[service]' : $(this).val()});
+        });       
+        
+        $('#acommodation select').on('change', function(){
+            notifyFilterChange({'data[acommodation]' : $(this).val()});
+        });
+        
+        $('#rooms select').on('change', function(){
+            notifyFilterChange({'data[rooms]' : $(this).val()});
+        });
+        
+        $('#price input').on('keypress', function(e){
+            if(e.keyCode == 13) {
+               var pricemin = $('#price-min').val();
+               var pricemax = $('#price-max').val();
+               
+               if(!(pricemin >= 0)){
+                   pricemin = null;
+               }
+               
+               if(!(pricemax >= 0)){
+                   pricemax = null;
+               }
+               
+               notifyFilterChange({
+                   'data[price-min]' : pricemin,
+                   'data[price-max]' :  pricemax
+               });
+            }
+             
+        });
+
+        $('#search input').on('keypress', function(e){
+            if(e.keyCode == 13) {
+                notifyFilterChange({'data[search]' : $(this).val()}); 
+            }
+        });
+
+        function notifyFilterChange(params)
+        {
+            var url = "{{ path('homestayfilter_add') }}"; 
+            window.location = url + "?" + $.param(params);
+        }
+    });
+</script>

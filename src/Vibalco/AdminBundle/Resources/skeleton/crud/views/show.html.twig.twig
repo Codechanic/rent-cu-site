@@ -1,0 +1,136 @@
+{{'{% spaceless %}'}}
+{% if list =="short" %}
+    {{ "<div class=\"portlet box {{color_portlet}}\">"}}
+    <div class="portlet-title">
+        {#<div class="caption"> {{ entity.name }}</div>#}
+
+        <div class="actions">
+            <div class="btn-group">
+                {{
+                        "<a class=\"btn {{color_button_edit}\}\" action=\"ajax-modal\" href=\"{{ path('admin_"~module~"_edit', {'id': entity.id}) }}\" data-toggle=\"tooltip\" title=\"{{ 'admin.action.edit' | trans }}\"><i class=\"icon-edit\"></i> {{ 'admin.action.edit' | trans }}</a>"
+                }}
+                {{"<a class=\"btn {{color_button_delete}\}\" action=\""~module~"-delete\" data-toggle=\"tooltip\" title=\"{{ 'admin.action.delete' | trans }}\"><i class=\"icon-trash\"></i> {{ 'admin.action.delete' | trans }}</a>"}}
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                {{ "{# Al attributes in this place in work #}"}}            
+                {% for field in fields %}
+                    {% if field != "id" %}
+                        <tr><th>{{ "{{'admin."~module~'.'~field~ "' | trans\}\}" }}</th><td>{{ "{{ entity."~field~" }}" }}</td></tr>        
+                    {% endif %}
+                {% endfor %}  
+            </table>
+        </div>        
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#admin-entity-viewer a[action=ajax-modal]').on('click', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        var container = $('#admin-entity-viewer');
+        App.blockUI(container, false);
+        $.post(url, {}, function(response) {
+            //App.unblockUI(container);
+            container.html(response);
+            // App.fixContentHeight(); // fix content height
+            // App.initUniform(); // initialize uniform elements
+            //$('.selected').removeClass('selected warning');
+            //myself.addClass('selected warning');
+        });
+    });
+    $('a[action={{module}}-delete]').on('click', function() {
+        if (confirm({{ "'{{ '"~module~".delete' | trans }}{{ entity }}'" }})) {
+            $.ajax({
+                type: 'delete',
+                dataType: 'json',
+                url: {{ "'{{ path('admin_"~module~"_delete', {'id': entity.id}) }}'"}},
+                success: function(response) {
+                    if (response.success) {
+                        $('#table-{{ module }}s').dataTable().fnDraw(false);
+                        {{ "$('#admin-entity-viewer').html('<center><p class=\"muted\" style=\"margin-top: 24px;\">{{ 'admin.common.select' | trans \}\} {{ 'admin."~module~".entity' | trans \}\}... </p></center > ');"}}
+                        toastr['success'](response.message, "admin.message.succesfully");
+                    } else {
+                        toastr['error'](response.error.message, "admin.message.error");
+                    }
+                }
+            });
+        }
+    });
+    /*Uncomment this entity have enabled*/
+
+    /* $('a[action={{module}}-change-status]').on('click', function(e) {
+     e.preventDefault();
+     $.ajax({
+     type: 'post',
+     dataType: 'json',
+     url: {{ "{#'{{ path('admin_"~module~"_status', { 'id': entity.id }) }}'#}" }},
+
+     success: function(response) {
+     if (response.success) {
+     $('i[slide-icon=status]').attr('class', 'icon-thumbs-' + (response.status ? 'up' : 'down'));
+     toastr.success(response.message);
+     } else {
+     toastr.error(response.error.message);
+     }
+     }
+     });
+     });
+     */
+</script>
+{% else %}
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                {{ "<h3 class=\"muted\">{{'admin.action.show' | trans}} {% if  entity.nombre  is defined %}{{entity.nombre}}{% else %}{{module}}{% endif %} </h3>"}}
+            </div>
+
+            <div class="modal-body">  
+
+                <table class="table table-hover">
+                    {{ "{# Al attributes in this place in work #}"}}            
+                    {% for field in fields %}
+                        {% if field != "id" %}
+                            <tr><th>{{ "{{'admin."~module~'.'~field~ "' | trans\}\}" }}</th><td>{{ "{{ entity."~field~" }}" }}</td></tr>        
+                        {% endif %}
+                    {% endfor %}  
+                </table>
+
+
+            </div>
+            <div class="modal-footer">
+                {{ "<button class=\"btn {{color_button_new}}\" data-dismiss=\"modal\" aria-hidden=\"true\">{{ 'admin.action.close' | trans }}</button>"}}
+                {{ "<a class=\"btn {{color_button_delete}}\" action=\""~module~"-delete\" data-toggle=\"tooltip\" title=\"{{ 'admin.action.delete' | trans }}\"><i class=\"icon-trash\"></i> {{ 'admin.action.delete' | trans }}</a>"}}
+
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+    $('a[action={{module}}-delete]').on('click', function() {
+        if (confirm({{ "'{{ '"~module~".delete' | trans }}{{ entity }}'" }})) {
+            $.ajax({
+                type: 'delete',
+                dataType: 'json',
+                url: {{ "'{{ path('admin_"~module~"_delete', {'id': entity.id}) }}'"}},
+                success: function(response) {
+                    if (response.success) {
+                        $('#{{ module }}-modal').modal('hide');
+                        $('#table-{{ module }}s').dataTable().fnDraw(false);
+                        {{ "$('#admin-entity-viewer').html('<center><p class=\"muted\" style=\"margin-top: 24px;\">{{ 'admin.common.select' | trans \}\} {{ 'admin."~module~".entity' | trans \}\}... </p></center > ');"}}
+                        toastr['success'](response.message, {{" '{{ 'admin.message.succesfully' | trans }}');"}}
+                    } else {
+                        toastr['error'](response.error.message, {{" '{{ 'admin.message.action.error' | trans }}');"}}
+                    }
+                }
+            });
+        }
+    });
+    </script>
+
+{% endif %}
+{{'{% endspaceless %}'}}

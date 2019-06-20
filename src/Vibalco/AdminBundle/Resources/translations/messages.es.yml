@@ -1,0 +1,116 @@
+admin:   
+  title: Panel de Administración
+  write_user_passwd: Escribe usuario y contraseña
+  password: contraseña
+  remember_me: Recuerdame
+  bad_credential: Lo siento!!! Credenciales incorrectas.
+  login_button: Acceder
+  security: Seguridad
+  my_profile: Mi Perfil
+  change_passwd: Cambiar Contraseña
+  logout: Salir
+  send: Email enviado correctamente.
+  send_error: Ha ocurrido algun error al enviar el correo.
+  
+  dashboard:
+    message: estadísticas y más
+    resent: Visitas Resientes
+    
+  backup:
+      name: Respaldos
+      backup: Respaldo
+      now: Resplado ahora
+      description: Crear y restaurar salvas de respaldo.
+      create_success: El Respaldo se ha creado satisfactriamente
+      restore_success: El Respaldo se ha restaurado satisfactriamente
+      delete_success: El Respaldo se ha eliminado satisfactriamente
+      
+  search: Buscar
+  
+  common:
+    select: Seleccionar
+    view_more: Ver más
+    title: Título
+    
+  action:
+    new: Nuevo
+    create: Crear
+    edit: Editar
+    update: Actualizar
+    delete: Eliminar
+    accept: Aceptar
+    close: Cerrar
+    cancel: Cancelar
+    show: Mostrar
+    actions: Acciones
+    no_action: Sin Acciones
+    succesfully : Acción Satisfactoria
+    error: Ocurrió un Error
+    add: Adiconar nuevo
+    restore: Restaurar
+    save: Guardar
+    save_send: Guardar y Enviar
+    send: Enviar
+    
+  user: 
+    entity: Usuario
+    module: Usuarios
+    description: administradores del sistema
+    change_passwd: Cambiar Contraseña
+    column:
+      name: Nombre
+      username: Usuario
+      email: Email
+      password: Contraseña
+      enabled: Habilitado
+      
+  settings:
+    module: Configuración
+    entity: Configuración
+    description: Configuración de sitio
+    name: Nombre del Sitio
+    facebook: Página de Facebook
+    twitter: Página de Twitter
+    tripadvisor: Página de Trip Advisor
+    googleplus: Página de Google Plus
+    email: Correo electónico
+    domain: Dominio
+    offline: Sitio Desactivado
+    message: Mensaje Sitio Desactivado
+    exchangecuc: Cambio de Euro a CUC
+    address: Dirección
+    metatitle: Meta Título
+    metakeywords: Meta Palabras Clave
+    metadescription: Meta Descripción
+    contactdescription: Descripción Página de Contactos
+    phones: Teléfonos
+    aboutus: Quienes Somos
+    
+  testing:
+      module: Prueba
+
+  message:
+      succesfully: Acción Satisfactoria
+      error: Error en la Acción
+      notfound: Entidad no Encontrada
+          
+  a2lix:
+    translations: Traducción
+      
+  subscriber:
+      module: Subscriptor
+      description: gestionar los clientes subscritos
+      enabled: Habilitado
+      locked: Bloqueado
+      email: Correo
+      
+  applicant:
+      module: Candidatos
+      description: gestionar los nuevos anunciantes
+      name: Nombre
+      message: Mensaje
+      email: Correo
+      
+admin.breadcrumb.dashboard: Cuadro de mando
+admin.action.columns: Columnas
+app.common.title: Título

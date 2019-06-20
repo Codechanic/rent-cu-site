@@ -1,0 +1,43 @@
+conten:
+    resource: "@ContenBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+main:
+    resource: "@MainBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+front:
+    resource: "@FrontBundle/Controller/"
+    type:     annotation
+    prefix:   /
+    
+slider:
+    resource: "@SliderBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+
+admin:
+    resource: "@AdminBundle/Controller/"
+    type:     annotation
+    prefix:   /
+    
+gallery:
+    resource: "@GalleryBundle/Controller/"
+    type:     annotation
+    prefix:   /
+ 
+comment:
+    resource: "@CommentBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+
+   
+genemu_image:
+    resource: "@GenemuFormBundle/Resources/config/routing/image.xml"   
+ 
+genemu_base64:
+    resource: "@GenemuFormBundle/Resources/config/routing/base64.xml"

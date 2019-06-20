@@ -1,0 +1,98 @@
+ <div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <h3 class="page-title">
+            {{ 'admin.backup.name' | trans }} <small> {{ 'admin.backup.description' | trans }}</small>
+        </h3>
+        <ul class="page-breadcrumb breadcrumb">
+            <li class="btn-group">
+                <button data-close-others="true" data-delay="1000" data-hover="dropdown" data-toggle="dropdown" class="btn blue dropdown-toggle" type="button">
+                    <span>{{ 'admin.action.actions' | trans }}</span> <i class="icon-angle-down"></i>
+                </button>
+                <ul role="menu" class="dropdown-menu pull-right">
+                    <li><a action="backup" href="#"> <i class="icon-save"></i> {{ 'admin.backup.now' | trans }}</a></li>
+
+                </ul>
+            </li>
+            <li>
+                <i class="icon-home"></i>
+                <a href="{{ path('admin_index') }}">{{ 'admin.backup.name' | trans }}</a>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+<!-- BEGIN DASHBOARD STATS -->
+
+<div id="sortable_portlets" class="row">
+    {% for b in backups%}
+        <div class="col-md-4 column">
+            <!-- BEGIN Portlet PORTLET-->
+            <div class="portlet box {{color_portlet}}" style="opacity: 1;">
+                <div class="portlet-title">
+                    <div class="caption"><i class="icon-save"></i>{{ 'admin.backup.backup' | trans }}</div>
+                    <div class="actions">
+                        <a class="btn {{color_button_acept}}  btn-sm" action="restore" db="{{b}}" href="#"><i class="icon-pencil"></i> {{'admin.action.restore'| trans}}</a>  
+                        <a class="btn {{color_button_cancel}} btn-sm" action="remove" db="{{b}}" href="#"><i class="icon-remove"></i> {{'admin.action.delete'| trans}}</a>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div>
+                        {{b}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("a[action=restore]").on('click', function() {
+            var url = '{{ path('backup') }}' + "/" + $(this).attr("db");
+            var container = $('.page-content .page-content-body');
+            var block = $('body');
+            App.blockUI(block, false);
+            $.post(url, {}, function(response) {
+                App.unblockUI(block);
+                toastr["success"](response);
+                App.fixContentHeight(); // fix content height
+                App.initUniform();
+            });
+        });
+
+
+        $("a[action=backup]").on('click', function() {
+            var url = '{{ path('backup') }}';
+            var container = $('.page-content .page-content-body');
+            var block = $('body');
+            App.blockUI(block, false);
+            $.post(url, {}, function(response) {
+                App.unblockUI(block);                
+                container.html(response);
+                App.fixContentHeight(); // fix content height
+                App.initUniform();
+                toastr["success"]('{{ 'admin.backup.create_success' | trans }}');
+            });
+        });
+        
+        $("a[action=remove]").on('click', function() {
+            
+            var url = '{{ path("admin_remove", {'backup': 'backup_id'}) }}'; 
+            url = url.replace("backup_id", $(this).attr("db"));
+            var container = $('.page-content .page-content-body');
+            var block = $('body');
+            App.blockUI(block, false);
+            $.post(url, {}, function(response) {
+                App.unblockUI(block);                
+                container.html(response);
+                App.fixContentHeight(); // fix content height
+                App.initUniform();
+                toastr["success"]('{{ 'admin.backup.delete_success' | trans }}');
+            });
+        });
+    });
+</script>
+

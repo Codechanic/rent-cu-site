@@ -1,0 +1,11 @@
+<div class="row lateral-social">
+    <div class="col-md-12">
+        <b>{{ 'front.social.header' | trans }}</b>
+        <ul class="social-icons">
+            {% if appconfig.data.facebook %}<li><a href="{{ appconfig.data.facebook }}" data-original-title="Facebook" class="facebook"></a></li>{% endif %}
+            {% if appconfig.data.twitter %}<li><a href="{{ appconfig.data.twitter }}" data-original-title="Twitter" class="twitter"></a></li>{% endif %}
+            {% if appconfig.data.googleplus %}<li><a href="{{ appconfig.data.googleplus }}" data-original-title="Goole Plus" class="googleplus"></a></li>{% endif %}
+            {% if appconfig.data.tripadvisor %}<li><a href="{{ appconfig.data.tripadvisor }}" data-original-title="Trip Advisor" class="tadvs"></a></li>{% endif %}
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,530 @@
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" style="padding: 0px; margin: 0px;"><head>
+        <title>Suscripción</title>
+        <style>
+            body{
+                font:14px/20px 'Helvetica', Arial, sans-serif;
+                margin:0;
+                padding:75px 0 0 0;
+                text-align:center;
+            }
+            p{
+                padding:0 0 10px 0;
+            }
+            textarea{
+                font:12px/18px 'Helvetica', Arial, sans-serif;
+            }
+            h2{
+                font-size:22px;
+                line-height:28px;
+                margin:0 0 10px 0;
+            }
+            h3{
+                margin:0 0 5px 0;
+                padding:0;
+            }
+            .headerBar{
+                background:none;
+                padding:0;
+                border:none;
+            }
+            .wrapper{
+                width:600px;
+                margin:0 auto 10px auto;
+                text-align:left;
+            }
+            .container{
+                position:relative;
+                border-width:0 !important;
+                border-color:transparent !important;
+                margin:0;
+                text-align:left;
+                -moz-box-shadow:2px 2px 4px rgba(0,0,0,0.1);
+                -webkit-box-shadow:2px 2px 4px rgba(0,0,0,0.1);
+                box-shadow:2px 2px 4px rgba(0,0,0,0.1);
+            }
+            .tpl-image-content{
+                padding-left:20px;
+            }
+            fieldset{
+                padding:10px;
+                background-color:#ddd;
+                border:1px solid #ccc;
+            }
+            label{
+                float:none;
+                clear:both;
+                display:block;
+                width:auto;
+                margin-top:8px;
+                text-align:left;
+                font-weight:bold;
+                position:relative;
+                color:#ffffff;
+            }
+            .field-group{
+                float:none;
+                margin:3px 0 15px 0;
+                padding:5px;
+                border-style:solid;
+                background:-moz-linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, .25));
+                background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0, rgba(255, 255, 255, 0)),color-stop(1, rgba(255, 255, 255, .25)));
+                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#3fffffff');
+                -ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#3fffffff')";
+            }
+            .field-group input{
+                display:block;
+                margin:0;
+                padding:5px;
+                border:0;
+                background:none;
+                width:98%;
+            }
+            .radiogroup input,.phonearea input,.addressfield input,.datefield input,.groups input{
+                width:auto;
+            }
+            .radio-group input,.checkbox-group input{
+                width:auto;
+                display:inline-block;
+                margin-right:5px;
+            }
+            .field-group label{
+                clear:none;
+            }
+            .field-group textarea{
+                background:none;
+                border:none;
+                width:525px;
+                height:150px;
+                margin:0;
+                overflow:auto;
+            }
+            .field-help{
+                display:none;
+                font-weight:normal;
+                position:static;
+                float:none;
+                clear:both;
+                margin:5px -5px -5px -5px;
+                width:auto;
+                padding:8px 10px;
+                line-height:16px;
+                font-size:12px;
+                -moz-border-radius:0;
+                border-radius:0;
+                -webkit-border-radius:0;
+                color:#ffffff;
+            }
+            .field-help .help{
+                min-height:16px;
+                text-decoration:none;
+            }
+            .field-group .feedback br{
+                display:none;
+            }
+            .field-group .feedback div{
+                margin:0 !important;
+                padding:0 !important;
+            }
+            .addressfield .subfield{
+                clear:left;
+            }
+            .indicates-required{
+                text-align:right;
+            }
+            .indicates-required span{
+                font-size:150%;
+                font-weight:bold;
+            }
+            label .asterisk{
+                position:absolute;
+                top:36px;
+                right:10px;
+                font-size:30px;
+            }
+            .error,.errorText{
+                margin:5px 0 0 0;
+                padding:5px 10px;
+            }
+            .formstatus{
+                margin-bottom:10px;
+            }
+            .alert{
+                background:#e4f3d4;
+                border:2px solid #5ca000;
+                font-size:14px;
+                color:#5ca000;
+                margin:10px 0;
+                padding:10px;
+            }
+            .alert a{
+                color:#5ca000;
+                text-decoration:underline;
+            }
+            .datefield,.phonefield-us{
+                padding:5px;
+            }
+            .datefield input,.phonefield-us input{
+                display:inline;
+                width:60px;
+                margin:0 2px;
+                letter-spacing:1px;
+                text-align:center;
+                padding:5px 0 2px 0;
+            }
+            .datefield .small-meta{
+                font-size:11px;
+            }
+            .phonefield-us .phonearea input,.phonefield-us .phonedetail1 input{
+                width:40px;
+            }
+            .datefield .monthfield input,.datefield .dayfield input{
+                width:30px;
+            }
+            .datefield label,.phonefield-us label{
+                display:none;
+            }
+            ul.interestgroup_field{
+                display:block;
+                padding:5px;
+                margin:0;
+            }
+            ul.interestgroup_field li,.interestgroup_row{
+                display:block;
+                margin:0;
+                padding:0;
+                list-style:none;
+            }
+            ul.interestgroup_field input{
+                display:inline !important;
+                width:auto !important;
+            }
+            ul.interestgroup_field label,div.interestgroup_field label{
+                display:table;
+                padding:0 0 0 3px;
+                font-weight:normal;
+            }
+            select{
+                width:300px;
+                margin:5px;
+            }
+            ul.unsub-options{
+                display:block;
+            }
+            ul.unsub-options li{
+                display:block;
+                padding-bottom:5px;
+            }
+            ul.unsub-options li label{
+                display:inline;
+                padding-left:5px;
+            }
+            ul.unsub-options li textarea{
+                display:block;
+                padding:5px;
+                background:#fff;
+                border:1px solid #ccc;
+                margin:5px 0;
+                width:350px;
+                height:100px;
+            }
+            .addressfield span{
+                display:block;
+                height:34px;
+            }
+            .addressfield input{
+                float:right;
+                width:56%;
+                margin:0 9% 0 0;
+                padding:8px 0 2px 0;
+            }
+            .addressfield label{
+                float:left;
+                font-weight:normal;
+                text-align:right;
+                width:33%;
+            }
+            .addressfield .countryfield{
+                display:block;
+                height:45px;
+                position:relative;
+            }
+            .addressfield .countryfield select{
+                margin:0;
+                position:absolute;
+                top:10px;
+                left:35%;
+            }
+            .captcha{
+                float:left;
+                width:340px;
+                height:170px;
+            }
+            #archive-list{
+                display:block;
+                margin:15px 0;
+                padding:0;
+                border-top:1px solid #eee;
+            }
+            #archive-list li{
+                display:block;
+                list-style:none;
+                margin:0;
+                padding:6px 10px;
+                border-bottom:1px solid #eee;
+            }
+            .button,.button-small{
+                display:inline-block;
+                font-family:'Helvetica', Arial, sans-serif;
+                width:auto;
+                white-space:nowrap;
+                height:32px;
+                margin:5px 5px 0 0;
+                padding:0 22px;
+                text-decoration:none;
+                text-align:center;
+                font-weight:bold;
+                font-style:normal;
+                font-size:15px;
+                line-height:32px;
+                cursor:pointer;
+                border:0;
+                -moz-border-radius:4px;
+                border-radius:4px;
+                -webkit-border-radius:4px;
+                vertical-align:top;
+            }
+            .button-small{
+                float:none;
+                display:inline-block;
+                height:auto;
+                line-height:18px !important;
+                padding:2px 15px !important;
+                font-size:11px !important;
+            }
+            .button span{
+                display:inline;
+                font-family:'Helvetica', Arial, sans-serif;
+                text-decoration:none;
+                font-weight:bold;
+                font-style:normal;
+                font-size:15px;
+                line-height:32px;
+                cursor:pointer;
+                border:none;
+            }
+            .rounded6{
+                -moz-border-radius:6px;
+                border-radius:6px;
+                -webkit-border-radius:6px;
+            }
+            .poweredWrapper{
+                padding:20px 0;
+                width:560px;
+                margin:0 auto;
+            }
+            .poweredBy{
+                display:block;
+                text-align:center;
+            }
+        
+            .clear{
+                clear:both;
+            }
+            .tpl-image-content{
+                padding-left:0px;
+            }
+            .profile-list{
+                display:block;
+                margin:15px 20px;
+                padding:0;
+                list-style:none;
+                border-top:1px solid #eee;
+            }
+            .profile-list li{
+                display:block;
+                margin:0;
+                padding:5px 0;
+                border-bottom:1px solid #eee;
+            }
+            body{
+                -webkit-text-size-adjust:none;
+            }
+            input{
+                -webkit-appearance:none;
+            }
+            input[type=checkbox]{
+                -webkit-appearance:checkbox;
+            }
+            input[type=radio]{
+                -webkit-appearance:radio;
+            }
+            body,#bodyTable{
+                background-color:#ffffff;
+            }
+            h1{
+                font-size:28px;
+                margin-bottom:15px;
+                padding:0;
+                margin-top:0;
+            }
+            #templateContainer{
+                background-color:none;
+            }
+            #templateBody{
+                background-color:#dc4003;
+                background-image: url('{{ url('logo') }}');
+                background-repeat: no-repeat;
+                background-position: 90%;
+            }
+            .bodyContent{
+                line-height:150%;
+                font-family:Helvetica;
+                font-size:12px;
+                color:#ffffff;
+                padding:20px;
+            }
+            a:link,a:active,a:visited,a{
+                color:#499819;
+            }
+            .button:link,.button:active,.button:visited,.button,.button span,.button-small:link,.button-small:active,.button-small:visited,.button-small{
+                background-color:#5aaf2b;
+                color:#ffffff;
+            }
+            .button:hover,.button-small:hover{
+                background-color:#1e5781;
+                color:#ffffff;
+            }
+            label{
+                line-height:150%;
+                font-family:Helvetica;
+                font-size:14px;
+                color:#ffffff;
+            }
+            .field-group{
+                background-color:#eeeeee;
+                border-width:2px;
+                border-color:#d0d0d0;
+            }
+            .datefield input,.phonefield-us input,.addressfield input{
+                border-bottom-width:1px;
+                border-bottom-style:solid;
+                border-color:#ffffff;
+            }
+            .field-group input,.field-group textarea{
+                font-family:Trebuchet MS;
+                font-size:16px;
+                color:#1e5781;
+            }
+            .asterisk{
+                color:#ba2217;
+            }
+            .field-help{
+                background-color:#dcdcdc;
+                color:#ffffff;
+            }
+            .error,.errorText{
+                font-size:12px;
+                color:#6b0505;
+                background-color:#f4bfbf;
+            }
+            html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label{
+                text-align:right !important;
+            }
+            html[dir=rtl] ul.interestgroup_field label{
+                padding:0;
+            }
+            html[dir=rtl] ul.interestgroup_field input{
+                margin-left:5px;
+            }
+            html[dir=rtl] label .asterisk{
+                right:auto;
+                left:10px;
+            }
+            @media (max-width: 601px){
+                body{
+                    width:100%;
+                    -webkit-font-smoothing:antialiased;
+                    padding:10px 0 0 0 !important;
+                    min-width:300px !important;
+                }
+
+            }	@media (max-width: 601px){
+                textarea,select,ul.unsub-options li textarea{
+                    width:80% !important;
+                }
+
+            }	@media (max-width: 601px){
+                h1 img{
+                    max-width:100%;
+                    height:auto !important;
+                }
+
+            }	@media (max-width: 601px){
+                .wrapper,.poweredWrapper{
+                    width:auto !important;
+                    max-width:600px !important;
+                    padding:0 10px;
+                }
+
+            }	@media (max-width: 601px){
+                .addressfield .countryfield select{
+                    max-width:50% !important;
+                }
+
+            }	@media (max-width: 601px){
+                #templateContainer,#templateBody,#templateContainer table{
+                    width:100% !important;
+                    -moz-box-sizing:border-box;
+                    -webkit-box-sizing:border-box;
+                    box-sizing:border-box;
+                }
+
+            }</style><link rel="stylesheet"></head>
+            {% set locale = app.request.locale %}  
+    <body style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 14px; line-height: 20px; font-family: Helvetica, Arial, sans-serif; margin: 0px; padding: 75px 0px 0px; text-align: center; background-color: rgb(255, 255, 255); height: auto;" class="MsgBody MsgBody-html">
+        <center>
+            <table border="0" cellpadding="20" cellspacing="0" width="100%" id="bodyTable" style="background-color: #ffffff;">
+                <tbody><tr>
+                        <td align="center" valign="top">
+
+                            <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer" class="rounded6" style="-moz-border-radius: 6px;border-radius: 6px;-webkit-border-radius: 6px;background-color: none;">
+                                <tbody><tr>
+                                        <td align="center" valign="top">
+
+                                            <table border="0" cellpadding="0" cellspacing="0" width="600">
+                                                <tbody><tr>
+                                                        <td>
+                                                            <h1 style="font-size: 28px;margin-bottom: 15px;padding: 0;margin-top: 0;"><div style="text-align: center;">
+                                                                    <span style="color:#000000;"><span style="font-size:18px;"><span style="font-family:tahoma,verdana,segoe,sans-serif;"><span style="text-align: center;">{{ 'admin.message.want' | trans }}?&nbsp;</span></span></span></span></div>
+                                                            </h1>
+                                                        </td>
+                                                    </tr>
+                                                </tbody></table>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" valign="top">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateBody" class="rounded6" style="-moz-border-radius: 6px;border-radius: 6px;-webkit-border-radius: 6px;background-color: #547DA8;">
+                                                <tbody><tr>
+                                                        <td align="left" valign="top" class="bodyContent" style="line-height: 150%;font-family: Helvetica;font-size: 12px;color: #ffffff;padding: 20px;">
+                                                            <h2 style="font-size: 22px;line-height: 28px;margin: 0 0 10px 0;">{{ 'admin.message.subscription' | trans }}
+                                                            </h2>
+                                                            <span class="Object-hover" id="OBJ_PREFIX_DWT191_com_zimbra_url"><a class="button" href="{{app.request.uri~"/"~token}}" style="color: #ffffff;display: inline-block;font-family: 'Helvetica', Arial, sans-serif;width: auto;white-space: nowrap;height: 32px;margin: 5px 5px 0 0;padding: 0 22px;text-decoration: none;text-align: center;font-weight: bold;font-style: normal;font-size: 15px;line-height: 32px;cursor: pointer;border: 0;-moz-border-radius: 4px;border-radius: 4px;-webkit-border-radius: 4px;vertical-align: top;background-color: orange;" target="_blank"><span style="display: inline;font-family: 'Helvetica', Arial, sans-serif;text-decoration: none;font-weight: bold;font-style: normal;font-size: 15px;line-height: 32px;cursor: pointer;border: none;background-color: orange;color: #ffffff;">{{ 'admin.message.subscribe' | trans }}</span></a></span>
+                                                            <br>
+                                                                <div><p style="padding: 0 0 10px 0;"> {{ 'admin.message.sol' | trans }} <br> {{ 'admin.message.sol_error' | trans }} </br> {{ 'admin.message.sol_click' | trans }}</p>
+                                                                    <p style="padding: 0 0 10px 0;">{{ 'admin.site_name' | trans }}:
+                                                                        <br><span class="Object" id="OBJ_PREFIX_DWT192_com_zimbra_email"><a href="mailto:{{ 'admin.mailto' | trans }}" style="color: orange;" target="_blank">{{ 'admin.site_name' | trans }}</a></span></p>
+                                                                </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody></table>
+                                        </td>
+                                    </tr>
+                                </tbody></table>
+                        </td>
+                    </tr>
+                </tbody></table>
+        </center>
+
+        </p></body></html>

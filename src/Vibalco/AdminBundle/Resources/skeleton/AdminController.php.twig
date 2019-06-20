@@ -1,0 +1,174 @@
+<?php
+
+namespace {{ namespace }};;
+
+use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Vibalco\{{bundle}}\Entity\{{model}};
+use Vibalco\{{bundle}}\Form\{{model}}Type;
+use Vibalco\AdminBundle\Manager\AdminManager;
+
+/**
+* {{model}} controller.
+*
+* @Route("/admin/{_locale}/{{routing}}" , defaults={"_locale" = "en"})
+*/
+class {{ classBasename }} extends AdminManager {
+
+/**
+* @return \Vibalco\DatatableBundle\Util\Datatable datatable
+*/
+function __construct() {
+parent::__construct(new {{model}}(), new {{model}}Type(), "{{bundle}}:{{model}}");
+}
+
+private function _datatable() {
+{%if list == 'short'%}
+return parent::datatable();
+{%else%}
+       $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+
+        $qb->from($this->repository, 'p')->orderBy('p.id', 'desc');
+
+        $datatable = $this->get('datatable')
+                ->setFields(array(
+                    'app.common.title' => 'p.title',                     
+                    '_identifier_' => 'p.id',
+                ))
+                ->setSearch(true)
+                ->setMultiple(
+                array(
+                    'delete' => array(
+                        'title' => 'Delete',
+                        'route' => 'admin_{{routing}}_delete_multiple' // path to multiple delete route
+                    )
+                )
+                )
+                    ->setColumns(array(
+                    'app.common.title' => '1',                   
+                    
+                ))
+
+        ;
+        $datatable->getQueryBuilder()->setDoctrineQueryBuilder($qb);
+        return $datatable;
+{%endif%}
+}
+
+/**
+* Lists all {{model}} entities.
+*
+* @Route("/", name="admin_{{routing}}")
+* @Template()
+*/
+public function indexAction() {
+$this->_datatable();
+return array('data'=>$this->_datatable()->getColumns());
+}
+
+/**
+* @Route("/grid", name="admin_{{routing}}_grid")
+*/
+public function gridAction() {
+return $this->_datatable()->execute();
+}
+
+/**
+* Lists all {{model}} entities.
+*
+* @Route("/list", name="admin_{{routing}}_list")
+* @Template()
+*/
+public function listAction() {
+$this->_datatable();
+return array('data'=>$this->_datatable()->getColumns());
+}
+
+/**
+* Finds and displays a {{model}} entity.
+*
+* @Route("/{id}/show", name="admin_{{routing}}_show")
+* @Template()
+*/
+public function showAction($id) {
+return parent::showObject($id);
+}
+
+/**
+* Displays a form to create a new {{model}} entity.
+*
+* @Route("/new", name="admin_{{routing}}_new")
+* @Template()
+*/
+public function newAction() {
+return parent::NewForm();
+}
+
+/**
+* Creates a new {{model}} entity.
+*
+* @Route("/create", name="admin_{{routing}}_create")
+* @Method("POST")
+*/
+public function createAction(Request $request) {
+parent::createObject($request);
+}
+
+/**
+* Displays a form to edit an existing {{model}} entity.
+*
+* @Route("/{id}/edit", name="admin_{{routing}}_edit")     *
+* @Template()
+*/
+public function editAction($id) {
+return parent::editObject($id);
+}
+
+/**
+* Edits an existing {{model}} entity.
+*
+* @Route("/{id}", name="admin_{{routing}}_update")
+* @Method("PUT")
+*/
+public function updateAction(Request $request, $id) {
+return parent::updateObject($request, $id);
+}
+
+/**
+* Deletes a {{model}} entity.
+*
+* @Route("/{id}", name="admin_{{routing}}_delete")
+* @Method("DELETE")
+*/
+public function deleteAction(Request $request, $id) {
+parent::deleteObject($request, $id);
+}
+
+/**
+* Uncomment This if you have attribute enabled
+* Change {{model}} status
+*
+* @Route("/{id}/status", name="admin_{{routing}}_status")
+* @Method("POST")
+*/
+/*public function statusAction(Request $request, $id) {
+return parent::statusObject($request, $id);
+}*/
+
+
+/**
+* Deletes a Navegadores entity multiple.
+*
+* @Route("/delete_multiple", name="admin_{{routing}}_delete_multiple")
+* @Method("POST")
+*/
+public function deletemultipleAction() {
+$data = $this->getRequest()->get('dataTables');
+$ids = $data['actions'];       
+parent::delteObjects($this->getRequest(),$ids);
+}
+
+}
+

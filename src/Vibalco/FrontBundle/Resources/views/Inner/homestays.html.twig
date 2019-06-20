@@ -1,0 +1,104 @@
+{% extends "FrontBundle::layout.html.twig" %}
+
+{% block title %}{{ 'front.homestays.title' | trans }}{% endblock %}
+
+{% block pagecontent %}   
+<div class="col-md-9 col-md-push-3 left-row-padding body-content">
+    <div class="row bodyrow entity-list">        
+    {% for entity in entities %}
+        <div class="col-sm-6">
+            <div class="row box-gray front-box-shadow list-box" id='homestay-{{ entity.id }}'>   
+                <div class="col-sm-7">
+                    <div class='entity-content'>
+                        <div class="list-data">
+                            <span><b>{{ entity.rooms }}</b> {{ (entity.rooms > 1 ? 'front.homestay.rooms' : 'front.homestay.room') | trans }}</span>
+                        </div>
+                        <address>
+                            <b>{{ entity.address }}</b><br>
+                            {{ entity.municipality }}{% if entity.municipality %}, {{ entity.municipality.province }}{% endif %}
+                        </address>
+                    </div>
+                    <div class='entity-description' style="font-size: 12px;">
+                        {{ entity.description | striptags | truncate(300, true) | raw }}
+                    </div>
+                </div>
+                {% if entity.webPath %}
+                    {% set img_src = entity.webPath %}
+                {% else %}
+                    {% set img_src = 'assets/front/listado.png' %}
+                {% endif %}
+                <div class="col-sm-5 picture">
+                    <img class="img-responsive" src="{{ asset(img_src) }}" alt="{{ entity.name }}" title="{{ entity.name }}">
+                </div>
+                <h3 class="col-sm-12">
+                    <a href="{{ path('homestay', {'slug' : entity.slug }) }}">
+                        {{ entity.name }}
+                    </a>
+                    <b class="popovericon icon-info-sign" data-id="#homestay-{{ entity.id }}"></b>
+                </h3>
+            </div>
+        </div>
+        {% if loop.index is even %}
+            <div class="clearfix"></div>
+        {% endif %}
+    {% endfor %}
+    {% if paginator.itemsPerPage < paginator.totalItems %}
+        <div id="paginator" class="col-sm-12">
+        {% set template = 'FrontBundle:Inner:bootstrap-simple-paginator-list-view.html.twig' %}
+        {{ simple_paginator_render('homestays', null, {
+            'previousPageText': '«',
+            'nextPageText': '»',
+            'currentClass': 'active'
+        }, template) }}
+    </div>
+    {% endif %}
+    </div>
+</div>
+    
+<aside class="col-md-3 col-md-pull-9 right-row-padding">
+        <div class="row front-box-shadow lateral-list">
+            <div class="badge-lateral">
+                <b class="floatingtag">{{ 'front.homestayfilter.header' | trans }}</b>
+                <img class="img-responsive" src="{{ asset('bundles/front/images/badge.png') }}"/>
+            </div>
+            <div class="container-fluid">
+                {% render controller("FrontBundle:Inner:homestayfilter") %}
+            </div>  
+        </div>                                        
+        {% include 'FrontBundle:Default:fragm_applicant.html.twig'%}
+        {% include 'FrontBundle:Default:fragm_sociallinks.html.twig'%}
+    </aside>
+{% endblock pagecontent %}
+
+{% block javascripts %}
+    {{ parent() }}    
+    
+    <script type="text/javascript">
+        $('document').ready(function() {                        
+            $('.list-box .popovericon').on('click', function(){
+                var _this = $(this);
+                var id = _this.data('id');
+                
+                $(id + ' .entity-description').toggle('fast');
+                $(id + ' .entity-content').toggle('fast');
+                {#$(id + ' .entity-content').toggleClass('hidden');
+                $(id + ' .entity-description').toggleClass('hidden');#}
+            });
+
+            initApplicant();
+            
+            function initApplicant()
+            {
+                $('#applicantform').ajaxForm({
+                    target: '#applicantform-container',
+                    beforeSubmit: function() {                    
+                        return true;
+                    },
+                    success: function(response) {                       
+                        initApplicant();
+                    }
+                });
+            }
+        });        
+    </script>
+{% endblock javascripts %}

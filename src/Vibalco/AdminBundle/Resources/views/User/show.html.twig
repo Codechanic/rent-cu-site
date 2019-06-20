@@ -1,0 +1,111 @@
+<div  class="portlet box {{color_portlet}}">
+    <div class="portlet-title">
+        <div class="actions">
+
+            <div class="btn-group">
+                <button type="button" class="btn blue dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
+                    <span>{{ 'admin.action.actions' | trans }}</span> <i class="icon-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li> <a action="ajax-modal" href="{{ path('admin_user_change_password', {'id': entity.id}) }}" data-toggle="tooltip" title="{{ 'admin.action.change_passwd' | trans }}"><i class="icon-key"></i> {{ 'admin.user.change_passwd' | trans }}</a></li>
+                   <li> <a  action="ajax-modal" href="{{ path('admin_user_edit', {'id': entity.id}) }}" data-toggle="tooltip" title="{{ 'admin.action.edit' | trans }}"><i class="icon-edit"></i> {{ 'admin.action.edit' | trans }}</a></li>
+                   <li> <a action="user-delete" data-toggle="tooltip" title="{{ 'admin.action.delete' | trans }}"><i class="icon-trash"></i> {{ 'admin.action.delete' | trans }}</a></li>
+
+                </ul>
+                </li>
+            </div>
+        </div>
+
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-md-3">
+                <img class="img-thumbnail" style="max-height: 130px;max-width: 130px"src="{% if entity.webPath %}{{ asset(entity.webPath) }}{% else %}{{ asset('assets/img/user.png') }}{% endif %}" alt="" />
+            </div>
+
+            <div class="col-md-9">                
+                <table class="table table-hover" style="cursor: pointer;">
+                    <tbody>
+                        <tr>
+                            <th>Username</th>
+                            <td>{{ entity.username }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ entity.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Enabled</th>
+                            <td>
+                                <a href="#" action="user-change-status">
+                                    <i user-icon="status" class="icon-thumbs-{{ entity.enabled ? 'up' : 'down' }}" data-toggle="tooltip" title="{{ 'admin.common.change_status' | trans }}"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>     
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('a[action=ajax-modal]').on('click', function(e) {
+
+        e.preventDefault();
+        var url = $(this).attr('href');
+        var container = $('#admin-entity-viewer');
+        App.blockUI(container, false);
+
+        $.post(url, {}, function(response) {
+
+            App.unblockUI(container);
+            container.html(response);
+            App.fixContentHeight(); // fix content height
+            App.initUniform(); // initialize uniform elements
+            $('.selected').removeClass('selected warning');
+            //myself.addClass('selected warning');
+        });
+
+
+
+    });
+
+    $('a[action=user-delete]').on('click', function() {
+        if (confirm('Delete user {{ entity.name }}')) {
+            $.ajax({
+                type: 'delete',
+                dataType: 'json',
+                url: '{{ path('admin_user_delete', {'id': entity.id}) }}',
+                success: function(response) {
+                    if (response.success) {
+                        $('#admin-user-list').load('{{ path('admin_user_list') }}', function() {
+                            $('#admin-entity-viewer').html('<center><p class="muted" style="margin-top: 24px;">{{ 'admin.common.select' | trans }} {{ 'admin.user.entity' | trans }}...</p></center>');
+                        });
+                        toastr.success(response.message);
+                    } else {
+                        toastr.error(response.error.message);
+                    }
+                }
+            });
+        }
+    });
+
+    $('a[action=user-change-status]').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: '{{ path('admin_user_status', { 'id': entity.id }) }}',
+            success: function(response) {
+                if (response.success) {
+                    $('i[user-icon=status]').attr('class', 'icon-thumbs-' + (response.status ? 'up' : 'down'));
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.error.message);
+                }
+            }
+        });
+    });
+
+</script>

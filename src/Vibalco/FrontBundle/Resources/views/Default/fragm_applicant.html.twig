@@ -1,0 +1,9 @@
+<div class="row bg-bottom2top front-box-shadow">
+    <div class="badge-lateral">
+        <b class="floatingtag">{{ 'front.applicant.header' | trans }}</b>
+        <img class="img-responsive" src="{{ asset('bundles/front/images/bbadge.png') }}" alt="{{ 'front.applicant.header' | trans }}"/>
+    </div>
+    <div class="container-fluid" id="applicantform-container">
+        {% render controller('FrontBundle:Default:addapplicant') %}
+    </div>  
+</div>

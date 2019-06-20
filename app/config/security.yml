@@ -1,0 +1,40 @@
+security:        
+    encoders:
+        Vibalco\AdminBundle\Entity\User: {algorithm: sha512, encode_as_base64: true, iterations: 10}
+            
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_ALLOWED_TO_SWITCH
+
+    providers:
+        users:
+            entity: { class: Vibalco\AdminBundle\Entity\User, property: username }
+        
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+#        login:
+#            pattern:  ^/admin/login$
+#            security: false
+            
+        backend:
+            pattern:        ^/admin          
+            provider:       users
+            form_login:
+                login_path: _login
+                check_path: _security_check
+                default_target_path: admin_index
+                always_use_default_target_path: true
+            logout:
+                path: _logout
+                target: admin_index
+            remember_me:
+                key:        m4d3r4
+                lifetime:   86400
+        
+    access_control:
+        - { path: ^/admin/*, roles: ROLE_ADMIN }
+                
+
+

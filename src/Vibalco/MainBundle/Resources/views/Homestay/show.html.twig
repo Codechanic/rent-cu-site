@@ -1,0 +1,141 @@
+{% spaceless %}
+<div class="portlet box {{color_portlet}}">
+    <div class="portlet-title">
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn {{color_button_edit}}" action="ajax-modal" href="{{ path('admin_homestay_edit', {'id': entity.id}) }}" data-toggle="tooltip" title="{{ 'admin.action.edit' | trans }}"><i class="icon-edit"></i> {{ 'admin.action.edit' | trans }}</a>
+                <a class="btn {{color_button_delete}}" action="homestay-delete" data-toggle="tooltip" title="{{ 'admin.action.delete' | trans }}"><i class="icon-trash"></i> {{ 'admin.action.delete' | trans }}</a>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="tabbable tabbable-custom boxless">
+            <!-- Only required for left/right tabs -->
+            <ul class="nav nav-tabs tabs-left">
+                <li class="active"><a data-toggle="tab" href="#tab_3_1">General</a></li>
+                <li class=""><a data-toggle="tab" href="#tab_3_2">Extra<br/></a></li>
+                <li class=""><a data-toggle="tab" href="#tab_3_6">Galería</a></li>
+            </ul>
+        </div>
+
+        <div class="tab-content">
+            <div id="tab_3_1" class="tab-pane active">         
+                <div class="container">
+                    <div class="col-md-3">
+                        {% if entity.webPath %}
+                            {% set img_src = entity.webPath %}
+                        {% else %}
+                            {% set img_src = 'bundles/admin/images/noimage.jpg' %}
+                        {% endif %}
+                        <img class="img-thumbnail img-responsive" src="{{ asset(img_src) }}" alt="{{ entity.name }}" title="{{ entity.name }}" />
+                    </div>
+                    <div class="col-md-9">
+                        <table class="table table-hover">
+                            <tr><th>{{'admin.homestay.name' | trans}}</th><td>{{ entity.name }}</td></tr>                            
+                            <tr><th>{{'admin.homestay.address' | trans}}</th><td>{{ entity.address }}</td></tr>
+                            <tr><th>{{'admin.homestay.location' | trans}}</th><td>{{ entity.municipality }}{{ entity.municipality and entity.municipality.province ? ', ' ~ entity.municipality.province }}</td></tr>        
+
+                            <tr><th>{{'admin.homestay.owner' | trans}}</th><td>{{ entity.owner }}</td></tr>        
+                            <tr><th>{{'admin.homestay.email' | trans}}</th><td>{{ entity.email }}</td></tr>                
+                            <tr><th>{{'admin.homestay.phones' | trans}}</th><td>{{ entity.phones }}</td></tr>                          
+                            <tr><th>{{'admin.homestay.rooms' | trans}}</th><td>{{ entity.rooms }}</td></tr>                  
+                            <tr><th>{{'admin.homestay.breakfastprice' | trans}}</th><td>{{ entity.breakfastprice | number_format(2) }}</td></tr>
+                            <tr><th>{{'admin.homestay.extrabedprice' | trans}}</th><td>{{ entity.extrabedprice | number_format(2) }}</td></tr>
+                            <tr><th>{{'admin.homestay.bedchildprice' | trans}}</th><td>{{ entity.bedchildprice | number_format(2) }}</td></tr>
+                            
+                            <tr><th>{{'admin.homestay.acommodation' | trans}}</th><td>{{ entity.acommodation }}</td></tr>
+                            
+                            <tr><th>{{'admin.homestay.showcontact' | trans}}</th><td>{{ entity.showcontact ? 'Si' : 'No' }}</td></tr>
+                            <tr><th>{{'admin.homestay.rank' | trans}}</th><td>{{ entity.rank }}</td></tr>
+                            <tr><th>{{'admin.homestay.enabled' | trans}}</th><td>{{ entity.enabled ? 'Si' : 'No' }}</td></tr>
+                        </table> 
+                    </div>
+                </div>
+            </div>  
+
+            <div id="tab_3_2" class="tab-pane">
+                <div class="row">
+                    <div class="col-md-4">
+                        <table class="table table-hover" style="margin-bottom: 20px !important;">
+                            <tr><th colspan="2" style="padding-top: 20px; background-color: #F5F5F5;">Servicios gratis</th></tr>
+                            {% for service in entity.freeservices %}
+                                <tr><td>{{ service.name }}</td></tr>
+                            {% else %}
+                                <tr><td>No tiene <b>servicios gratis</b> definidos.</td></tr>
+                            {% endfor%}
+                        </table>     
+                    </div>
+                    <div class="col-md-4">
+                        <table class="table table-hover " style="margin-bottom: 20px !important;"> 
+                            <tr><th colspan="2" style="padding-top: 20px; background-color: #F5F5F5;">Costros extra</th></tr>
+                            {% if entity.extracosts is not empty %}
+                                {% for extra in entity.extracosts %}
+                                    <tr>
+                                        <td>{{ extra.name }}</td>
+                                    </tr>
+                                {% endfor%}
+                            {% else %}
+                                <tr><td colspan="2">No tiene <b>costos extras</b> definidos.</td></tr>
+                            {% endif %}
+                        </table>    
+                    </div>
+                    <div class="col-md-4">
+                        <table class="table table-hover">
+                            <tr><th style="padding-top: 20px; background-color: #F5F5F5;">No Oferta</th></tr>
+                            {% for no in entity.notoffereds %}
+                                <tr><td>{{ no.name }}</td></tr>
+                            {% else %}
+                                <tr><td>No tiene <b>no oferta</b> definido.</td></tr>
+                            {% endfor%}
+                        </table>   
+                    </div>
+                </div>
+            </div>
+                       
+            <div id="tab_3_6" class="tab-pane">
+                {% render controller('GalleryBundle:Image:index' , {'owner': entity.galleryOwner}) %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+    $('#admin-entity-viewer a[action=ajax-modal]').on('click', function(e) {
+
+        e.preventDefault();
+        var url = $(this).attr('href');
+        var container = $('#admin-entity-viewer');
+        App.blockUI(container, false);
+        $.post(url, {}, function(response) {
+
+            //App.unblockUI(container);
+            container.html(response);
+            // App.fixContentHeight(); // fix content height
+            // App.initUniform(); // initialize uniform elements
+            //$('.selected').removeClass('selected warning');
+            //myself.addClass('selected warning');
+        });
+    });
+    
+    $('a[action=homestay-delete]').on('click', function() {
+        if (confirm('{{ 'homestay.delete' | trans }}{{ entity.name }}')) {
+            $.ajax({
+                type: 'delete',
+                dataType: 'json',
+                url: '{{ path('admin_homestay_delete', {'id': entity.id}) }}',
+                success: function(response) {
+                    if (response.success) {
+                        $('#table-homestays').dataTable().fnDraw(false);
+                        $('#admin-entity-viewer').html('<center><p class="muted" style="margin-top: 24px;">{{ 'admin.common.select' | trans }} {{ 'admin.homestay.entity' | trans }}... </p></center > ');
+
+                        toastr['success'](response.message, "admin.message.succesfully");
+                    } else {
+                        toastr['error'](response.error.message, "admin.message.error");
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endspaceless %}

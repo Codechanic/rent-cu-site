@@ -1,0 +1,83 @@
+{% set module = 'settings' | lower %}
+{% set text = 'admin.settings.module' | trans %}
+
+    {% form_theme edit_form 'AdminBundle:Default:formTemplate.html.twig' %}
+    <div class="portlet box {{color_portlet}}">
+        <div class="portlet-title">
+
+            <div class="caption">
+                <span class="hidden-480">{{'admin.action.edit' | trans}} {% if text is defined %}{{text}}{% else %}{{module}}{% endif %}</span>
+            </div>  
+        </div>
+        <div class="portlet-body form">
+            <form class="form-horizontal form-bordered form-label-stripped" id="form-{{ module }}-edit" action="{{ path('admin_'~module~'_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+                <div class="form-body">   
+                    <input type="hidden" name="_method" value="PUT" />
+                {% block formwidget %}
+                    {{ form_widget(edit_form) }}
+                {% endblock formwidget %}
+                </div>
+                <div class="form-actions fluid">
+                    <div class="col-md-offset-3 col-md-9">
+                        <a action="cancel-edit-{{ module }}" class="btn {{color_button_cancel}}" ><i class="icon-list"></i> {{ 'admin.action.cancel' | trans }}</a>
+                        <a action="accept-{{ module }}" class="btn {{color_button_acept}}" ><i class="icon-save"></i> {{ 'admin.action.accept' | trans }}</a>
+                    </div>
+                </div>
+            </form>                    
+        </div> 
+    </div>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {         
+            $('textarea.editor').summernote(
+                //    {  
+               // height: 100,                 // set editor height
+               // minHeight: null,             // set minimum height of editor
+               // maxHeight: null,             // set maximum height of editor
+               // focus: true, 
+            //}
+            );
+        });
+        
+        $('#form-{{ module }}-edit').ajaxForm({
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    var url = '{{ path('admin_'~module) }}' + response.id + '/show';
+                    var container = $('#admin-entity-viewer');
+
+                    App.blockUI(container, false);
+
+                    $.post(url, {}, function(response) {
+                        App.unblockUI(container);
+                        container.html(response);
+                        App.fixContentHeight(); // fix content height
+                        App.initUniform(); // initialize uniform elements
+                        $('.selected').removeClass('selected warning');
+                        $('#' + response.id).addClass('selected warning');
+                    });
+
+                    toastr['success'](response.message, '{{ 'admin.action.succesfully' | trans }}');
+                } else {
+                    toastr['error'](response.error.message, '{{ 'admin.action.error' | trans }}');
+                }
+            }
+        });
+
+        $('a[action=cancel-edit-{{ module }}]').on('click', function() {
+                var url = '{{ path('admin_'~module) }}' + {{entity.id}} +'/show';
+                //Me queda recargar limpio.jejej
+
+                var container = $('#admin-entity-viewer');
+                $.post(url, {}, function(response) {
+                    App.unblockUI(container);
+                    container.html(response);
+                    App.fixContentHeight(); // fix content height
+                    App.initUniform(); // initialize uniform elements
+                    $('#' + '{{entity.id}}').addClass('selected warning');
+                });
+        });
+
+        $('a[action=accept-{{ module }}]').on('click', function() {
+            $('#form-{{ module }}-edit').submit();
+        });
+    </script>

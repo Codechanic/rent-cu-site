@@ -1,0 +1,17 @@
+La seguridad del sistema es basado en roles por controladores, los mismos roles son guardados en la base de datos y 
+luego asignados a un determinado usuario..Además existe el Rol ROLE_ADMIN que es un rol superadministrador.
+
+Para asegurar los gestionar(Control) con un determindado rol es necesario primeramente añadir el use:
+
+use Lsw\SecureControllerBundle\Annotation\Secure;
+
+despues poner la anotacion encima de la clase control:
+
+@Secure(roles="ROLE_ADMIN_BACKUPS", name="ADMIN BACKUPS")
+
+
+donde roles->será el rol que deve tener el usuario para ejecutar una deteremiada acción y name es el nomobre del rol que saldrá a la
+hora de crear un nuevo usuario..
+
+Para actualizar los roles en la bd ver ReadmeCommand.
+

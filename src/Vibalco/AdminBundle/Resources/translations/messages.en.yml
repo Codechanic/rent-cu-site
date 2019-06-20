@@ -1,0 +1,91 @@
+admin:
+  title: Admin Panel
+  write_user_passwd: Write user and password
+  password: password
+  remember_me: Remember me
+  bad_credential: Sorry!!! Wrong user or password.
+  login_button: Login
+  security: Security
+  my_profile: My Profile
+  change_passwd: Change Password
+  logout: Log Out
+  send: Mail sended succesfully.
+  send_error: Mail sended error.
+  
+  dashboard:
+    message: statistics and more
+    resent: Resent Visit
+    
+  backup:
+      name: Backups
+      backup: Backup
+      now: Backup Now
+      description: Save or restore all database conten.
+      create_success: Backup was created successfully
+      restore_success: Backup was restored successfully
+      delete_success: Backup was delete successfully
+
+  search: Search
+  
+  common: 
+    select : Select
+    view_more: View more
+    title: Title
+  
+  action:
+    new: New
+    create: Create
+    edit: Edit
+    update: Update
+    delete: Delete
+    accept: Accept
+    close: Close
+    cancel: Cancel
+    show: Show
+    actions: Actions
+    no_action: No Actions
+    succesfully : Action Succesfully
+    error: Error Ocurred
+    add: Add new
+    restore: Restore
+    save: Save
+    save_send: Save and Send
+    send: Send
+  
+  user: 
+    entity: User
+    module: Users
+    description: system administrators
+    change_passwd: Change password
+    column:
+      name: Name
+      username: Username
+      email: Email
+      password: Password
+      enabled: Enabled
+      
+  settings:
+    module: Settings
+    entity: Settings
+    description: Site configuration
+    name: Name
+    facebook: Facebook Page
+    twitter: Twitter Page
+    email: Email
+    domain: Domain
+    offline: Offline
+    message: Message
+    
+  testing:
+      module: Testing
+
+  message:
+      succesfully: Action succesfully
+      error: Action Error
+      notfound: Entity not Found
+      
+  a2lix:
+    translations: Translations
+    
+admin.breadcrumb.dashboard: Dashboard
+admin.action.columns: Columns

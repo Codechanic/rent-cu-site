@@ -1,0 +1,78 @@
+{% extends "FrontBundle::layout.html.twig" %}
+
+{% block title %}{{ 'front.contactus.title' | trans }}{% endblock %}
+
+{% block pagecontent %}
+<div id="contact">
+         <!-- BEGIN PAGE CONTENT-->
+            <div class="col-md-12">
+               <!-- Google Map -->
+               
+               <div class="row contact-content">
+                  <div class="col-md-6">
+                     <div class="space20"></div>
+                     <h3 class="form-section">{{ 'front.contactus.text.contactus' | trans }}</h3>
+                     <p>{{ appconfig.data.contactdescription }}</p>
+                     <div class="well">
+{#                        <div class="col-md-6">#}
+                            <h4>{{ 'front.contactus.text.address' | trans }}</h4>
+                            <address>
+                                {{ appconfig.data.address | raw }}<br>
+                               <abbr title="{{ 'front.contactus.text.phones' | trans }}">{{ 'front.contactus.text.phonesabbr' | trans }}:</abbr> {{ appconfig.data.phones }}
+                            </address>
+                            <address>
+                               <strong>{{ 'front.contactus.text.email' | trans }}</strong><br>
+                               <a href="mailto:{{ appconfig.data.email }}">{{ appconfig.data.email }}</a>
+                            </address>
+                            <div class="row lateral-social">
+                                <div class="col-md-12">
+                                    <ul class="social-icons">
+                                        {% if appconfig.data.facebook %}<li><a href="{{ appconfig.data.facebook }}" data-original-title="Facebook" class="facebook"></a></li>{% endif %}
+                                        {% if appconfig.data.twitter %}<li><a href="{{ appconfig.data.twitter }}" data-original-title="Twitter" class="twitter"></a></li>{% endif %}
+                                        {% if appconfig.data.googleplus %}<li><a href="{{ appconfig.data.googleplus }}" data-original-title="Goole Plus" class="googleplus"></a></li>{% endif %}
+                                        {% if appconfig.data.tripadvisor %}<li><a href="{{ appconfig.data.tripadvisor }}" data-original-title="Trip Advisor" class="tadvs"></a></li>{% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+{#                        </div>#}
+                        {#<div class="col-md-6 location-map">
+                            <img class="img-responsive" src="{{ asset('bundles/front/images/location.fw.png') }}" alt="Localización de {{ entity.name }}"/>
+                        </div>#}
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="contactform-container">
+                     <!-- BEGIN FORM-->
+                     {% render controller('FrontBundle:Default:contactusform') %}
+                     <!-- END FORM-->  
+                  </div>
+               </div>
+            </div>
+         <!-- END PAGE CONTENT-->
+      </div>
+{% endblock pagecontent %}
+
+{% block javascripts %}
+    {{ parent() }}
+    
+    <script type="text/javascript" src="{{ asset('vendor/jquery.form.js') }}"></script>
+        
+    <script type="text/javascript">
+        $('document').ready(function() { 
+            
+            initContactUs();
+            
+            function initContactUs()
+            {
+                $('#contactusform').ajaxForm({
+                    target: '#contactform-container',
+                    beforeSubmit: function() {                    
+                        return true;
+                    },
+                    success: function(response) {                       
+                        initContactUs();
+                    }
+                });
+            }
+        });        
+    </script>
+{% endblock javascripts %}

@@ -1,0 +1,21 @@
+<table border="0" cellpadding="0" cellspacing="0" style="background-color:#487508; height:52px; width: 100%">
+    <tr>
+        <td>
+            <h2 class="alt" style="color: #FFF; font-size: 20px; padding: 12px; margin: 0px;">{{ 'front.applicant.email.title' | trans }}</h2>
+        </td>
+    </tr>
+</table>
+<div style="font-size: 12px; font-family: Arial;">
+    <table border="0" cellpadding="0" cellspacing="0" style="margin-top: 12px;"> 
+        <tbody>
+            <tr><th style="text-align: right;padding-right: 15px;padding-bottom: 4px;">{{ 'front.contactform.email.homestay' | trans }}</th><td>{{ entity.homestay.name }}</td></tr>
+            <tr><th style="text-align: right;padding-right: 15px;padding-bottom: 4px;">{{ 'front.contactform.email.fromdate' | trans }}</th><td>{{ entity.fromdate | date('d-m-Y') }}</td></tr>
+            <tr><th style="text-align: right;padding-right: 15px;padding-bottom: 4px;">{{ 'front.contactform.email.todate' | trans }}</th><td>{{ entity.todate | date('d-m-Y') }}</td></tr>
+            <tr><th style="text-align: right;padding-right: 15px;padding-bottom: 4px;">{{ 'front.contactform.email.name' | trans }}</th><td>{{ entity.name }}</td></tr>
+            <tr><th style="text-align: right;padding-right: 15px;padding-bottom: 4px;">{{ 'front.contactform.email.email' | trans }}</th><td>{{ entity.email }}</td></tr>
+            <tr><th style="text-align: right;padding-right: 15px;padding-bottom: 4px;">{{ 'front.contactform.email.phone' | trans }}</th><td>{{ entity.phone }}</td></tr>
+            <tr><th style="text-align: right;padding-right: 15px;padding-bottom: 4px;">{{ 'front.contactform.email.message' | trans }}</th><td>{{ entity.message }}</td></tr>
+        </tbody>
+    </table>
+    <h5 style=" background-color: #487508; color: #FFF; padding: 12px; font-size: 12px;">{{ 'front.email.footer' | trans }} <a  style="text-decoration: none;font-size: 17px; color: #FFF;" href="{{ url("index") }}"><b>rent.cu</b></a></h5>
+</div>

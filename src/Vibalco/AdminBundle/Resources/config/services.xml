@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+   
+    <parameters>
+        <parameter key="admin.example.class">Vibalco\AdminBundle\Services\FormError</parameter>
+        <parameter key="admin.extension.class">Vibalco\AdminBundle\Form\Extension\ImageTypeExtension</parameter>
+        <parameter key="twig.extension.class">Vibalco\AdminBundle\Generator\HtmlcssBundle\HtmlcssExtension</parameter>
+         
+        <parameter key="config.class">Vibalco\AdminBundle\Services\ConfigService</parameter>
+        
+        <parameter key="mfs.class">Vibalco\AdminBundle\Services\MFSService</parameter>
+    </parameters>
+
+    <services>
+        <service id="config" class="%config.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+        
+        <service id="mfs" class="%mfs.class%">
+            <argument type="service" id="session" />
+        </service>
+        
+        <service id="formError" class="%admin.example.class%">
+            
+           
+        </service>
+        
+        <service id="acme_demo_bundle.image_type_extension"
+                 class="%admin.extension.class%">
+            <tag name="form.type_extension" alias="file" />
+        </service>
+        
+        <service id="htmlcss.twig.htmlcss_extension"
+                  class="%twig.extension.class%">
+            <tag name="twig.extension" alias="name" />
+        </service>
+        
+        
+        <service id="acme_demo.form.type.editor" class="Vibalco\AdminBundle\Form\Type\EditorType">
+             <tag name="form.type" alias="editor" />
+        </service>
+        
+        <service id="acme_demo.form.type.datepicker" class="Vibalco\AdminBundle\Form\Type\DatepickerType">
+             <tag name="form.type" alias="datepicker" />
+        </service>
+        
+        <service id="acme_demo.form.type.timepicker" class="Vibalco\AdminBundle\Form\Type\TimepickerType">
+             <tag name="form.type" alias="timepicker" />
+        </service>
+        
+        <service id="acme_demo.form.type.rangepicker" class="Vibalco\AdminBundle\Form\Type\RangepickerType">
+             <tag name="form.type" alias="rangepicker" />
+        </service>
+        
+        
+         <service id="acme_demo.form.type.select2" class="Vibalco\AdminBundle\Form\Type\Select2Type">
+             <tag name="form.type" alias="select2" />
+        </service>
+
+
+  </services>
+
+    
+  
+</container>

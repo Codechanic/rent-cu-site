@@ -1,0 +1,228 @@
+<ul class="list-unstyled" id="filter">
+    
+    {#
+        FILTERED VALUES IN SESSION
+    #}    
+    <li class="blog-tags">
+
+        <span class="icon-filter">
+            <a href="{{ path('antiquecars') }}"><b>{{ fm.totalresults }} {{ 'front.antiquecarfilter.results' | trans }}</b></a>
+        </span>
+        {% if fm.entityfilter is not empty %}
+        <ul class="list-unstyled" id="match">
+            {% for key, value in fm.entityfilter %}
+                {% if fm.ismultiple(key) %}
+                    {% for id, entity in value %}
+                        <li><a href="{{ path('antiquecarfilter_remove', { 'key' : key, 'value' : id}) }}"><i class="icon-remove-sign"></i>{{ entity }}</a></li>
+                    {% endfor %}
+                {% else %}
+                    {% set caption = value %}
+                    {% if key == 'price-min' %}{% set caption = 'Min ' ~ value ~ ' CUC' %}{% endif %}
+                    {% if key == 'price-max' %}{% set caption = 'Max ' ~ value ~ ' CUC' %}{% endif %}
+                    {% if key == 'year' %}
+                        {% set caption = ('front.antiquecarfilter.year' | trans) ~ ' ' ~ value %}
+                    {% endif %}
+                    <li><a href="{{ path('antiquecarfilter_remove', { 'key' : key}) }}"><i class="icon-remove-sign"></i>{{ caption }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </li>
+    <li class="list-separator"></li>
+    
+    
+    {#
+        LOCATION FILTER
+    #}    
+    <li>
+        <span>
+            <a href="#" title="{{ 'front.antiquecarfilter.morelocations' | trans }}" class="filter-param">
+                {{ 'front.antiquecarfilter.location' | trans }}<b class="icon-plus"></b>
+            </a>
+        </span>
+        <ul class="list-unstyled" id="location">
+            {% if fm.entityfilter['province'] is not defined %}
+               {% for result in fm.paramcounts('province') %}
+                    <li><a href="{{ path('antiquecarfilter_add', { 'key' : 'province', 'value' : result['entity'].id}) }}">{{ result['entity'].name }} <b>({{ result['filter_count'] }})</b></a></li>
+               {% endfor %}
+            {% endif %}
+            <li class="form-filter hidden">
+                <select placeholder="{{ 'front.antiquecarfilter.location' | trans }}" class="form-control input-sm select2">
+                    <option key="province" value=""></option>
+                    {% set selid = fm.entityfilter['province'] is defined ? fm.entityfilter['province'].id : null %}
+                    {% for entity in fm.entities['province'] %}
+                        <option key="province" value="{{ entity.id }}" {% if selid == entity.id %}selected="selected"{% endif %}>{{ entity.name }}</option>
+                    {% endfor %}
+                </select>
+            </li>
+        </ul>
+    </li>
+    <li class="list-separator"></li>
+
+    
+    {#
+        BRAND FILTER
+    #}
+    <li>
+        <span>
+            <a href="#" title="{{ 'front.antiquecarfilter.morebrands' | trans }}" class="filter-param">
+                {{ 'front.antiquecarfilter.brand' | trans }}<b class="icon-plus"></b>
+            </a>
+        </span>
+        <ul class="list-unstyled" id="brand">
+            {% if fm.entityfilter['brand'] is not defined %}
+                {% for result in fm.paramcounts('brand') %}
+                    <li><a href="{{ path('antiquecarfilter_add', { 'key' : 'brand', 'value' : result['entity'].id}) }}">{{ result['entity'].name }} <b>({{ result['filter_count'] }})</b></a></li>
+                {% endfor %}
+             {% endif %}
+            <li class="form-filter hidden">
+                <select placeholder="{{ 'front.antiquecarfilter.brand' | trans }}" class="form-control input-sm select2">
+                    <option value=""></option>
+                    {% set selid = fm.entityfilter['brand'] is defined ? fm.entityfilter['brand'].id : null %}
+                    {% for entity in fm.entities['brand'] %}
+                        <option value="{{ entity.id }}" {% if selid == entity.id %}selected="selected"{% endif %}>{{ entity.name }}</option>
+                    {% endfor %}
+                </select>
+            </li>
+        </ul>
+    </li>
+    <li class="list-separator"></li>    
+    
+    {#
+        YEAR FILTER
+    #}
+    <li>
+        <span>
+            <a href="#" title="{{ 'front.antiquecarfilter.moreyears' | trans }}" class="filter-param">
+                {{ 'front.antiquecarfilter.year' | trans }}<b class="icon-plus"></b>
+            </a>
+        </span>
+        <ul class="list-unstyled" id="year">
+            {% if fm.entityfilter['year'] is not defined %}
+                {% for result in fm.paramcounts('year') %}
+                    <li><a href="{{ path('antiquecarfilter_add', { 'key' : 'year', 'value' : result['entity'].year}) }}">{{ result['entity'].year }} <b>({{ result['filter_count'] }})</b></a></li>
+                {% endfor %}
+             {% endif %}
+            <li class="form-filter hidden">
+                <select placeholder="{{ 'front.antiquecarfilter.year' | trans }}" class="form-control input-sm select2">
+                    <option value=""></option>
+                    {% set selid = fm.entityfilter['year'] is defined ? fm.entityfilter['year'] : null %}
+                    {% for value in fm.entities['year'] %}
+                        <option value="{{ value }}" {% if selid == value %}selected="selected"{% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </li>
+        </ul>
+    </li>
+    <li class="list-separator"></li>    
+    
+    {#
+        PRICE FILTER
+    #}
+    <li>
+        <span>
+            <a href="#" title="{{ 'front.antiquecarfilter.changeprices' | trans }}" class="filter-param">
+                {{ 'front.antiquecarfilter.prices' | trans }}<b class="icon-plus"></b>
+            </a>
+        </span>
+        <ul class="list-unstyled" id="price">
+            <li class="form-filter">
+                <div class="row">
+                    <div class="col-sm-6 padding-right-5">
+                        <input type="text" placeholder="{{ 'front.antiquecarfilter.pricemin' | trans }}" class="form-control input-sm" id="price-min" {% if fm.entityfilter['price-min'] is defined %}value="{{ fm.entityfilter['price-min'] }}"{% endif %}/>
+                    </div>
+                    <div class="col-sm-6 padding-left-5">
+                        <input type="text" placeholder="{{ 'front.antiquecarfilter.pricemax' | trans }}" class="form-control input-sm" id="price-max" {% if fm.entityfilter['price-max'] is defined %}value="{{ fm.entityfilter['price-max'] }}"{% endif %}/>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </li>
+    <li class="list-separator"></li>
+
+    {#
+        SEARCH FILTER
+    #}
+    <li>
+        <span>
+            <a href="#" title="{{ 'front.antiquecarfilter.changesearch' | trans }}" class="filter-param">
+                {{ 'front.antiquecarfilter.search' | trans }}<b class="icon-plus"></b>
+            </a>
+        </span>
+        <ul class="list-unstyled sub-list" id="search">
+            <li class="form-filter">
+                <input type="text" placeholder="{{ 'front.antiquecarfilter.searchplaceholder' | trans }}" class="form-control input-sm" {% if fm.entityfilter['search'] is defined %}value="{{ fm.entityfilter['search'] }}"{% endif %}/>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<script type="text/javascript">
+    
+    {# SHOW / HIDE FILTER SELECTS AND INPUTS BY CATEGORY #}
+    $('document').ready(function() {
+        $('.filter-param').on('click', function(e){
+            e.preventDefault();
+            
+            var fpli = $(this).parent().parent();
+            
+            fpli.find('.form-filter').toggleClass('hidden');
+        });
+                        
+        {#        
+            TODO - put municipality values
+                 - why data attributes not working in jquery
+        #}
+        $('#location select').on('change', function(){            
+            var key = $('#location select option:selected').attr('key'); 
+            
+            console.info(key);
+            
+            var params = { data : {}};
+            
+            params['data'][key] = $(this).val();
+            
+            notifyFilterChange(params);
+        });      
+        
+        $('#brand select').on('change', function(){
+            notifyFilterChange({'data[brand]' : $(this).val()});
+        });
+        
+        $('#year select').on('change', function(){
+            notifyFilterChange({'data[year]' : $(this).val()});
+        });
+        
+        $('#price input').on('keypress', function(e){
+            if(e.keyCode == 13) {
+               var pricemin = $('#price-min').val();
+               var pricemax = $('#price-max').val();
+               
+               if(!(pricemin >= 0)){
+                   pricemin = null;
+               }
+               
+               if(!(pricemax >= 0)){
+                   pricemax = null;
+               }
+               
+               notifyFilterChange({
+                   'data[price-min]' : pricemin,
+                   'data[price-max]' :  pricemax
+               });
+            }
+        });
+
+        $('#search input').on('keypress', function(e){
+            if(e.keyCode == 13) {
+                notifyFilterChange({'data[search]' : $(this).val()}); 
+            }
+        });
+
+        function notifyFilterChange(params)
+        {
+            var url = "{{ path('antiquecarfilter_add') }}"; 
+            window.location = url + "?" + $.param(params);
+        }
+    });
+</script>

@@ -1,0 +1,50 @@
+{% spaceless %}
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 class="muted">{{'admin.action.show' | trans}} {% if  entity.nombre  is defined %}{{entity.nombre}}{% else %}{{module}}{% endif %} </h3>
+            </div>
+
+            <div class="modal-body">  
+
+                <table class="table table-hover">            
+                    <tr><th>{{'admin.applicant.name' | trans}}</th><td>{{ entity.name }}</td></tr>        
+                    <tr><th>{{'admin.applicant.email' | trans}}</th><td>{{ entity.email }}</td></tr>        
+                    <tr><th>{{'admin.applicant.message' | trans}}</th><td>{{ entity.message }}</td></tr>        
+
+                </table>
+
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn {{color_button_new}}" data-dismiss="modal" aria-hidden="true">{{ 'admin.action.close' | trans }}</button>
+                <a class="btn {{color_button_delete}}" action="applicant-delete" data-toggle="tooltip" title="{{ 'admin.action.delete' | trans }}"><i class="icon-trash"></i> {{ 'admin.action.delete' | trans }}</a>
+
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+    $('a[action=applicant-delete]').on('click', function() {
+        if (confirm('{{ 'applicant.delete' | trans }}{{ entity }}')) {
+            $.ajax({
+                type: 'delete',
+                dataType: 'json',
+                url: '{{ path('admin_applicant_delete', {'id': entity.id}) }}',
+                success: function(response) {
+                    if (response.success) {
+                        $('#applicant-modal').modal('hide');
+                        $('#table-applicants').dataTable().fnDraw(false);
+                        $('#admin-entity-viewer').html('<center><p class="muted" style="margin-top: 24px;">{{ 'admin.common.select' | trans }} {{ 'admin.applicant.entity' | trans }}... </p></center > ');
+                        toastr['success'](response.message,  '{{ 'admin.message.succesfully' | trans }}');
+                    } else {
+                        toastr['error'](response.error.message,  '{{ 'admin.message.action.error' | trans }}');
+                    }
+                }
+            });
+        }
+    });
+    </script>
+
+{% endspaceless %}

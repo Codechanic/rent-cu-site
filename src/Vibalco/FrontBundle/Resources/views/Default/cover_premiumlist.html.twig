@@ -1,0 +1,28 @@
+{% if promos is not empty %}
+<div class="row box-gray bg-top2bottom front-box-shadow premium">
+    <div class="badge-lateral">
+        <b class="floatingtag">{{ 'front.premiumslider.header' | trans }}</b>
+        <img class="img-responsive" src="{{ asset('bundles/front/images/badge.png') }}" alt="{{ 'front.premiumslider.header' | trans }}"/>
+    </div>
+    <div class="container-fluid">
+        <ul class="media-list">
+            {% for promo in promos %}
+                {% set url = promo.url or promo.product ? path('redirectpromo', {'concept' : 'promo', 'id' : promo.id }) : '#' %}
+                <li class="media">
+                    <a class="pull-left" href="{{ url }}">
+                        <img class="media-object img-responsive" src="{{ asset( promo.webpath ) }}" alt="">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading"><a href="{{ url }}">{{ promo.name }}</a></h4>
+                        {{ promo.description | truncate(80, true) | trim | raw }}
+                    </div>
+                </li>
+
+                {% if not loop.last %}
+                <li class="list-separator"></li>    
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>  
+</div>
+{% endif %}

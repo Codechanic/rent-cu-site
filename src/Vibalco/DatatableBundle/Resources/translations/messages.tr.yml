@@ -1,0 +1,20 @@
+datatable:
+    common:
+        action: Eylemler
+        confirm_delete: "Bu öğeyi silmek istediğinizden emin misiniz?"
+        delete: Sil
+        edit: Düzenle
+        no_action: "(Silemezsiniz)"
+        sProcessing:   "İşleniyor..."
+        sLengthMenu:   "Sayfada _MENU_ Kayıt Göster"
+        sZeroRecords:  "Eşleşen Kayıt Bulunmadı"
+        sInfo:         "  _TOTAL_ Kayıttan _START_ - _END_ Arası Kayıtlar"
+        sInfoEmpty:    "Kayıt Yok"
+        sInfoFiltered: "( _MAX_ Kayıt İçerisinden Bulunan)"
+        sInfoPostFix:  ""
+        sSearch:       "Bul:"
+        sFirst:    "İlk"
+        sPrevious: "Önceki"
+        sNext:     "Sonraki"
+        sLast:     "Son"
+        search:   "Arama"

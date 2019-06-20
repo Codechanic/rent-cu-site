@@ -1,0 +1,21 @@
+datatable:
+    common:
+        action: Aktionen
+        confirm_delete: "Möchten Sie diesen Eintrag wirklich löschen?"
+        delete: löschen
+        edit: editieren
+        no_action: "(kann nicht löschen)"
+        sProcessing: "Bearbeite..."
+        sLengthMenu: "Zeige _MENU_ Einträge"
+        sZeroRecords: "Kein Eintrag gefunden"
+        sInfo: "Zeige _START_ bis _END_ von _TOTAL_ Einträgen"
+        sInfoEmpty: "Zeige 0 bis 0 von 0 Einträgen"
+        sInfoFiltered: "(gefiltert von _MAX_ Einträgen)"
+        sInfoPostFix: ""
+        sSearch: "Suchen:"
+        sLoadingRecords: "Ein Moment Geduld..."
+        sFirst: "Erste"
+        sPrevious: "Vorrige"  
+        sNext: "Folgende"
+        sLast: "Letzte"
+        search: "suchen"

@@ -1,0 +1,371 @@
+{# empty Twig template #}
+{% block form_rows %}
+{% spaceless %}
+    {% for child in form %}
+
+        {{ form_row(child) }}
+
+    {% endfor %}
+{% endspaceless %}
+{% endblock form_rows %}
+
+
+{% block form_label %}
+{% spaceless %}
+    {% if label is not sameas(false) %}
+        {% if not compound %}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {% endif %}
+        {% if required %}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {% endif %}
+        {% if label is empty %}
+            {% set label = name|humanize %}
+        {% endif %}
+<label class="col-md-3 control-label" {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
+    {% endif %}
+{% endspaceless %}
+{% endblock form_label %}
+
+
+
+{% block form_widget_simple %}
+{% spaceless %}
+
+
+{% if type is defined and type=='password' %}
+<div class="col-md-6">
+    {#<div class="input-icon">#}
+        {#<span class="input-icon"><i class="icon-user"></i></span>#}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control input-sm')|trim}) %}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {#</div>#}
+</div>
+{% else %}
+{% if type is defined and type=='file' %}
+
+{% set type = type|default('text') %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control input-sm')|trim}) %}
+<input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{% else %}
+<div class="col-md-6">
+    {% set type = type|default('text') %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control input-sm')|trim}) %}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+</div>
+{% endif %}
+{% endif %}
+{% endspaceless %}
+{% endblock form_widget_simple %}
+
+
+{% block email_widget %}
+{% spaceless %}
+<div class="col-md-6">
+    {#<div class="input-icon">#}
+        {#<span class="input-icon"><i class="icon-envelope"></i></span>#}
+    {% set type = type|default('text') %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control input-sm')|trim}) %}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {#</div>#}
+</div>
+
+{% endspaceless %}
+{% endblock email_widget %}
+
+
+
+{% block checkbox_widget %}
+{% spaceless %}
+<div class="col-md-6">
+    <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+</div>
+{% endspaceless %}
+{% endblock checkbox_widget %}
+
+
+{% block textarea_widget %}
+{% spaceless %}
+<div class="col-md-6">
+    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+</div>
+{% endspaceless %}
+{% endblock textarea_widget %}
+
+
+{% block editor_widget %}
+{% spaceless %}
+    {% if attr.title is defined %}
+        <div class="{{ attr.lateral is defined ? 'col-md-3' : 'col-md-12'}}"  style="text-align: center">
+            <label>{{attr.title}}</label>
+        </div>
+        {% endif %}
+<div class="{{ attr.lateral is defined ? 'col-md-9' : 'col-md-12'}}">
+    <link href="{{ asset('vendor/summernote/dist/summernote.css') }}" rel="stylesheet" type="text/css">
+    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+{#  <script src="{{ asset('vendor/summernote/dist/summernote.min.js') }}"></script>#}
+    <script type="text/javascript">         
+    jQuery(document).ready(function() {         
+        $('textarea.editor').summernote({  
+            height: 100,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null,             // set maximum height of editor
+            focus: true, 
+        });
+    });
+    </script>
+</div>
+{% endspaceless %}
+{% endblock editor_widget %}
+
+
+{% block datepicker_widget %}
+{% spaceless %}
+    {#<link rel="stylesheet" type="text/css" href="{{ asset('vendor/bootstrap-datepicker/css/datepicker.css') }}" />#}
+    <style>
+        .modal-open .datepicker {
+            z-index: 10055 !important;
+            }
+
+    </style>
+<div class="col-md-6">
+    {% set type = type|default('text') %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control input-sm')|trim}) %}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+</div>
+{#<script src="{{ asset('vendor/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>#}
+<script type="text/javascript">         
+        jQuery(document).ready(function() {         
+           if (jQuery().datepicker) {
+            $('.date-picker').datepicker({
+                rtl: App.isRTL(),
+                autoclose: true
+            });
+            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+        }
+  });
+</script>
+
+{% endspaceless %}
+{% endblock datepicker_widget %}
+    
+    
+    
+{% block timepicker_widget %}
+{% spaceless %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/clockface/css/clockface.css') }}" />
+   
+ 
+<style>
+      .modal-open .clockface {
+            z-index: 10055 !important;
+        }
+    </style>
+ 
+<div class="col-md-6">
+    {% set type = type|default('text') %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim}) %}
+        <input style="text-align: left" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+</div>
+<script src="{{ asset('vendor/clockface/js/clockface.js') }}"></script>
+<script type="text/javascript">         
+        jQuery(document).ready(function() {         
+          if (jQuery().clockface) {
+        $('.clockface').clockface();
+        }
+  });
+</script>
+
+{% endspaceless %}
+{% endblock timepicker_widget %}
+    
+    
+{% block rangepicker_widget %}
+{% spaceless %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/bootstrap-daterangepicker/daterangepicker-bs3.css') }}" />
+    <style>
+        .modal-open .daterangepicker {
+  z-index: 10055 !important;
+}
+
+    </style>
+    <div class="col-md-6">
+    {% set type = type|default('text') %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim}) %}
+        <input style="text-align: left" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+</div>
+<script src="{{ asset('vendor/bootstrap-daterangepicker/moment.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+<script type="text/javascript">         
+        jQuery(document).ready(function() {         
+       if (jQuery().daterangepicker) {
+       
+
+        $('.rangepicker').daterangepicker({
+                 
+                format: 'MM/DD/YYYY',
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                minDate: '01/01/1900',
+                /*maxDate: '12/31/2014',*/
+            },
+            function (start, end) {
+                
+                
+            }
+        );  
+     return;
+        }
+  });
+</script>
+
+{% endspaceless %}
+{% endblock rangepicker_widget %}
+
+
+{% block choice_widget_collapsed %}
+{% spaceless %}
+<div class="col-md-6">
+    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {% if empty_value is not none %}
+        <option {% if required %} disabled="disabled"{% if value is empty %} selected="selected"{% endif %}{% else %} value=""{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+        {% endif %}
+        {% if preferred_choices|length > 0 %}
+            {% set options = preferred_choices %}
+            {{ block('choice_widget_options') }}
+            {% if choices|length > 0 and separator is not none %}
+        <option disabled="disabled">{{ separator }}</option>
+            {% endif %}
+        {% endif %}
+        {% set options = choices %}
+        {{ block('choice_widget_options') }}
+    </select>
+</div>
+{% endspaceless %}
+{% endblock choice_widget_collapsed %}
+    
+    
+    
+    
+{% block select2_widget %}
+{% spaceless %}
+<div class="col-md-6">
+    
+    <select {{ block('widget_attributes') }}{% if multiple %}  multiple="multiple"{% endif %}>
+        {% if empty_value is not none %}
+        <option {% if required %} disabled="disabled"{% if value is empty %} selected="selected"{% endif %}{% else %} value=""{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+        {% endif %}
+        {% if preferred_choices|length > 0 %}
+            {% set options = preferred_choices %}
+            {{ block('choice_widget_options') }}
+            {% if choices|length > 0 and separator is not none %}
+        <option disabled="disabled">{{ separator }}</option>
+            {% endif %}
+        {% endif %}
+        {% set options = choices %}
+        {{ block('choice_widget_options') }}
+    </select>
+</div>
+       
+ 
+{#   <script type="text/javascript">  
+        jQuery(document).ready(function() {
+             $('select.select2').select2();
+        });
+    </script>#}
+{% endspaceless %}
+{% endblock select2_widget %}
+
+
+
+
+
+{% block form_row %}
+{% spaceless %}
+<div class="form-group">
+        {{ form_label(form) }}
+        {{ form_errors(form) }}
+        {{ form_widget(form) }} 
+</div>
+{% endspaceless %}
+{% endblock form_row %}
+
+
+{% block form_widget %}
+{% spaceless %}
+    {% if compound %}
+        {{ block('form_widget_compound') }}
+    {% else %}
+        {{ block('form_widget_simple') }}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_widget %}
+
+
+
+{% block form_widget_compound %}
+{% spaceless %}
+
+        {% if form.parent is empty %}
+            {{ form_errors(form) }}
+        {% endif %}
+        {{ block('form_rows') }}
+        {{ form_rest(form) }}
+
+{% endspaceless %}
+{% endblock form_widget_compound %}
+
+{% block file_widget %}
+    {% spaceless %}
+
+    <div class="col-md-6">
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <span class="btn default btn-file">
+                <span class="fileupload-new"><i class="icon-paper-clip"></i> Select file</span>
+                <span class="fileupload-exists"><i class="icon-undo"></i> Change</span>
+                <input type="file" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+            </span>
+            <span class="fileupload-preview" style="margin-left:5px;"></span>
+            <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
+        </div>
+
+    </div>
+
+    {% if image_url is defined and image_url is not null %}
+    <div class="col-md-3">
+        <img class="img-thumbnail" style="max-width: 120px;max-height: 120px"src="{{ asset(image_url) }}"/>
+    </div>
+    {% endif %}
+
+
+
+    {% endspaceless %}
+    
+    
+    
+    
+{% endblock %}
+
+
+
+{% block genemu_captcha_widget %}
+    
+    <img id="{{ id }}_image" src="{{ src }}" width="{{ width }}" height="{{ height }}" title="{{ name|trans }}" />
+    {# We're putting a link there #}
+    <a id="{{ id }}_refresh">Refresh</a>
+    {{ block("form_widget_simple") }}
+ 
+
+    <script type="text/javascript">
+        $(function () {
+            
+            {# Image will be refreshed when the link is clicked #}
+            $('#{{ id }}_refresh').click(function() {
+                $('#{{ id }}_image').attr('src', '{{ path('genemu_captcha_refresh') }}?' + Math.random());
+            });
+        });
+    </script>
+
+ 
+{% endblock %}

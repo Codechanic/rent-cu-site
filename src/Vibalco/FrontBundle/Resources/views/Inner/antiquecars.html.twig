@@ -1,0 +1,137 @@
+{% extends "FrontBundle::layout.html.twig" %}
+
+{% block title %}{{ 'front.antiquecars.title' | trans }}{% endblock %}
+
+{% block pagecontent %}   
+<div class="col-md-9 col-md-push-3 left-row-padding body-content">
+    <div class="row bodyrow entity-list">        
+    {% for entity in entities %}
+        <div class="col-sm-12">
+            <div class="row box-gray front-box-shadow list-box">   
+                <div class="col-sm-7">
+                    <div class="table-responsive">
+                        <table class="table table-condensed feature-table">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'front.antiquecar.brand' | trans }}</th>
+                                    <th>{{ 'front.antiquecar.year' | trans }}</th>
+                                    <th>{{ 'front.antiquecar.color' | trans }}</th>
+                                    <th>{{ 'front.antiquecar.hardcover' | trans }}</th>
+                                    <th>{{ 'front.antiquecar.convertible' | trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ entity.brand }}</td>
+                                    <td>{{ entity.year }}</td>
+                                    <td>{{ entity.color }}</td>
+                                    <td>{% if entity.hardcover %}<i class="icon-ok">{% endif %}</td>
+                                    <td>{% if entity.convertible %}<i class="icon-ok">{% endif %}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="price-container row">
+                        <div class="col-xs-6">
+                            <h4>{{ entity.pricehour | number_format(0) }}<i>.{{ (entity.pricehour * 100) | number_format(0, '', '') | slice(-2)  }} CUC</i> <span>{{ 'front.antiquecar.perhour' | trans }}</span></h4>
+                        </div>
+                        <div class="col-xs-6">
+                            <h4>{{ entity.price8hour | number_format(0) }}<i>.{{ (entity.price8hour * 100) | number_format(0, '', '') | slice(-2)  }} CUC</i> <span>{{ 'front.antiquecar.per8hour' | trans }}</span></h4>
+                        </div>
+                    </div>
+                    <div class="row info-container">
+                        <div class="col-xs-7 text-left">
+                            <address>
+                                {{ entity.owner }}</br>
+                                {{ 'front.antiquecar.email' | trans }}: <b>{{ entity.email }}</b><br>
+                                {{ 'front.antiquecar.phones' | trans }}: <b>{{ entity.phones }}</b><br>
+                            </address>
+                        </div>
+                        <div class="col-xs-5 municipality">
+                            {% if entity.municipality %} {{ entity.municipality.province }}{% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% if entity.webPath %}
+                    {% set img_src = entity.webPath %}
+                {% else %}
+                    {% set img_src = 'assets/front/listado.png' %}
+                {% endif %}
+                <div class="col-sm-5 picture">
+                    <img class="img-responsive" src="{{ asset(img_src) }}" alt="{{ entity.name }}" title="{{ entity.name }}">
+                </div>
+                <h3 class="col-sm-12">
+                    <span>
+                        {{ entity.name }}
+                    </span>
+                </h3>
+            </div>
+        </div>
+        {% if loop.index is even %}
+            <div class="clearfix"></div>
+        {% endif %}
+    {% endfor %}
+    {% if paginator.itemsPerPage < paginator.totalItems %}
+        <div id="paginator" class="col-sm-12">
+        {% set template = 'FrontBundle:Inner:bootstrap-simple-paginator-list-view.html.twig' %}
+        {{ simple_paginator_render('antiquecars', null, {
+            'previousPageText': '«',
+            'nextPageText': '»',
+            'currentClass': 'active'
+        }, template) }}
+        </div>
+    {% endif %}
+    </div>
+</div>
+    
+<aside class="col-md-3 col-md-pull-9 right-row-padding">
+        <div class="row front-box-shadow lateral-list">
+            <div class="badge-lateral">
+                <b class="floatingtag">{{ 'front.antiquecarfilter.header' | trans }}</b>
+                <img class="img-responsive" src="{{ asset('bundles/front/images/badge.png') }}"/>
+            </div>
+            <div class="container-fluid">
+                {% render controller("FrontBundle:Inner:antiquecarfilter") %}
+            </div>  
+        </div>                                        
+        {% include 'FrontBundle:Default:fragm_applicant.html.twig'%}
+        {% include 'FrontBundle:Default:fragm_sociallinks.html.twig'%}
+    </aside>
+{% endblock pagecontent %}
+
+{% block javascripts %}
+    {{ parent() }}    
+    
+    <script type="text/javascript">
+        $('document').ready(function() {            
+            
+{#            function temporal_fix(){
+                var aside = $('aside');
+                var bc = $('.body-content');            
+                var h = Math.max(aside.height(), bc.height());            
+                aside.height(h);
+                bc.height(h);
+            };
+            
+            temporal_fix();#}
+            
+            $('.popovericon').popover();
+            
+                        
+            initApplicant();
+            
+            function initApplicant()
+            {
+                $('#applicantform').ajaxForm({
+                    target: '#applicantform-container',
+                    beforeSubmit: function() {                    
+                        return true;
+                    },
+                    success: function(response) {                       
+                        initApplicant();
+                    }
+                });
+            }
+        });        
+    </script>
+{% endblock javascripts %}

@@ -1,0 +1,11 @@
+/app/cache/
+/app/logs/
+/app/config/parameters.yml
+/public_html/bundles/
+/.idea/
+/nbproject/
+/public_html/uploads/
+vendor
+composer.phar
+*.zip
+uploads.zip
