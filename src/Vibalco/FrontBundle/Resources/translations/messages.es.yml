@@ -38,7 +38,7 @@ front:
             email: Correo
             
     coverfilter:
-       header: CATEGORÍAS
+       header: CASAS
        location: Ubicación
        homestays: Casas
     
@@ -84,7 +84,7 @@ front:
             message: Mensaje
             
     contactform:
-        header: RENTA DE CASA
+        header: RENTAR
         form:
             name: Nombre
             email: Correo
@@ -150,13 +150,13 @@ front:
         description: Descripción
             
     homestayfilter:
-        header: BÚSQUEDA
+        header: OTRA BÚSQUEDA
         results: resultados
-        location: Ubicación
+        location: Provincia
         morelocations: Más ubicaciones
-        service: Sevicios
+        service: Facilidades
         moreservices: Más servicios
-        acommodation: Alojamiento
+        acommodation: Tipo de Alojamiento
         moreacommodations: Más alojamientos
         prices: Precios
         changeprices: Cambiar Precios
@@ -165,7 +165,7 @@ front:
         search: Búsqueda Personalizada
         changesearch: Cambiar criterio de búsqueda
         searchplaceholder: Nombre, descripción...
-        rooms: Habitaciones
+        rooms: Cantidad de Habitaciones
         room: Habitación
         morerooms: Más habitaciones
             
@@ -196,3 +196,7 @@ front:
         searchplaceholder: Nombre, descripción...
         year: Año
         moreyears: Más años
+    comment:
+        label: Comentario
+        send: Enviar
+        email: Email

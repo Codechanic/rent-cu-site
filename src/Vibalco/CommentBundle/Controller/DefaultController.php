@@ -18,12 +18,6 @@ class DefaultController extends Controller {
     public function indexAction($name) {
         return array('name' => $name);
     }
-    
-    
- 
-    
-    
-
     /**
      * @Route("/subscribe/form", name="subscribe_form")
      * @Template()
@@ -172,9 +166,6 @@ class DefaultController extends Controller {
         $entity = new \Vibalco\CommentBundle\Entity\CommentVisitors();
         $form = $this->createForm(new \Vibalco\CommentBundle\Form\CommentHomeType(), $entity);
         $form->bind($request);
-
-
-       
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

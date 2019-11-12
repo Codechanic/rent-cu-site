@@ -20,6 +20,10 @@
                     </div>
                     <div class='entity-description' style="font-size: 12px;">
                         {{ entity.description | striptags | truncate(300, true) | raw }}
+                        <br/>
+                        <div class="pull-left">
+                            <span>{{ 'front.homestay.price' | trans }} &nbsp;</span>{{ entity.getMinPrice() | number_format(0) }}<i>.{{ (entity.getMinPrice() * 100) | number_format(0, '', '') | slice(-2)  }} CUC</i>
+                        </div>
                     </div>
                 </div>
                 {% if entity.webPath %}
@@ -32,7 +36,7 @@
                 </div>
                 <h3 class="col-sm-12">
                     <a href="{{ path('homestay', {'slug' : entity.slug }) }}">
-                        {{ entity.name }}
+                        {{ entity.name }} - {{ entity.municipality.province }}
                     </a>
                     <b class="popovericon icon-info-sign" data-id="#homestay-{{ entity.id }}"></b>
                 </h3>

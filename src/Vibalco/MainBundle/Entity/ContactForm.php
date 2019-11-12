@@ -80,7 +80,7 @@ class ContactForm
     protected $active;
     
     /**
-     * @Assert\True
+     * @Assert\IsTrue
      */
     public function isValid() {
         return ($this->email != null || $this->phone != null );

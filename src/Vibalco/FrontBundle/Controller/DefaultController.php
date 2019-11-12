@@ -4,11 +4,14 @@ namespace Vibalco\FrontBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
+use Firebase\JWT\JWT;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Vibalco\AdminBundle\Entity\User;
+use Vibalco\FrontBundle\Entity\Comment;
 use Vibalco\MainBundle\Entity\Applicant;
 use Vibalco\MainBundle\Entity\ContactUs;
 use Vibalco\MainBundle\Entity\Subscriber;
@@ -303,6 +306,88 @@ class DefaultController extends Controller {
         //TODO add car count here
         
         return array('list' => $list);
+    }
+
+    /**
+     * @Route("/comment", name="rent.app.comment", methods={"GET"})
+     * @param Request $request
+     */
+    public function listCommentAction(Request $request) {
+        $list = $request->query->get('homeStayId');
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $homeStay = $em->getRepository('MainBundle:Homestay')->find($list);
+            $comments = $em->getRepository('FrontBundle:Comment')->findBy(array(
+                'homestay' => $homeStay
+            ));
+
+            return new JsonResponse($comments);
+
+        } catch (\Exception $e) {
+            return new JsonResponse($e->getMessage(), JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     *@Route("/comment", name="rent.app.comment.create", methods={"POST"})
+     * @param Request $request
+     */
+    public function createComment(Request $request) {
+        $homestay = $request->request->get('homeStayId');
+        $name = $request->request->get('name');
+        $text = $request->request->get('text');
+        $email = $request->request->get('email');
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $homeStay = $em->getRepository('MainBundle:Homestay')->find($homestay);
+            $comment = new Comment();
+            $comment->setName($name);
+            $comment->setText($text);
+            $comment->setRating(0);
+            $comment->setEnabled(false);
+            $comment->setEmail($email);
+            $comment->setHomestay($homeStay);
+            $em->persist($comment);
+            $em->flush();
+            return new JsonResponse();
+        }  catch (\Exception $exception) {
+            return new JsonResponse($exception->getMessage(), JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    /**
+     * @Route("/token", name="_security_token", methods={"POST"})
+     */
+    public function tokenAction(Request $request){
+        if ($request->isXmlHttpRequest()) {
+            try {
+                $username = $request->get('_username');
+                $password = $request->get('_password');
+                $em = $this->getDoctrine()->getManager();
+                $encoder = $this->get('security.password_encoder');
+                $user = $em->getRepository(User::class)->loadUserByUsername($username);
+                if (!empty($user)) {
+                    $isValid = $encoder->isPasswordValid($user, $password);
+                    if (!$isValid) {
+                        return new JsonResponse(array('Bad Credentials'), 400);
+                    }
+                }
+                $key = "secretKey";
+                $token = array(
+                    'username' => $user->getUsername(),
+                    'sub' => $user->getId()
+                );
+
+                $jwt = JWT::encode($token, $key);
+
+                return new JsonResponse($jwt, 200);
+            } catch (\Exception $exception) {
+                return new JsonResponse(array('Bad Credentials'), 400);
+            }
+        } else {
+            return new RedirectResponse($this->get('router')->generate('homepage'));
+        }
     }
     
     private function findPromos($class, $count) {

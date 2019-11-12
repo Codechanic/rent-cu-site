@@ -23,6 +23,7 @@ class InnerController extends Controller {
      */
     public function homestaysAction() 
     {
+
         $em = $this->getDoctrine()->getManager();        
         $fm = $this->get('homestay.filter');
         

@@ -32,14 +32,14 @@ front:
     footer:
         externallinks: EXTERNAL LINKS
         contactus: 
-            title: CANTACT
+            title: CONTACT
             phones: Phone
             phonesabbr: P
             email: Email
             
     coverfilter:
-       header: CATEGORIES
-       location: Location
+       header: HOMESTAYS
+       location: Province
        homestays: Homestays
     
     premiumslider.header: PREMIUMS
@@ -48,43 +48,43 @@ front:
     discountslider.header: LAST DISCOUNTS
          
     subscriber:
-        text.formtitle: Desea recibir el boletín mensual de noticias.
-        form.submit: SUBSCRÍBETE
+        text.formtitle: Would you like to receive the newsletter
+        form.submit: SUBSCRIBE
         message:
-            success: Solicitud enviada
-            error: Error en los campos de solicitud
+            success: Request sent
+            error: Request fields has errors
         email:
-            subject: Nueva Subscripción
-            title: Nueva Subscripción
-            email: Correo
+            subject: New Subscription
+            title: New Subscription
+            email: Email
             
         
     contactus:
         text:
-            contactus: Contáctenos
-            address: Dirección
-            phones: Teléfonos
-            phonesabbr: T
-            email: Correo
-            formtitle: Formulario de Contacto
+            contactus: Contact Us
+            address: Address
+            phones: Phones
+            phonesabbr: P
+            email: Email
+            formtitle: Contact Form
         form:
-            name: Nombre
-            email: Correo
-            message: Mensaje
-            submit: Enviar
+            name: Name
+            email: Email
+            message: Message
+            submit: Send
         message:
-            success: Solicitud enviada
-            internalerror: Error al procesar solicitud
-            error: Error en los campos de solicitud
+            success: Request sent
+            internalerror: There was an error processing the request
+            error: Request fields has errors
         email:
-            subject: Nueva Solicitud de Contacto
-            title: Nueva Solicitud de Contacto
-            name: Nombre
-            email: Correo
-            message: Mensaje
+            subject: New Contact Request
+            title: New Contact Request
+            name: Name
+            email: Email
+            message: Message
             
     contactform:
-        header: RENTA DE CASA
+        header: BOOK
         form:
             name: Nombre
             email: Correo
@@ -109,12 +109,12 @@ front:
             message: Mensaje
             
     applicant:
-        header: ANÚNCIATE YA
+        header: GET ANNOUNCED
         form:
-            name: Nombre
-            email: Correo
-            message: Mensaje
-            submit: ENVIAR
+            name: Name
+            email: Email
+            message: Message
+            submit: SEND
         message:
             success: Solicitud enviada
             internalerror: Error al procesar solicitud
@@ -140,34 +140,34 @@ front:
         notoffered: No disponible
         description: DESCRIPCIÓN
         municipality: Localización
-        location: Localización
+        location: Province
         phones: Teléfonos
         email: Correo
         places: Lugares de Interés  
         
     homestays:
-        rooms: Habitaciones
-        description: Descripción
+        rooms: Rooms
+        description: Description
             
     homestayfilter:
-        header: BÚSQUEDA
-        results: resultados
-        location: Ubicación
-        morelocations: Más ubicaciones
-        service: Sevicios
-        moreservices: Más servicios
-        acommodation: Alojamiento
-        moreacommodations: Más alojamientos
-        prices: Precios
-        changeprices: Cambiar Precios
+        header: SEARCH
+        results: results
+        location: Province
+        morelocations: More locations
+        service: Facilities
+        moreservices: More facilities
+        acommodation: Accommodation Type
+        moreacommodations: More accomodation
+        prices: Prices
+        changeprices: Change Prices
         pricemin: Min
         pricemax: Max
-        search: Búsqueda Personalizada
-        changesearch: Cambiar criterio de búsqueda
-        searchplaceholder: Nombre, descripción...
-        rooms: Habitaciones
-        room: Habitación
-        morerooms: Más habitaciones
+        search: Custom Search
+        changesearch: Change search criteria
+        searchplaceholder: Name, description...
+        rooms: Total Rooms
+        room: Room
+        morerooms: More Room
             
     antiquecar:
         brand: Marca
@@ -183,7 +183,7 @@ front:
     antiquecarfilter:
         header: BÚSQUEDA
         results: resultados
-        location: Ubicación
+        location: Province
         morelocations: Más ubicaciones
         brand: Marca
         morebrands: Más marcas
@@ -196,3 +196,7 @@ front:
         searchplaceholder: Nombre, descripción...
         year: Año
         moreyears: Más años
+    comment:
+        label: Comment
+        send: Send
+        email: Email

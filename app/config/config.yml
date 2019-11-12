@@ -113,7 +113,7 @@ vibalco_datatable:
 
 a2lix_translation_form:
     locales: [es, en]       # [1]
-    default_required: true      # [2]
+    #default_required: true      # [2]
     manager_registry: doctrine      # [3]
     templating: "A2lixTranslationFormBundle::default.html.twig"      # [4]
 
@@ -163,7 +163,6 @@ services:
     arguments: [@appsettings]
     tags:
         - { name: twig.extension }
-
 
 
 

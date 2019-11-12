@@ -9,3 +9,5 @@ vendor
 composer.phar
 *.zip
 uploads.zip
+/log-composer.txt
+/update.sql

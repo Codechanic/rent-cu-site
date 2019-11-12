@@ -2,10 +2,16 @@
 
 namespace Vibalco\AdminBundle\Controller;
 
+use DoctrineExtensions\Versionable\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\SecurityContext;
+use Vibalco\AdminBundle\Entity\User;
 
 /**
  * SecuredController
@@ -44,7 +50,6 @@ class SecuredController extends Controller {
     public function logoutAction() {
         //close session
     }
-
 }
 
 ?>

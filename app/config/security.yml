@@ -14,9 +14,9 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-#        login:
-#            pattern:  ^/admin/login$
-#            security: false
+        login:
+            pattern:  ^/admin/login$
+            security: false
             
         backend:
             pattern:        ^/admin          
@@ -32,7 +32,7 @@ security:
             remember_me:
                 key:        m4d3r4
                 lifetime:   86400
-        
+
     access_control:
         - { path: ^/admin/*, roles: ROLE_ADMIN }
                 

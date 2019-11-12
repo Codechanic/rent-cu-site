@@ -78,7 +78,7 @@ class Visit
     }
     
     /**
-     *  @Assert\True()
+     *  @Assert\IsTrue ()
      */
     public function isAClass() {
         return class_exists($this->entityclass);;
