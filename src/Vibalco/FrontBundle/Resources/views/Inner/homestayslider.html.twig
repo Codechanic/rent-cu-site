@@ -1,0 +1,41 @@
+<div id="homestayslider" class="jssor_main_container">
+    <!-- Slides Container -->
+    <div data-u="slides" class="slides">
+        <div>
+            {% if entity.webPath %}
+                {% set img_src = entity.webPath %}
+            {% else %}
+                {% set img_src = 'assets/front/casa.png' %}
+            {% endif %}
+            <img data-u="image" src="{{ asset( img_src )}}" alt="{{entity.name}} cover image"/>
+        </div>
+        {% for image in images %}
+        <div>
+            <img data-u="image" src="{{ asset( image.webPath )}}" alt="{{entity.name}} gallery image {{ loop.index }}"/>
+            <img data-u="thumb" src="{{ asset( image.webPath )}}" alt="{{entity.name}} gallery image {{ loop.index }}"/>
+        </div>
+        {% endfor %}            
+    </div>
+
+    <!-- Arrow Left -->
+    <span data-u="arrowleft" class="jssora05l">
+    </span>
+    <!-- Arrow Right -->
+    <span data-u="arrowright" class="jssora05r">
+    </span>
+    <!-- Arrow Navigator Skin End -->
+
+    <!-- Thumbnail Navigator Skin Begin -->
+    <div data-u="thumbnavigator" class="jssort01">
+        <!-- Thumbnail Item Skin Begin -->
+        <div data-u="slides">
+            <div data-u="prototype" class="p">
+                <div class=w><thumbnailtemplate></thumbnailtemplate></div>
+                <div class=c>
+                </div>
+            </div>
+        </div>
+        <!-- Thumbnail Item Skin End -->
+    </div>
+    <!-- Thumbnail Navigator Skin End -->
+</div>

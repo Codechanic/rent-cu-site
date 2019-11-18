@@ -1,0 +1,172 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+
+framework:
+    #esi:             ~
+    translator:      { fallback: %locale% }
+    secret:          %secret%
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVersionScheme
+    default_locale:  "%locale%"
+    trusted_proxies: ~
+    session:         ~
+    fragments:       ~
+
+# Twig Configuration
+twig:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+    globals:
+        theme: default
+        color_portlet: blue
+        color_button_acept: yellow
+        color_button_cancel: red
+        color_button_edit: yellow
+        color_button_new: yellow
+        color_button_close: green
+        color_button_delete: red
+        color_change_password: yellow
+        color_button_change_staus: yellow
+        color_button_multiple: red
+        appconfig: @config
+
+# Assetic Configuration
+assetic:
+    debug:          %kernel.debug%
+    use_controller: false
+    read_from: %kernel.root_dir%/../public_html
+    bundles:        [FrontBundle, AdminBundle]
+    #java: /usr/bin/java
+    filters:
+        cssrewrite: ~
+        yui_css:
+            jar: "%kernel.root_dir%/Resources/java/yuicompressor.jar"
+        yui_js:
+            jar: "%kernel.root_dir%/Resources/java/yuicompressor.jar"
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   %database_driver%
+        host:     %database_host%
+        port:     %database_port%
+        dbname:   %database_name%
+        user:     %database_user%
+        password: %database_password%
+        charset:  UTF8
+        
+    orm:
+        auto_generate_proxy_classes: %kernel.debug%
+        auto_mapping: true
+        
+        mappings:
+            translatable:
+                type: annotation
+                alias: Gedmo
+                prefix: Gedmo\Translatable\Entity
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity"
+
+swiftmailer:
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
+    
+
+        
+avalanche_imagine:
+    web_root:     %kernel.root_dir%/../public_html
+    cache_prefix: images/cache
+    driver:       gd
+    filters:
+        my_thumb:
+            type:    thumbnail
+            options: { size: [100, 100], mode: outbound, cache_type: public, cache_expires: 2 weeks }
+        profile:
+            type:    thumbnail
+            options: { size: [200, 200], mode: outbound, cache_type: public, cache_expires: 2 weeks }  
+        slide:
+            type:    resize
+            options: { size: [700, 357], mode: outbound, cache_type: public, cache_expires: 2 weeks }
+        post:
+            type:    resize
+            options: { size: [350, 350], mode: outbound, cache_type: public, cache_expires: 2 weeks }
+        
+        
+stof_doctrine_extensions:
+    default_locale: %locale%
+    orm:
+        default:
+            translatable: true
+            sluggable: true
+vibalco_datatable:    
+    all:    ~
+    js:     ~
+
+a2lix_translation_form:
+    locales: [es, en]       # [1]
+    default_required: true      # [2]
+    manager_registry: doctrine      # [3]
+    templating: "A2lixTranslationFormBundle::default.html.twig"      # [4]
+
+
+                 
+#be_simple_packing_minify.config:
+ #       css: { minify: true }
+ #       js:  { minify: true }
+ 
+genemu_form:    
+    captcha:
+        enabled:          true
+        width:            100
+        height:           40
+        length:           4
+        format:           'png'
+        chars:            '0123456789'
+        font_size:        18
+        font_color:       ['252525', '8B8787', '550707', '3526E6', '88531E']
+        font_dir:         %kernel.root_dir%/../web/bundles/genemuform/fonts
+        fonts:            ['akbar.ttf', 'brushcut.ttf', 'molten.ttf', 'planetbe.ttf', 'whoobub.ttf']
+        background_color: 'DDDDDD'
+        border_color:     '000000'
+        grayscale:        false
+ 
+
+#be_simple_i18n_routing: ~
+#jms_i18n_routing:
+#        default_locale: en
+#        locales: [en, es]
+#        strategy: custom
+        
+backup_restore: ~
+
+services:
+ twig.extension.text:
+     class: Twig_Extensions_Extension_Text
+     tags:
+         - { name: twig.extension }
+
+ appsettings:
+    class: Vibalco\AdminBundle\Extensions\AppSettings
+    arguments: [@session, @doctrine.orm.entity_manager]
+        
+ twig.extension.appstate:
+    class: Vibalco\AdminBundle\Extensions\AppSettingExtension
+    arguments: [@appsettings]
+    tags:
+        - { name: twig.extension }
+
+
+
+
+
+
+        

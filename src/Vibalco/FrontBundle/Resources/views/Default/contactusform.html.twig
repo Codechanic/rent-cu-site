@@ -1,0 +1,22 @@
+<form action="{{ path('contactusform') }}"  method="post" {{ form_enctype(form) }} class="horizontal-form" id="contactusform">
+    <h3 class="form-section">{{'front.contactus.text.formtitle' | trans }}</h3>
+    <div class="form-group">
+        {{ form_row(form.name, {'attr' : {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.email, {'attr' : {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.message, {'attr' : {'class': 'form-control'}}) }}
+    </div>
+    
+    {{ form_rest(form) }}
+    
+    <div class="margin-top-10">
+        <button type="submit" class="btn blueimg">{{ 'front.contactus.form.submit' | trans }}</button>
+    </div>
+    <div class="margin-top-10">
+        <span class="msg">{{ msg['error'] | trans }}</span>
+        <span class="msg success">{{ msg['success'] | trans }}</span>
+    </div>
+</form>

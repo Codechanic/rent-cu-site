@@ -1,0 +1,61 @@
+{% spaceless %}
+    <div class="portlet box {{color_portlet}}">
+    <div class="portlet-title">
+        
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn {{color_button_edit}}" action="ajax-modal" href="{{ path('admin_contactform_edit', {'id': entity.id}) }}" data-toggle="tooltip" title="{{ 'admin.action.edit' | trans }}"><i class="icon-edit"></i> {{ 'admin.action.edit' | trans }}</a>
+                <a class="btn {{color_button_delete}}" action="contactform-delete" data-toggle="tooltip" title="{{ 'admin.action.delete' | trans }}"><i class="icon-trash"></i> {{ 'admin.action.delete' | trans }}</a>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <tr><th>{{'admin.contactform.name' | trans}}</th><td>{{ entity.name }}</td></tr>        
+                <tr><th>{{'admin.contactform.email' | trans}}</th><td>{{ entity.email }}</td></tr>        
+                <tr><th>{{'admin.contactform.phone' | trans}}</th><td>{{ entity.phone }}</td></tr>        
+                <tr><th>{{'admin.contactform.message' | trans}}</th><td>{{ entity.message }}</td></tr>        
+                <tr><th>{{'admin.contactform.from' | trans}}</th><td>{{ entity.fromdate is not null ? entity.fromdate|date('d/m/Y') : ''}}</td></tr>        
+                <tr><th>{{'admin.contactform.to' | trans}}</th><td>{{ entity.todate is not null ? entity.fromdate|date('d/m/Y') : '' }}</td></tr>
+                <tr><th>{{'admin.contactform.homestay' | trans}}</th><td>{{ entity.homestay }}</td></tr>
+            </table>
+        </div>        
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#admin-entity-viewer a[action=ajax-modal]').on('click', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        var container = $('#admin-entity-viewer');
+        App.blockUI(container, false);
+        $.post(url, {}, function(response) {
+            //App.unblockUI(container);
+            container.html(response);
+            // App.fixContentHeight(); // fix content height
+            // App.initUniform(); // initialize uniform elements
+            //$('.selected').removeClass('selected warning');
+            //myself.addClass('selected warning');
+        });
+    });
+    $('a[action=contactform-delete]').on('click', function() {
+        if (confirm('{{ 'contactform.delete' | trans }}{{ entity }}')) {
+            $.ajax({
+                type: 'delete',
+                dataType: 'json',
+                url: '{{ path('admin_contactform_delete', {'id': entity.id}) }}',
+                success: function(response) {
+                    if (response.success) {
+                        $('#table-contactforms').dataTable().fnDraw(false);
+                        $('#admin-entity-viewer').html('<center><p class="muted" style="margin-top: 24px;">{{ 'admin.common.select' | trans }} {{ 'admin.contactform.entity' | trans }}... </p></center > ');
+                        toastr['success'](response.message, "admin.message.succesfully");
+                    } else {
+                        toastr['error'](response.error.message, "admin.message.error");
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endspaceless %}

@@ -1,0 +1,6 @@
+{% if promo is not null %}
+    {% set url = promo.url or promo.product ? path('redirectpromo', {'concept' : 'promotop', 'id' : promo.id }) : '#' %}
+    <a href="{{ url }}" class="cover_toppromo">
+        <img class="img-responsive"  src="{{ asset( promo.webpath )}}" alt="{{ promo.name }}" title="{{ promo.name }}"/>
+    </a>
+{% endif %}

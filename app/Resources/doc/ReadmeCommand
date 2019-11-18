@@ -1,0 +1,24 @@
+Los comandos existentes son lo siguientes:
+
+Para adicionar un usuario administrador al sistema..requeire de los parámetros -u nombre_de_usuario y -p contraseña
+
+vibalco:add:admin -u admin -p adminpass
+
+Para generar un crud completo de una Entidad se utiliza el siguiente comando
+
+vibalco:generate:crud Entidad -l (long, chort) -b NameBundle
+
+
+Para instalar y generar todas las configuraciones básicas del sistema se ultiliza el siguinte comando:
+
+  vibalco:install                    
+
+
+Para que el sistema actualize los roles de los usarios es necesario ejecutar el siguiente comando:
+
+  vibalco:roles
+
+Si no se le pasa ningun parametro este borrara todos los roles existentes y añadirá otros nuevos por lo cual es recomendable usar 
+la opcion -a update para que solo añada los nuevos Roles, para lo usuarios..
+
+

@@ -1,0 +1,204 @@
+front:
+    home.title: PORTADA
+    homestays.title: CASAS
+    antiquecars.title: AUTOS ANTIGUOS
+    contactus.title: CONTÁCTENOS      
+    
+    social.header: SÍGUENOS
+    
+    email.footer: Este reporte ha sido enviado por
+    
+    global:
+        email: Correo
+        name: Nombre
+        message: Mensaje
+        phone: Teléfono
+        
+    aboutus:
+        title: QUIENES SOMOS
+        header: Quienes Somos
+    
+    copyright: Todos los derechos reservados
+    
+    header.form-search: ¿Qué estas buscando? 
+    
+    menu:
+        index: INICIO
+        homestays: CASAS
+        antiquecars: AUTOS ANTIGUOS
+        contactus: CONTACTOS
+        aboutus: QUIENES SOMOS
+        
+    footer:
+        externallinks: ENLACES EXTERNOS
+        contactus: 
+            title: CONTÁCTENOS
+            phones: Teléfonos
+            phonesabbr: Tel
+            email: Correo
+            
+    coverfilter:
+       header: CASAS
+       location: Provincia
+       homestays: Casas
+    
+    premiumslider.header: PREMIUMS
+    visitslider.header: LO MÁS VISTO
+    stripslider.header: ANUNCIOS
+    discountslider.header: ÚLTIMAS REBAJAS
+        
+    subscriber:
+        text.formtitle: Desea recibir el boletín mensual de noticias.
+        form.submit: SUBSCRÍBETE
+        message:
+            success: Solicitud enviada
+            error: Error en los campos de solicitud
+        email:
+            subject: Nueva Subscripción
+            title: Nueva Subscripción
+            email: Correo
+            
+        
+    contactus:
+        text:
+            contactus: Contáctenos
+            address: Dirección
+            phones: Teléfonos
+            phonesabbr: T
+            email: Correo
+            formtitle: Formulario de Contacto
+        form:
+            name: Nombre
+            email: Correo
+            message: Mensaje
+            submit: Enviar
+        message:
+            success: Solicitud enviada
+            internalerror: Error al procesar solicitud
+            error: Error en los campos de solicitud
+        email:
+            subject: Nueva Solicitud de Contacto
+            title: Nueva Solicitud de Contacto
+            name: Nombre
+            email: Correo
+            message: Mensaje
+            
+    contactform:
+        header: RENTAR
+        form:
+            name: Nombre
+            email: Correo
+            phone: Teléfono
+            fromdate: Desde
+            todate: Hasta
+            message: Mensaje
+            submit: ENVIAR
+        message:
+            success: Solicitud enviada
+            internalerror: Error al procesar solicitud
+            error: Error en los campos de solicitud
+        email:
+            subject: Nueva Solicitud de Reserva
+            title: Nueva Solicitud de Reserva
+            homestay: Casa
+            fromdate: Desde
+            todate: Hasta
+            name: Nombre
+            email: Correo
+            phone: Teléfono
+            message: Mensaje
+            
+    applicant:
+        header: ANÚNCIATE YA
+        form:
+            name: Nombre
+            email: Correo
+            message: Mensaje
+            submit: ENVIAR
+        message:
+            success: Solicitud enviada
+            internalerror: Error al procesar solicitud
+            error: Error en los campos de solicitud
+        email:
+            subject: Nueva Solicitud de Anuncio
+            title: Nueva Solicitud de Anuncio
+            name: Nombre
+            email: Correo
+            message: Mensaje
+            
+    homestay:
+        rooms: Habitaciones
+        room: Habitación
+        price: Desde
+        breakfast: Desayuno
+        extrabed: Tercera persona
+        childbed: Cama para niño
+        childnotallowed: No se permiten niños
+        childforfree: Sin costo para niños
+        freeservices: Facilidades
+        extracost: Costo adicional
+        notoffered: No disponible
+        description: DESCRIPCIÓN
+        municipality: Localización
+        location: Localización
+        phones: Teléfonos
+        email: Correo
+        places: Lugares de Interés
+        
+    homestays:
+        rooms: Habitaciones
+        description: Descripción
+            
+    homestayfilter:
+        header: OTRA BÚSQUEDA
+        results: resultados
+        location: Provincia
+        morelocations: Más ubicaciones
+        service: Facilidades
+        moreservices: Más servicios
+        acommodation: Tipo de Alojamiento
+        moreacommodations: Más alojamientos
+        prices: Precios
+        changeprices: Cambiar Precios
+        pricemin: Min
+        pricemax: Max
+        search: Búsqueda Personalizada
+        changesearch: Cambiar criterio de búsqueda
+        searchplaceholder: Nombre, descripción...
+        rooms: Cantidad de Habitaciones
+        room: Habitación
+        morerooms: Más habitaciones
+            
+    antiquecar:
+        brand: Marca
+        year: Año
+        color: Color
+        hardcover: Cubierta dura
+        convertible: Convertible
+        perhour: Por Hora
+        per8hour: Por 8 Horas
+        email: C
+        phones: T
+        
+    antiquecarfilter:
+        header: BÚSQUEDA
+        results: resultados
+        location: Provincia
+        morelocations: Más ubicaciones
+        brand: Marca
+        morebrands: Más marcas
+        prices: Precios
+        changeprices: Cambiar Precios
+        pricemin: Min
+        pricemax: Max
+        search: Búsqueda Personalizada
+        changesearch: Cambiar criterio de búsqueda
+        searchplaceholder: Nombre, descripción...
+        year: Año
+        moreyears: Más años
+    comment:
+        label: Comentario
+        send: Enviar
+        email: Email
+        name: Nombre
+        list: Comentarios

@@ -1,0 +1,70 @@
+<!-- BEGIN PAGE CONTAINER-->
+
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">     
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+           {{
+            "<h3 class=\"page-title\">
+                {{ 'admin."~module~".module' | trans }} <small> {{ 'admin."~module~".description' | trans }}</small>
+            </h3>"
+            }}
+           <ul class="page-breadcrumb breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                   {{ "<a href=\"{{ path('admin_index') }}\">Dashboard</a>" }}
+                    <i class="icon-angle-right"></i>
+                </li>
+                
+                {{ "<li class=\"active\">{{ 'admin."~module~".module' | trans }}</li>" }}
+            </ul>
+            <!-- END PAGE TITLE & BREADCRUMB-->
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+{% if list == "short" %}
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-md-4 admin-entities-list" id="admin-{{module}}-list">
+           {{ "{% include '"~bundle~":"~model~":list.html.twig' %}" }}
+        </div>
+
+        <div class="col-lg-8 col-md-8 col-md-8" id="admin-entity-viewer">
+           {{ "<center><p class=\"muted\" style=\"margin-top: 24px;\">{{ 'admin.common.select' | trans }} {{ 'admin."~module~".entity' | trans }}...</p></center>" }}
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+       <div class="inbox col-md-3 menu-list">
+               <ul class="inbox-nav margin-bottom-10">
+                 
+                  <li class="inbox active {{module}}">
+                     <a action="list" url="{{"{{ path('admin_"~module~"_list') }}"}}" data-parent_name="{{ module }}" data-title="Inbox" class="btn" href="javascript:;"> <i class="icon-list"></i> {{module}}
+                     </a>
+                     <b></b>
+                  </li>
+                  
+               </ul>
+            </div>
+        <div class="col-md-9 admin-entity-viewer" id="admin-{{module}}-viewer">
+           {{ "{% include '"~bundle~":"~model~":list.html.twig' %}" }}
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+    $('a[action=list]').on('click', function(e) {
+        var url=$(this).attr('url');
+        var parent=$(this).attr('data-parent_name');
+        e.preventDefault();
+        var pageContent = $('.admin-entity-viewer');
+        App.blockUI(pageContent, false);
+        $('.admin-entity-viewer').load(url, function() {
+        $('.inbox-nav > li.active').removeClass('active');
+        $('.inbox-nav > li.' + parent).addClass('active');
+        App.unblockUI(pageContent);
+        });
+         });
+    </script>
+    
+ {% endif %}
+

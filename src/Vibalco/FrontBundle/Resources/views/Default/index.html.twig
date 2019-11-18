@@ -1,0 +1,58 @@
+{% extends "FrontBundle::layout.html.twig" %}
+
+{% block pagecontent %}
+    <div class="col-md-9 col-md-push-3 left-row-padding body-content">
+        <div class="row bodyrow">
+            <div class="col-sm-7 colmainslider">
+                <div>
+                    {% render controller("FrontBundle:Default:cover_mainslider") %}
+                </div>
+            </div>
+            <div class="col-sm-5">
+                {% render controller('FrontBundle:Default:cover_premiumlist') %}
+            </div>
+        </div>
+
+        {% render controller('FrontBundle:Default:cover_discountslider') %}
+
+        {% render controller('FrontBundle:Default:cover_visitslider') %}
+    </div>
+    <aside class="col-md-3 col-md-pull-9 right-row-padding">
+        <div class="row front-box-shadow lateral-list">
+            <div class="badge-lateral">
+                <b class="floatingtag">{{ 'front.coverfilter.header' | trans }}</b>
+                <img class="img-responsive" src="{{ asset('bundles/front/images/badge.png') }}" alt="{{ 'front.coverfilter.header' | trans }}"/>
+            </div>
+            <div class="container-fluid">
+                {% render controller('FrontBundle:Default:cover_filter') %}
+            </div>  
+        </div>                                        
+        {% include 'FrontBundle:Default:fragm_applicant.html.twig'%}
+        {% include 'FrontBundle:Default:fragm_sociallinks.html.twig'%}
+    </aside>
+{% endblock pagecontent %}
+
+{% block javascripts %}
+    {{ parent() }}
+    
+    <script type="text/javascript">
+        $('document').ready(function() {
+            Front.init();
+            
+            initApplicant();
+            
+            function initApplicant()
+            {
+                $('#applicantform').ajaxForm({
+                    target: '#applicantform-container',
+                    beforeSubmit: function() {                    
+                        return true;
+                    },
+                    success: function(response) {                       
+                        initApplicant();
+                    }
+                });
+            }
+        });        
+    </script>
+{% endblock javascripts %}

@@ -1,0 +1,85 @@
+{% spaceless %}
+<div class="portlet box {{color_portlet}}">
+    <div class="portlet-title">
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn {{color_button_edit}}" action="ajax-modal" href="{{ path('admin_antiquecar_edit', {'id': entity.id}) }}" data-toggle="tooltip" title="{{ 'admin.action.edit' | trans }}"><i class="icon-edit"></i> {{ 'admin.action.edit' | trans }}</a>
+                <a class="btn {{color_button_delete}}" action="antiquecar-delete" data-toggle="tooltip" title="{{ 'admin.action.delete' | trans }}"><i class="icon-trash"></i> {{ 'admin.action.delete' | trans }}</a>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-responsive">
+            <div class="container">
+                <div class="col-md-3">
+                    {% if entity.webPath %}
+                        {% set img_src = entity.webPath %}
+                    {% else %}
+                        {% set img_src = 'bundles/admin/images/noimage.jpg' %}
+                    {% endif %}
+                    <img class="img-thumbnail img-responsive" src="{{ asset(img_src) }}" alt="{{ entity.name }}" title="{{ entity.name }}" />
+                </div>
+                <div class="col-md-9">
+                    <table class="table table-hover">           
+                        <tr><th class="col-md-4">{{'admin.antiquecar.name' | trans}}</th><td>{{ entity.name }}</td></tr>
+                        <tr><th class="col-md-4">{{'admin.antiquecar.owner' | trans}}</th><td>{{ entity.owner }}</td></tr>
+                        <tr><th class="col-md-4">{{'admin.antiquecar.brand' | trans}}</th><td>{{ entity.brand }}</td></tr>
+                        <tr><th>{{'admin.antiquecar.municipality' | trans}}</th><td>{{ entity.municipality }}{{ entity.municipality and entity.municipality.province ? ', ' ~ entity.municipality.province }}</td></tr>
+                        
+                        <tr><th>{{'admin.antiquecar.owner' | trans}}</th><td>{{ entity.owner }}</td></tr>
+                        <tr><th>{{'admin.antiquecar.email' | trans}}</th><td>{{ entity.email }}</td></tr>
+                        <tr><th>{{'admin.antiquecar.phones' | trans}}</th><td>{{ entity.phones }}</td></tr>
+
+                        <tr><th>{{'admin.antiquecar.color' | trans}}</th><td>{{ entity.color }}</td></tr>
+                        <tr><th>{{'admin.antiquecar.year' | trans}}</th><td>{{ entity.year }}</td></tr>
+                        <tr><th>{{'admin.antiquecar.pricehour' | trans}}</th><td>{{ entity.pricehour | number_format(2) }}</td></tr>
+                        <tr><th>{{'admin.antiquecar.price8hour' | trans}}</th><td>{{ entity.price8hour | number_format(2) }}</td></tr>
+                        <tr><th>{{'admin.antiquecar.hardcover' | trans}}</th><td>{{ entity.hardcover ? 'Si' : 'No'}}</td></tr>
+                        <tr><th>{{'admin.antiquecar.convertible' | trans}}</th><td>{{ entity.convertible ? 'Si' : 'No' }}</td></tr>
+                        <tr><th>{{'admin.antiquecar.rank' | trans}}</th><td>{{ entity.rank }}</td></tr>
+                        <tr><th>{{'admin.antiquecar.enabled' | trans}}</th><td>{{ entity.enabled ? 'Si' : 'No' }}</td></tr>
+                    </table>    
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#admin-entity-viewer a[action=ajax-modal]').on('click', function(e) {
+
+        e.preventDefault();
+        var url = $(this).attr('href');
+        var container = $('#admin-entity-viewer');
+        App.blockUI(container, false);
+        $.post(url, {}, function(response) {
+
+            //App.unblockUI(container);
+            container.html(response);
+            // App.fixContentHeight(); // fix content height
+            // App.initUniform(); // initialize uniform elements
+            //$('.selected').removeClass('selected warning');
+            //myself.addClass('selected warning');
+        });
+    });
+    $('a[action=antiquecar-delete]').on('click', function() {
+        if (confirm('{{ 'antiquecar.delete' | trans }}{{ entity.name }}')) {
+            $.ajax({
+                type: 'delete',
+                dataType: 'json',
+                url: '{{ path('admin_antiquecar_delete', {'id': entity.id}) }}',
+                success: function(response) {
+                    if (response.success) {
+                        $('#table-antiquecars').dataTable().fnDraw(false);
+                        $('#admin-entity-viewer').html('<center><p class="muted" style="margin-top: 24px;">{{ 'admin.common.select' | trans }} {{ 'admin.antiquecar.entity' | trans }}... </p></center > ');
+
+                        toastr['success'](response.message, "admin.message.succesfully");
+                    } else {
+                        toastr['error'](response.error.message, "admin.message.error");
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endspaceless %}

@@ -1,0 +1,28 @@
+
+    <div class="row">
+        <div class="col-md-12">   
+            <h3 class="page-title">
+                {{ 'admin.user.module' | trans }} <small> {{ 'admin.user.description' | trans }}</small>
+            </h3>                  
+            <ul class="page-breadcrumb breadcrumb">
+               
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="{{ path('admin_index') }}">Dashboard</a> 
+                    <i class="icon-angle-right"></i>
+                </li>                 
+                <li class="active">{{ 'admin.user.module' | trans }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 admin-entities-list" id="admin-user-list">
+            {% include 'AdminBundle:User:list.html.twig' %}
+        </div>
+
+        <div class="col-md-8" id="admin-entity-viewer">
+            <center><p class="muted" style="margin-top: 24px;">{{ 'admin.common.select' | trans }} {{ 'admin.user.entity' | trans }}...</p></center>
+        </div>
+    </div>
+

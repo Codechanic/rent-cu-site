@@ -1,0 +1,89 @@
+<div class="portlet box {{color_portlet}}">
+    <div class="portlet-title">
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn {{color_button_edit}}" action="ajax-modal" href="{{ path('admin_promopremium_edit', {'id': entity.id}) }}" data-toggle="tooltip" title="{{ 'admin.action.edit' | trans }}"><i class="icon-edit"></i> {{ 'admin.action.edit' | trans }}</a>
+                <a class="btn {{color_button_delete}}" action="promopremium-delete" data-toggle="tooltip" title="{{ 'admin.action.delete' | trans }}"><i class="icon-trash"></i> {{ 'admin.action.delete' | trans }}</a>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="container">
+            <div class="col-md-3">
+                {% if entity.webPath %}
+                    {% set img_src = entity.webPath %}
+                {% else %}
+                    {% set img_src = 'bundles/admin/images/noimage.jpg' %}
+                {% endif %}
+                <img class="img-thumbnail img-responsive" src="{{ asset(img_src) }}" alt="{{ entity.name }}" title="{{ entity.name }}" />
+            </div>
+            <div class="col-md-9">
+                <table class="table table-hover">
+                    {# Al attributes in this place in work #}            
+                    <tr>
+                        <th>{{'admin.promo.name' | trans}}</th>
+                        <td>{{ entity.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{'admin.promo.description' | trans}}</th>
+                        <td>{{ entity.description | truncate(200, true) | trim | raw }}</td>
+                    </tr>
+                    {% if entity.homestay %}
+                    <tr>
+                        <th>{{'admin.promo.homestay' | trans}}</th>
+                        <td>{{ entity.homestay }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if entity.url %}
+                    <tr>
+                        <th>{{'admin.promo.url' | trans}}</th>
+                        <td>{{ entity.url | truncate(100, true) }}</td>
+                    </tr>    
+                    {% endif %}
+                    <tr>
+                        <th>{{'admin.promo.fromdate' | trans}}</th>
+                        <td>{{ entity.fromdate | date('d/m/Y') }}</td>
+                    </tr>        
+                    <tr>
+                        <th>{{'admin.promo.todate' | trans}}</th>
+                        <td>{{ entity.todate | date('d/m/Y') }}</td>
+                    </tr> 
+                </table>  
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#admin-entity-viewer a[action=ajax-modal]').on('click', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        var container = $('#admin-entity-viewer');
+        App.blockUI(container, false);
+        $.post(url, {}, function(response) {
+            //App.unblockUI(container);
+            container.html(response);
+            // App.fixContentHeight(); // fix content height
+            // App.initUniform(); // initialize uniform elements
+            //$('.selected').removeClass('selected warning');
+            //myself.addClass('selected warning');
+        });
+    });
+    $('a[action=promopremium-delete]').on('click', function() {
+        if (confirm('{{ 'promo.delete' | trans }}{{ entity }}')) {
+            $.ajax({
+                type: 'delete',
+                dataType: 'json',
+                url: '{{ path('admin_promopremium_delete', {'id': entity.id}) }}',
+                success: function(response) {
+                    if (response.success) {
+                        $('#table-promopremiums').dataTable().fnDraw(false);
+                        $('#admin-entity-viewer').html('<center><p class="muted" style="margin-top: 24px;">{{ 'admin.common.select' | trans }} {{ 'admin.promopremium.entity' | trans }}... </p></center > ');
+                        toastr['success'](response.message, "admin.message.succesfully");
+                    } else {
+                        toastr['error'](response.error.message, "admin.message.error");
+                    }
+                }
+            });
+        }
+    });
+</script>

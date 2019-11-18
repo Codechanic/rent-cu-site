@@ -1,0 +1,94 @@
+<div class="portlet box {{color_portlet}}">
+    <div class="portlet-title">
+
+        <div class="actions">
+
+
+
+            <div class="btn-group">
+                <a class="btn {{color_button_edit}}" action="ajax-modal" href="{{ path('admin_slide_edit', {'id': entity.id}) }}" data-toggle="tooltip" title="{{ 'admin.action.edit' | trans }}"><i class="icon-edit"></i> {{ 'admin.action.edit' | trans }}</a>
+                <a class="btn {{color_button_delete}}" action="slide-delete" data-toggle="tooltip" title="{{ 'admin.action.delete' | trans }}"><i class="icon-trash"></i> {{ 'admin.action.delete' | trans }}</a>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                {# Al attributes in this place in work #}            
+                <tr><th>{{'admin.slide.name' | trans}}</th><td>{{ entity.name }}</td></tr>        
+                <tr><th>{{'admin.slide.title' | trans}}</th><td>{{ entity.title }}</td></tr>        
+                <tr><th>{{'admin.slide.subtitle' | trans}}</th><td>{{ entity.subtitle }}</td></tr>        
+
+                <tr><th>{{'admin.slide.enabled' | trans}}</th><td>{{ entity.enabled }}</td></tr> 
+                <tr><td>
+                        <div>
+                            <img  class="img-thumbnail" style="width: 100%;max-height: 100%" src="{{ asset(entity.getWebPath()) }}"/>
+                        </div>
+                    </td>
+                </tr> 
+
+
+            </table>
+        </div>        
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('a[action=ajax-modal]').on('click', function(e) {
+
+        e.preventDefault();
+        var url = $(this).attr('href');
+        var container = $('#admin-entity-viewer');
+        App.blockUI(container, false);
+        $.post(url, {}, function(response) {
+
+            //App.unblockUI(container);
+            container.html(response);
+            // App.fixContentHeight(); // fix content height
+            // App.initUniform(); // initialize uniform elements
+            //$('.selected').removeClass('selected warning');
+            //myself.addClass('selected warning');
+        });
+    });
+    $('a[action=slide-delete]').on('click', function() {
+        if (confirm('{{ 'slide.delete' | trans }}{{ entity.name }}')) {
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                url: '{{ path('admin_slide_delete', {'id': entity.id}) }}',
+                success: function(response) {
+                    if (response.success) {
+                        $('#table-slides').dataTable().fnDraw();
+                        $('#admin-entity-viewer').html('<center><p class="muted" style="margin-top: 24px;">{{ 'admin.common.select' | trans }} {{ 'admin.slide.entity' | trans }}... </p></center > ');
+
+                        toastr['success'](response.message, "admin.message.succesfully");
+                    } else {
+                        toastr['error'](response.error.message, "admin.message.error");
+                    }
+                }
+            });
+        }
+    });
+    /*Uncomment this entity have enabled*/
+
+    /* $('a[action=slide-change-status]').on('click', function(e) {
+     e.preventDefault();
+     $.ajax({
+     type: 'post',
+     dataType: 'json',
+     url: {#'{{ path('admin_slide_status', { 'id': entity.id }) }}'#},
+     
+     success: function(response) {
+     if (response.success) {
+     $('i[slide-icon=status]').attr('class', 'icon-thumbs-' + (response.status ? 'up' : 'down'));
+     toastr.success(response.message);
+     } else {
+     toastr.error(response.error.message);
+     }
+     }
+     });
+     });
+     */
+</script>

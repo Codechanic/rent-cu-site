@@ -1,0 +1,116 @@
+.container.wrapper {
+    max-width: 75%;
+}
+
+header {
+    background: url('../images/bg_top.png') repeat-x;
+    background-size: contain;
+}
+
+#top {
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+#top-promo {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.navbar {
+    margin: 0;
+}
+
+.navbar-default {
+    background: none;
+}
+
+.navbar .nav > li > a {
+    color: #25517f;
+}
+
+.navbar .nav li.divider {
+    padding: 15px 0;
+}
+
+#navbar-right > li > a {
+    padding: 15px 4px;
+}
+
+#top-news {
+    height: 40px;
+    background: #444;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+#main {
+    margin: 10px 0;
+    padding-bottom: 20px;
+    background: url('../images/bg_side.png') repeat-y;
+    background-size: contain;
+    border-bottom: 1px solid #ccc;
+}
+
+#right {
+    background: #fff;
+}
+
+.box {
+    background: url('../images/bg_box.png') repeat-x;
+    background-size: contain;
+}
+
+.box2 {
+    background: url('../images/bg_box2.png') repeat-x;
+    background-size: contain;
+}
+
+.box-blue {
+    background: url('../images/bg_box_blue.png') repeat-x;
+    background-size: contain;
+}
+
+#main .default-slider {
+    padding: 0;
+}
+
+#booking-box {
+    margin: 12px;
+    padding: 0;
+    border: 1px solid #ccc;
+    color: #255180;
+}
+
+/* Footer */
+
+/* Footer */
+footer {
+    background: url('../images/patt-bkg.png') repeat;
+    margin-top: 20px;
+    padding-top: 10px;
+    -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+
+footer ul li {
+    border-bottom: 1px solid #ccc;    
+}
+
+footer  ul  a {
+    color: #ccc;
+}
+
+footer  ul  a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+@media(max-width: 799px) {
+    #top .brand {
+        margin: 0 auto;
+    }
+}

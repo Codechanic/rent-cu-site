@@ -1,0 +1,57 @@
+<style type="text/css">
+    .filter {
+        margin-bottom: 30px;
+    }
+</style>
+
+{% macro select(id, placeholder, list) %}
+<div class="col-md-2 display-none">
+    <select id="{{ id }}" class="form-control select2">
+        <option value="">- {{ placeholder }} -</option>
+    {% for value in list %}
+        <option value="{{ value }}">{{ value }}</option>
+    {% endfor %}
+    </select>
+</div>
+{% endmacro %}
+
+<div class="filter row">
+    <div class="col-md-1" style="display: table;">
+        <button class="btn filterbtn" title="Filtrar">
+            <i class="icon-plus"></i> Filtros
+        </button>
+    </div>
+    {{ _self.select('municipalities', 'Municipio', municipalities) }}
+    {{ _self.select('acommodation', 'Alojamiento', acommodations) }}
+</div>
+        
+<script type="text/javascript">
+    //TODO add this to DataTable Bundle
+    function fnFiltros() {
+        var oTable = $('#table-homestays').dataTable();
+        
+        function fnShowHide( iCol, bVis )
+        {    
+            //var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+            oTable.fnSetColumnVis( iCol, bVis, false );
+        }
+        
+        function fnFilter(selector, col)
+        {
+          $(selector).change( function () {
+             oTable.fnFilter( $(this).val(), col );
+          } );
+          
+          fnShowHide(col, false);
+        }                
+
+        fnFilter('#municipalities', 1);
+        fnFilter('#acommodation', 2);
+    }
+    
+    $('.filterbtn').on('click', function(e) {
+       e.preventDefault();
+       
+       $('.filter .col-md-2').toggle(400);
+    });
+</script>

@@ -1,0 +1,56 @@
+<!-- BEGIN PAGE CONTAINER-->
+
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">     
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+           <h3 class="page-title">
+                {{ 'admin.mailing.module' | trans }} <small> {{ 'admin.mailing.description' | trans }}</small>
+            </h3>
+           <ul class="page-breadcrumb breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                   <a href="{{ path('admin_index') }}">Dashboard</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                
+                <li class="active">{{ 'admin.mailing.module' | trans }}</li>
+            </ul>
+            <!-- END PAGE TITLE & BREADCRUMB-->
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+    <div class="row">
+       <div class="inbox col-md-3 menu-list">
+               <ul class="inbox-nav margin-bottom-10">
+                 
+                  <li class="inbox active mailing">
+                     <a action="list" url="{{ path('admin_mailing_list') }}" data-parent_name="mailing" data-title="Inbox" class="btn" href="javascript:;"> <i class="icon-list"></i> mailing
+                     </a>
+                     <b></b>
+                  </li>
+                  
+               </ul>
+            </div>
+        <div class="col-md-9 admin-entity-viewer" id="admin-mailing-viewer">
+           {% include 'CommentBundle:Mailing:list.html.twig' %}
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+    $('a[action=list]').on('click', function(e) {
+        var url=$(this).attr('url');
+        var parent=$(this).attr('data-parent_name');
+        e.preventDefault();
+        var pageContent = $('.admin-entity-viewer');
+        App.blockUI(pageContent, false);
+        $('.admin-entity-viewer').load(url, function() {
+        $('.inbox-nav > li.active').removeClass('active');
+        $('.inbox-nav > li.' + parent).addClass('active');
+        App.unblockUI(pageContent);
+        });
+         });
+    </script>
+    
+ 

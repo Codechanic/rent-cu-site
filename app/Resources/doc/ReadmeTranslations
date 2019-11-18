@@ -1,0 +1,111 @@
+Los lenguajes disponibles se añaden el el config.yml revisar la configuracion de a2lix_translation_form:
+locales: [es, en]       # [1]
+
+
+Como adicionar traducir los contenidos una vez generado todo el crud:
+
+Agregar en la Entidad que se valla a traducir lo siguiente:
+
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+
+Luego en la anotación de la clase Agergar, la Relación con la Entidad que se creará al lado con el nombre de
+PersonaTranslation: Este nombre cambiara en dependencia de el nombre de Entidad.Replazar por el correcto en todo.
+
+@Gedmo\TranslationEntity(class="Vibalco\TestBundle\Entity\PersonaTranslation")
+
+Luego añádir todo lo que viene a continuación dentro de la entidad:
+
+/**
+     * @Gedmo\Locale
+     */
+    private $locale;
+
+    /**
+     * @ORM\OneToMany(
+     *   targetEntity="PersonaTranslation",
+     *   mappedBy="object",
+     *   cascade={"persist", "remove"}
+     * )
+     */
+    private $translations;
+
+    public function __construct() {        
+        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function getTranslations() {
+        return $this->translations;
+    }
+
+    public function addTranslation(PersonaTranslation $t) {
+        if (!$this->translations->contains($t)) {
+            $this->translations[] = $t;
+            $t->setObject($this);
+        }
+    }
+
+    public function removeTranslation(PersonaTranslation $t) {
+        $this->translations->removeElement($t);
+    }
+    
+    
+     /**
+     * Set translatable locale
+     * 
+     * @param type $locale
+     * @return Post
+     */
+    public function setTranslatableLocale($locale) {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Set locale
+     * 
+     * @param type $locale
+     * @return Post
+     */
+    public function setLocale($locale) {
+        $this->locale = $locale;
+        $this->setTranslatableLocale($locale);
+
+        return $this;
+    }
+
+    /**
+     * Get locale
+     *
+     * @return string 
+     */
+    public function getLocale() {
+        return $this->locale;
+    }
+    
+
+
+Después decidir que atributos se van a traducir y agregarle la anotaci'on:
+
+@Gedmo\Translatable
+
+
+Y luego eliminar el el formulario todos los atributos que se traduzcan y poner solamente:
+->add('translations', 'a2lix_translations_gedmo', array(
+                    'translatable_class' => "Vibalco\TestBundle\Entity\Persona"
+                ))
+
+
+
+Persoalice widgets:
+
+    ->add('translations', 'a2lix_translations_gedmo', array(
+                    'translatable_class' => "Vibalco\BlogBundle\Entity\Post",
+                    'fields' => array(
+                        'text' => array(// [3.a]
+                            'field_type' => 'editor')
+                    )
+                        )
+                )

@@ -1,0 +1,31 @@
+<form class="lateral-form" id="contactform" action="{{ path('homestay_contactform', {'slug': slug}) }}" method="post" {{ form_enctype(form) }}>
+
+    <div class="row">
+        <div class="form-group col-md-6 from">
+            {{ form_row(form.fromdate) }}
+        </div>
+        <div class="form-group col-md-6 to">
+            {{ form_row(form.todate) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_row(form.name) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.email) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.phone) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.message) }}
+    </div>
+    
+    {{ form_rest(form) }}
+    
+    <div class="form-actions">
+        <button class="btn blueimg form-control" type="submit">{{ 'front.contactform.form.submit' | trans }}</button>
+    </div>
+</form>
+<span class="msg">{{ msg['error'] | trans }}</span>
+<span class="msg success">{{ msg['success'] | trans }}</span>

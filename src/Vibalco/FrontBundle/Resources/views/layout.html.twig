@@ -1,0 +1,190 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{ 'front.home.title' | trans }}{% endblock %}
+
+{% block stylesheets %}
+<link type="text/css" rel="stylesheet" href="{{ asset('vendor/bootstrap-3.1.0/css/bootstrap.min.css') }}"/>   
+<link type="text/css" rel="stylesheet" href="{{ asset('bundles/front/css/social.css') }}"/>  
+<link type="text/css" rel="stylesheet" href="{{ asset('vendor/font-awesome/css/font-awesome.css') }}"/>
+<link type="text/css" rel="stylesheet" href="{{ asset('assets/css/front.css') }}"/>
+<link type="text/css" rel="stylesheet" href="{{ asset('vendor/bootstrap-datepicker/css/datepicker.css') }}"/>   
+
+{% endblock stylesheets %}
+
+{% block body %}
+    <header>
+        <div>
+            <div class="container" id="logorow">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <a href="{{ path('index') }}">
+                            <img class="coverlogo" src="{{ asset("bundles/front/images/logo.png") }}" alt="LOGO"/>
+                        </a>
+                    </div>
+                    <div class="col-md-offset-2 col-sm-3" id="col-form-search">
+                        {#<form class="form-search" action="#" method="GET">
+                            <div class="controls-row">
+                                <div class="control-group text-left">
+                                    <label class="control-label" for="inputSearch"><i>{{ 'front.header.form-search' | trans }}</i></label>
+                                    <div class="controls input-icon right">
+                                        <i class="icon-search"></i>
+                                        <input type="text" id="inputSearch" class="input-medium form-control" name="criteria"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>#}
+                    </div>                
+                    <div class="col-sm-5 top-promo">
+                        {% render controller("FrontBundle:Default:cover_toppromo") %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+{#                    <b id="navbar-search" class="icon-search"></b>#}
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topnav">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                      </button>
+                </div>
+                <div class="collapse navbar-collapse" id="topnav">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li class="active"><a href="{{ path('index') }}">{{ 'front.menu.index' | trans }}</a></li>
+                        <li class="divider hidden-xs">|</li>
+                        <li><a href="{{ path('homestays') }}">{{ 'front.menu.homestays' | trans }}</a></li>
+                        <li class="divider hidden-xs">|</li>
+                        <li><a href="{{ path('antiquecars') }}">{{ 'front.menu.antiquecars' | trans }}</a></li>
+                        <li class="divider hidden-xs">|</li>
+                        <li><a href="{{ path('contactus') }}">{{ 'front.menu.contactus' | trans }}</a></li>
+                        <li class="divider hidden-xs">|</li>
+                        <li><a href="{{ path('aboutus') }}">{{ 'front.menu.aboutus' | trans }}</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right hidden-xs" id="navbar-right">
+                        <li>
+                            {% if app.request.locale =="en" %}
+                                <a href="{{ path('index', {'_locale' : 'es'}) }}">
+                                    <img src="{{ asset("bundles/front/images/lang/es.jpg") }}" alt="Spanish">
+                                </a>
+                            {% else %}
+                                <a href="{{ path('index', {'_locale' : 'en'}) }}">
+                                    <img src="{{ asset("bundles/front/images/lang/en.png") }}" alt="English">
+                                </a>
+                            {% endif %}
+                        </li>
+                        {% if appconfig.data.facebook %}<li><a href="{{ appconfig.data.facebook }}"><img class="img-responsive" src="{{ asset('bundles/front/images/social3/facebook.png') }}" alt="Facebook"/></a></li>{% endif %}
+                        {% if appconfig.data.twitter %}<li><a href="{{ appconfig.data.twitter }}"><img class="img-responsive" src="{{ asset('bundles/front/images/social3/twitter.png') }}" alt="Twiter"/></a></li>{% endif %}
+                        {% if appconfig.data.googleplus %}<li><a href="{{ appconfig.data.googleplus }}"><img class="img-responsive" src="{{ asset('bundles/front/images/social3/google+.png') }}" alt="Google+"/></a></li>{% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% render controller("FrontBundle:Default:cover_stripslider") %}
+    </header>
+    <div class="body">
+        <div class="container">
+            <div class="row">
+                {% block pagecontent %}
+                    
+                {% endblock pagecontent %}
+            </div>
+        </div>
+    </div>
+                                            
+    <footer>
+        <div class="subscribe">
+            <div class="container">
+                <form id="subscriberform" class="form-inline">
+                    <label>{{ 'front.subscriber.text.formtitle' | trans }}</label>
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="subscriberemail"/>
+                    </div>
+                    <button type="submit" class="btn blueimg">{{ 'front.subscriber.form.submit' | trans }}</button>
+                </form>
+                <span class="msg error"></span>
+                <span class="msg success"></span>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row footer-toprow">
+                <div class="col-md-3 col-sm-4">
+                    <h4>{{ 'front.footer.externallinks' | trans }}</h4>
+                    {% render controller("FrontBundle:Default:externallinks") %}
+                </div>
+
+                <div class="col-md-3 col-sm-4">
+                    <h4>{{ 'front.footer.contactus.title' | trans }}</h4>
+                    <address class="margin-bottom-40">
+                        {{ appconfig.data.address | raw }}
+                    </address>
+                    <address>
+                        <abbr title="{{ 'front.footer.contactus.phones' | trans }}">{{ 'front.footer.contactus.phonesabbr' | trans }}:</abbr> {{ appconfig.data.phones }}<br>
+                        {{ 'front.footer.contactus.email' | trans }}: <a href="mailto:{{ appconfig.data.email }}">{{ appconfig.data.email }}</a>
+                    </address>
+                </div>
+
+                <div class="col-md-6 col-sm-4">
+                    {% include 'FrontBundle:Default:fragm_facebookbox.html.twig' %}
+                </div>
+            </div>            
+
+            <div class="row text-center footer-separator"></div>
+
+            <div class="row text-center copyright">
+                <img src="{{asset('bundles/front/images/logogris.png')}}" alt="LOGO VIBALCO"/>
+                <span class="muted">
+{#                    &copy; Copyright {{ 'now' | date('Y') }} | {{ 'front.copyright' | trans }}#}
+                    &copy; Copyright 2015 | {{ 'front.copyright' | trans }}
+                </span>
+            </div>
+        </div>
+    </footer>
+    
+{% endblock body %}
+
+{% block javascripts %}
+    <!-- use jssor.slider.mini.js (39KB) or jssor.sliderc.mini.js (31KB, with caption, no slideshow) or jssor.sliders.mini.js (26KB, no caption, no slideshow) instead for release -->
+    <!-- jssor.slider.mini.js = jssor.sliderc.mini.js = jssor.sliders.mini.js = (jssor.core.js + jssor.utils.js + jssor.slider.js) -->
+    <script type="text/javascript" src="{{ asset('vendor/jssor/js/jssor.core.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/jssor/js/jssor.utils.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/jssor/js/jssor.slider.js') }}"></script>
+    
+    <script type="text/javascript" src="{{ asset('vendor/jquery.form.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/front.js') }}"></script>    
+
+    <script type="text/javascript">
+    $('document').ready(function() 
+    { 
+        $('#subscriberform button').removeProp('disabled');
+        
+        $('#subscriberform button').on('click', function(e) {
+            e.preventDefault();
+            
+            $('#subscriberform button').prop('disabled', 'true');
+            
+            var url = '{{ path('addsubscriber') }}';
+            var email = $('#subscriberform input').val();
+            
+            $.post(url, {'subscriberemail' : email}, function(data) {
+                //TODO Add the same behavior as contactform
+                $('footer .msg').html('');
+                
+                if(data.success){
+                    $('#subscriberform input').val('');
+                    $('footer .msg.success').html('{{ 'front.subscriber.message.success' | trans }}');
+                }
+                else {                    
+                    $('footer .msg.error').html('{{ 'front.subscriber.message.error' | trans }}');
+                }
+            })
+            .always(function() { 
+                $('#subscriberform button').removeProp('disabled');
+            });
+        });
+    });
+    </script>
+{% endblock javascripts %}

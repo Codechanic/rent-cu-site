@@ -1,0 +1,31 @@
+<ul class="list-unstyled" id="coverfilter">            
+    <li>
+        <span>{{ 'front.coverfilter.location' | trans }}</span>
+        <ul class="list-unstyled">
+        {% for key, result in list %}
+            <li>
+                <a province="{{ key }}" href="{{ path('homestays', { 'key' : 'province', 'value' : key}) }}" title="{{result['homestaycount']}} {{ 'front.coverfilter.homestays' | trans }}">
+                    {{ result['province'] }} <b>{{ result['homestaycount'] }} <i class="icon-home"></i></b>
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    </li>
+</ul>
+
+<script type="text/javascript">
+
+        $('#coverfilter li a').on('click', function(e){
+            e.preventDefault();
+            
+            var provinceid = $(this).attr('province'); 
+            
+            notifyFilterChange({'data[province]' : provinceid});
+        });
+
+        function notifyFilterChange(params)
+        {            
+            var url = "{{ path('homestayfilter_add') }}"; 
+            window.location = url + "?" + $.param(params);
+        }
+  </script>

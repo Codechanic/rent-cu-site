@@ -1,0 +1,413 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{ 'admin.title' | trans }}{% endblock %}
+
+{% block stylesheets %}
+
+    {% stylesheets  output="assets/css/admin.css" filter='yui_css'
+            'vendor/bootstrap/css/bootstrap.css'
+            'vendor/font-awesome/css/font-awesome.css'
+            'vendor/themes/style-metronic.css'
+            'vendor/themes/style.css'
+            'vendor/themes/style-responsive.css'
+            'vendor/themes/themes/default.css'
+            'vendor/themes/custom.css'
+            'vendor/select2/select2_metro.css'
+            'vendor/data-tables/DT_bootstrap.css'
+            'vendor/bootstrap-toastr/toastr.min.css'          
+            'vendor/uniform/css/uniform.default.css'
+            'vendor/bootstrap-fileupload/bootstrap-fileupload.css'
+            'vendor/themes/pages/inbox.css'
+    %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/bootstrap-datepicker/css/datepicker.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/themes/custom.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/clockface/css/clockface.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/summernote/dist/summernote.css') }}">
+
+{#   
+<link href="{{ asset('vendor/themes/style-metronic.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('vendor/themes/style.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('vendor/themes/style-responsive.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('vendor/themes/plugins.css') }}" rel="stylesheet" type="text/css">
+
+<link href="{{ asset('vendor/themes/themes/'~theme~'.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('vendor/themes/custom.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('vendor/select2/select2_metro.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('vendor/data-tables/DT_bootstrap.css') }}" rel="stylesheet" type="text/css">
+
+<link href="{{ asset('vendor/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('vendor/bootstrap-fileupload/bootstrap-fileupload.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('vendor/uniform/css/uniform.default.css') }}" rel="stylesheet" type="text/css">
+#}
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="{{ asset('vendor/bootstrap/js/html5shiv.js') }}"></script>
+    <![endif]-->
+
+{% endblock %}
+{% block class_body %}page-header-fixed page-sidebar-closed page-footer-fixed{% endblock%}
+{% block body %}
+    <div class="header navbar navbar-inverse navbar-fixed-top">
+        <div class="header-inner">
+            <a class="navbar-brand" href="{{ path('admin_index') }}" style="padding-top: 5px;">
+                <img src="{{ asset('logo.png') }}" alt="RENT.CU LOGO" style="max-height: 35px;">
+            </a>                
+            <a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <img class="img-responsive" src="{{asset("assets/img/menu-toggler.png")}}" alt="" />
+            </a> 
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown language">
+                    <a data-close-others="true" data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        {% if app.request.locale =="en" %} 
+                            <img src="{{asset("vendor/flags/us.png")}}" alt="">
+                            <span class="username">English</span>
+                        {% else %}
+                            <img src="{{asset("vendor/flags/es.png")}}" alt="">
+                            <span class="username">Español</span>                            
+                        {% endif %}
+                        <i class="icon-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% if app.request.locale =="en" %}
+                            <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}"><img src="{{asset("vendor/flags/es.png")}}" alt=""> Spanish</a></li>
+                                {% else %}
+                            <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'en'})) }}"><img src="{{asset("vendor/flags/us.png")}}" alt=""> Inglés</a></li>
+                                {% endif %}
+                    </ul>
+                </li>    
+                <!-- BEGIN USER LOGIN DROPDOWN -->
+                <li class="dropdown user">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <img alt=""  style="max-width: 30px;max-height: 30px" src="{% if app.user.webPath %}{{ asset(app.user.webPath) }}{% else %}{{ asset('assets/img/avatar1_small.jpg') }}{% endif %}" />
+                        <span class="username">{{ app.user.username }}</span>
+                        <i class="icon-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">                   
+                        <li><a href="{{ path('_logout') }}"> <i class="m-icon-swapleft"></i> {{ 'admin.logout' | trans }}</a></li>
+
+                    </ul>
+                </li>
+                <!-- END USER LOGIN DROPDOWN -->
+            </ul>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="page-container">
+        <div class="page-sidebar navbar-collapse collapse" style="height: 0px">  
+            <ul class="page-sidebar-menu">
+                <li>
+                    <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+                    <div class="sidebar-toggler hidden-phone"></div>
+                    <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+                </li>
+
+                <li>
+                    <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+                    <div style="margin-bottom: 25px"></div>
+                    <!-- END RESPONSIVE QUICK SEARCH FORM -->
+                </li>
+                
+                <li class="start">
+                    <a class="ajaxify start"href="{{ path('admin_dashboard') }}">
+                        <i class="icon-home"></i> 
+                        <span class="title"> Cuadro de Mando </span>
+                        <span class="selected"></span>
+                    </a>
+                </li>
+
+{#                <li>
+                    <a href="javascript:;">
+                        <i class="icon-list"></i> 
+                        <span class="title"> Catálogo </span>
+                        <span class="arrow "></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_homestay') }}"> 
+                                <i class="icon-hospital"></i> Casas
+                            </a>
+                        </li>
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_antiquecar') }}"> 
+                                <i class="icon-link"></i> Auto Antiguo
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <i class="icon-user"></i> 
+                        <span class="title"> Promociones </span>
+                        <span class="arrow "></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_promocover') }}"> 
+                                <i class="icon-hospital"></i> Portada
+                            </a>
+                        </li>
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_promopremium') }}"> 
+                                <i class="icon-hospital"></i> Premium
+                            </a>
+                        </li>
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_promodiscount') }}"> 
+                                <i class="icon-hospital"></i> Descuentos
+                            </a>
+                        </li>
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_promostrip') }}"> 
+                                <i class="icon-hospital"></i> Tira
+                            </a>
+                        </li>
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_promotop') }}"> 
+                                <i class="icon-hospital"></i> Banner
+                            </a>
+                        </li>
+                    </ul>
+                </li>               
+                <li>
+                    <a href="javascript:;">
+                        <i class="icon-user"></i> 
+                        <span class="title"> Clientes </span>
+                        <span class="arrow "></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_applicant') }}"> 
+                                <i class="icon-money"></i> Candidatos
+                            </a>
+                        </li>
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_subscriber') }}"> 
+                                <i class="icon-mail-reply"></i> Subscriptores
+                            </a>
+                        </li>
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_contactform') }}"> 
+                                <i class="icon-mail-reply"></i> Solicitud
+                            </a>
+                        </li>
+                    </ul>
+                </li>                
+                <li class="last">
+                    <a href="javascript:;">
+                        <i class="icon-list"></i> 
+                        <span class="title"> Configuración</span>
+                        <span class="arrow "></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a href="javascript:;">
+                                <i class="icon-home"></i> 
+                                <span class="title"> Casa </span>
+                                <span class="arrow "></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a class="ajaxify" href="{{ path('admin_acommodationtype') }}"> 
+                                        <i class="icon-flag"></i> Alojamiento
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="ajaxify" href="{{ path('admin_homestayfreeservice') }}"> 
+                                        <i class="icon-coffee"></i> Servicios gratis
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="ajaxify" href="{{ path('admin_homestayextracost') }}"> 
+                                        <i class="icon-credit-card"></i> Costo extra
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="ajaxify" href="{{ path('admin_homestaynotoffered') }}"> 
+                                        <i class="icon-ban-circle"></i> No se ofrece
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <i class="icon-map-marker"></i> 
+                                <span class="title"> Geografía </span>
+                                <span class="arrow "></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a class="ajaxify" href="{{ path('admin_province') }}"> 
+                                        <i class="icon-pushpin"></i> Provincias
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="ajaxify" href="{{ path('admin_municipality') }}"> 
+                                        <i class="icon-pushpin"></i> Municipios
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_antiquecarbrand') }}"> 
+                                <i class="icon-link"></i> Marca Auto Antiguo
+                            </a>
+                        </li>
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_externallink') }}"> 
+                                <i class="icon-link"></i> Enlaces Externos
+                            </a>
+                        </li>
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_settings') }}"> 
+                                <i class="icon-cogs"></i> Configuración
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="last">
+                    <a href="javascript:;">
+                        <i class="icon-key"></i> 
+                        <span class="title"> {{ 'admin.security' | trans }}</span>
+                        <span class="arrow "></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li >
+                            <a class="ajaxify" href="{{ path('admin_user') }}"> 
+                                <i class="icon-user"></i> {{ 'admin.user.module' | trans }}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="ajaxify" href="{{ path('admin_backups') }}"> 
+                                <i class="icon-user"></i> {{ 'admin.backup.name' | trans }}
+                            </a>
+                        </li>  
+                    </ul>
+                </li>#}
+            </ul>
+        </div>
+
+        <div class="page-content">
+            <a class="btn btn-default gotoend" href="#gotoend" title="Ir al Final"><i class="icon-arrow-down" style="font-size: 20px;"></i></a>
+            <div class="page-content-body">
+            </div>
+            <div id="gotoend"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-inner">
+            {{ 'now' | date('Y') }} © RENT.CU. Desarrollado por VIBALCO.
+        </div>
+        <div class="footer-tools">
+            <span class="go-top">
+                <i class="icon-angle-up"></i>
+            </span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+    {# <script src="{{ asset('vendor/jquery-ui/jquery-ui-1.10.3.custom.min.js') }}"></script>
+     <script src="{{ asset('vendor/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js') }}" type="text/javascript" ></script>
+     <!--[if lt IE 9]>
+     <script src="{{ asset('vendor/excanvas.min.js') }}"></script>
+     <script src="{{ asset('vendor/respond.min.js') }}"></script>
+     <![endif]--> 
+     <script src="{{ asset('vendor/jquery.blockui.min.js') }}"></script>
+     <script src="{{ asset('vendor/jquery.cookie.min.js') }}" type="text/javascript"></script>
+     <script src="{{ asset('vendor/uniform/jquery.uniform.min.js') }}"></script>
+     <script src="{{ asset('vendor/jquery-validation/lib/jquery.form.js') }}"></script>
+     <script src="{{ asset('vendor/bootstrap-modal/js/bootstrap-modalmanager.js') }}"></script>
+     <script src="{{ asset('vendor/bootstrap-modal/js/bootstrap-modal.js') }}"></script>
+ 
+ 
+     <script src="{{ asset('vendor/select2/select2.min.js') }}"></script>
+     <script src="{{ asset('vendor/data-tables/jquery.dataTables.min.js') }}"></script>
+     <script src="{{ asset('vendor/data-tables/DT_bootstrap.js') }}"></script>
+     <script src="{{ asset('vendor/data-tables/jquery.datatable.inc.js') }}"></script>
+ 
+ 
+     <script src="{{ asset('vendor/bootstrap-toastr/toastr.js') }}"></script>
+ 
+ 
+ 
+     <script src="{{ asset('vendor/app.js') }}"></script>#}
+
+    {% javascripts  output="assets/js/admin.js" filter='yui_js'
+            'vendor/jquery-1.10.2.min.js'
+            'vendor/jquery-migrate-1.2.1.min.js'
+            'vendor/jquery-ui/jquery-ui-1.10.3.custom.min.js'
+            'vendor/bootstrap/js/bootstrap.min.js'            
+            'vendor/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js'          
+            'vendor/jquery.blockui.min.js'
+            'vendor/jquery.cookie.min.js'
+            'vendor/uniform/jquery.uniform.js'
+            'vendor/jquery.easing.js'
+            'vendor/jquery-validation/lib/jquery.form.js'
+            'vendor/bootstrap-modal/js/bootstrap-modalmanager.js'
+            'vendor/bootstrap-modal/js/bootstrap-modal.js'
+            'vendor/bootstrap-toastr/toastr.js'
+            'vendor/bootstrap-fileupload/bootstrap-fileupload.js'
+            'vendor/select2/select2.min.js'
+            'vendor/data-tables/jquery.dataTables.min.js'
+            'vendor/data-tables/DT_bootstrap.js'
+            'vendor/data-tables/jquery.datatable.inc.js'
+                     
+    %}
+    
+{#                'vendor/app.js' #}
+
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+
+    <!--[if lt IE 9]>
+      <script src="{{ asset('vendor/excanvas.min.js') }}"></script>
+      <script src="{{ asset('vendor/respond.min.js') }}"></script>
+    <![endif]--> 
+    <script src="{{ asset('vendor/app.js') }}" type="text/javascript"></script>
+    
+    
+    <script src="{{ asset('vendor/summernote/dist/summernote.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('vendor/bootstrap-datepicker/js/bootstrap-datepicker.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('vendor/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('vendor/clockface/js/clockface.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('vendor/dropzone/dropzone.min.js') }}" type="text/javascript"></script> 
+    <script src="{{ asset('vendor/fancybox/source/jquery.fancybox.pack.js') }}" type="text/javascript"></script> 
+    
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            App.init();
+            
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+            $('.page-sidebar .ajaxify.start').click();
+            
+            $.fn.datepicker.defaults.format = "dd/mm/yyyy";
+            $.fn.datepicker.defaults.language = "{{ app.request.get('_locale') }}";
+        });
+
+
+
+
+    </script>
+
+
+{% endblock %}

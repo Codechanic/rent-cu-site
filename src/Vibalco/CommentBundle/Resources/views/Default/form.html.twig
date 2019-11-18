@@ -1,0 +1,18 @@
+ 
+<form class="form-horizontal" method="post" action="{{ path('subscribe') }}" {{ form_enctype(form) }}>
+             
+        
+   <div class="input-group">
+                                     {{ form_widget(form.email) }}
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">Go!</button>
+                                    </span>
+                                </div>
+
+      {{ form_rest(form) }}
+
+
+</form>
+ 
+
+

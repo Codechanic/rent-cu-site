@@ -1,0 +1,56 @@
+{% spaceless %}
+<!-- BEGIN PAGE HEADER-->
+<div class="row">
+    <div class="col-md-12">     
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <h3 class="page-title">
+            {{ 'admin.homestay.module' | trans }} <small> {{ 'admin.homestay.description' | trans }}</small>
+        </h3>
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="{{ path('admin_index') }}">{{ 'admin.breadcrumb.dashboard' | trans }}</a>
+                <i class="icon-angle-right"></i>
+            </li>
+
+            <li class="active">{{ 'admin.homestay.module' | trans }}</li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+    {% render controller('MainBundle:Homestay:filter') %}
+    
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-md-4 admin-entities-list" id="admin-homestay-list">
+        {% include 'MainBundle:Homestay:list.html.twig' %}
+    </div>
+
+    <div class="col-lg-8 col-md-8 col-md-8" id="admin-entity-viewer">
+        <center><p class="muted" style="margin-top: 24px;">{{ 'admin.common.select' | trans }} {{ 'admin.homestay.entity' | trans }}...</p></center>
+    </div>
+</div>
+<script type="text/javascript">
+    {% if id is not null %}
+        
+        function showEntity(){
+            var url = '{{ path('admin_homestay_show', { 'id' : id}) }}';
+            var container = $('#admin-entity-viewer');
+            
+            App.blockUI(container, false);
+            
+            $.post(url, {}, function(response) {
+                App.unblockUI(container);
+                container.html(response);
+                App.fixContentHeight(); // fix content height
+                App.initUniform(); // initialize uniform elements
+                $('.selected').removeClass('selected warning');
+                myself.addClass('selected warning');
+            });
+        }
+        
+        showEntity();
+    {% endif %}
+</script> 
+{% endspaceless %}

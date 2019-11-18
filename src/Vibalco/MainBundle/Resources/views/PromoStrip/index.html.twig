@@ -1,0 +1,32 @@
+<!-- BEGIN PAGE CONTAINER-->
+
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">     
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+           <h3 class="page-title">
+                {{ 'admin.promostrip.module' | trans }} <small> {{ 'admin.promostrip.description' | trans }}</small>
+            </h3>
+           <ul class="page-breadcrumb breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                   <a href="{{ path('admin_index') }}">{{ 'admin.breadcrumb.dashboard' | trans }}</a>
+                    <i class="icon-angle-right"></i>
+                </li>
+                
+                <li class="active">{{ 'admin.promostrip.module' | trans }}</li>
+            </ul>
+            <!-- END PAGE TITLE & BREADCRUMB-->
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-md-4 admin-entities-list" id="admin-promostrip-list">
+           {% include 'MainBundle:PromoStrip:list.html.twig' %}
+        </div>
+
+        <div class="col-lg-8 col-md-8 col-md-8" id="admin-entity-viewer">
+           <center><p class="muted" style="margin-top: 24px;">{{ 'admin.common.select' | trans }} {{ 'admin.promostrip.entity' | trans }}...</p></center>
+        </div>
+    </div>
+    

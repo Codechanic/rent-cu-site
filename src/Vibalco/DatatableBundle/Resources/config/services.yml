@@ -1,0 +1,14 @@
+parameters:
+    datatable.class: Vibalco\DatatableBundle\Util\Datatable
+
+services:
+    datatable:
+        class: "%datatable.class%"
+        arguments: [ @service_container ]
+        scope: prototype
+        
+    datatable.twig.extension:
+        class: Vibalco\DatatableBundle\Twig\Extension\VibalcoDatatableExtension
+        arguments: [ @service_container ]
+        tags:
+            -  { name: twig.extension }

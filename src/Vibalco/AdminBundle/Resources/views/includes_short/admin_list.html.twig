@@ -1,0 +1,129 @@
+{% spaceless %}
+{% set module = module | lower %}
+
+<div id="portlet-{{ module }}" class="portlet box {{color_portlet}}">
+    <div class="portlet-title">
+        <div class="caption"> <i class="icon-list"></i></div>
+
+        <div class="actions">
+
+            <a class="btn {{color_button_new}}" action="ajax-modal" href="{{ path('admin_'~module~'_new') }}"><i class="icon-plus"></i> {{ 'admin.action.new' | trans }}</a>
+
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        {{ datatable({
+            'id': 'table-'~module~'s',
+            'module': module,
+            'type' : 'short', 
+            'search_field' : '0',
+            'js': {
+                'sAjaxSource': path('admin_'~module~'_grid'),
+                'sPaginationType': 'bootstrap',
+                'oLanguage': {
+                    'sSearch': '<span class="add-on"><i class="icon-search"></i></span>',
+                    'sLength': 'Show _MENU_'
+                }
+            }
+        }) | raw }}            
+    </div>
+</div>
+ 
+
+
+<div class="dropdown dropdown-preview contextmenu" id="contextmenu-{{ module }}" style="display: none">
+    <ul class="dropdown-menu">
+        <li>
+            <a class="view" title="{{ 'admin.action.detail' | trans }}" href="#" tabindex="-1">
+                <i class="icon-list"></i> {{ 'admin.action.detail' | trans }}
+            </a>
+        </li>
+    </ul>
+</div>
+
+<script type="text/javascript">
+    
+      if (jQuery().select2) {
+            $('select').select2({
+                placeholder: "Select",
+                allowClear: true
+            });
+        }
+    $('a[action=ajax-modal]').on('click', function(e) {
+
+        e.preventDefault();
+        var url = $(this).attr('href');
+        var container = $('#admin-entity-viewer');
+        App.blockUI(container, false);
+
+        $.post(url, {}, function(response) {
+            App.unblockUI(container);
+            container.html(response);
+           App.fixContentHeight(); // fix content height
+           App.initUniform(); // initialize uniform elements
+            $('.selected').removeClass('selected warning');
+            //myself.addClass('selected warning');
+        });
+
+
+
+    });
+
+
+    $('#table-{{ module }}s').on('click', 'tr', function(e) {
+        e.preventDefault();
+        var myself = $(this);
+
+        if (myself.attr('id')) {
+            var id = myself.attr('id');
+            var url = '{{ path('admin_'~module) }}' + id + '/show';
+            var container = $('#admin-entity-viewer');
+
+            App.blockUI(container, false);
+
+            $.post(url, {}, function(response) {
+                App.unblockUI(container);
+                container.html(response);
+                App.fixContentHeight(); // fix content height
+                App.initUniform(); // initialize uniform elements
+                $('.selected').removeClass('selected warning');
+                myself.addClass('selected warning');
+            });
+        }
+    });
+
+    
+
+    $(document).ready(function() {
+
+
+        $('#contextmenu-{{ module }}').bind('contextmenu', function() {
+            $(this).hide();
+        });
+
+        $('#portlet-{{ module }}').on('contextmenu', '.portlet-body table tbody tr', function(e) {
+            var myself = $(this);
+
+            if (myself.attr('id')) {
+                var id = myself.attr('id');
+                var url = '{{ path('admin_'~module) }}' + id + '/show';
+                $("#contextmenu-{{ module }} .view").attr('href', url);
+            }
+
+            $('#contextmenu-{{ module }}').css({
+                top: (e.pageY - 10) + 'px',
+                left: (e.pageX - 5) + 'px',
+                position: 'absolute'
+            }).show();
+
+            return false;
+        });
+
+        $("#contextmenu-{{ module }}").mouseleave(function() {
+            $(this).hide();
+        });
+    });
+
+</script>
+{% endspaceless %}

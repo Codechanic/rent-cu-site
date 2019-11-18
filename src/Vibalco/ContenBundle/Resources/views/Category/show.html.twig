@@ -1,0 +1,84 @@
+    <div class="portlet box {{color_portlet}}">
+    <div class="portlet-title">
+        
+        <div class="actions">
+
+
+
+            <div class="btn-group">
+                <a class="btn {{color_button_edit}}" action="ajax-modal" href="{{ path('admin_category_edit', {'id': entity.id}) }}" data-toggle="tooltip" title="{{ 'admin.action.edit' | trans }}"><i class="icon-edit"></i> {{ 'admin.action.edit' | trans }}</a>
+                <a class="btn {{color_button_delete}}" action="category-delete" data-toggle="tooltip" title="{{ 'admin.action.delete' | trans }}"><i class="icon-trash"></i> {{ 'admin.action.delete' | trans }}</a>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                {# Al attributes in this place in work #}            
+                                                                                                <tr><th>{{'admin.category.name' | trans}}</th><td>{{ entity.name }}</td></tr>        
+                                                                                <tr><th>{{'admin.category.path' | trans}}</th><td>{{ entity.path }}</td></tr>        
+                                      
+            </table>
+        </div>        
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('a[action=ajax-modal]').on('click', function(e) {
+
+    e.preventDefault();
+            var url = $(this).attr('href');
+            var container = $('#admin-entity-viewer');
+            App.blockUI(container, false);
+            $.post(url, {}, function(response) {
+
+            //App.unblockUI(container);
+            container.html(response);
+                    // App.fixContentHeight(); // fix content height
+                    // App.initUniform(); // initialize uniform elements
+                    //$('.selected').removeClass('selected warning');
+                    //myself.addClass('selected warning');
+            });
+    });
+            $('a[action=category-delete]').on('click', function() {
+    if (confirm('{{ 'category.delete' | trans }}{{ entity.name }}')) {
+            $.ajax({
+            type: 'delete',
+                    dataType: 'json',
+                    url: '{{ path('admin_category_delete', {'id': entity.id}) }}',
+                    success: function(response) {
+                    if (response.success) {
+                    $('#table-categorys').dataTable().fnDraw();
+    $('#admin-entity-viewer').html('<center><p class="muted" style="margin-top: 24px;">{{ 'admin.common.select' | trans }} {{ 'admin.category.entity' | trans }}... </p></center > ');
+
+                            toastr['success'](response.message, "admin.message.succesfully");
+                    } else {
+                    toastr['error'](response.error.message, "admin.message.error");
+                    }
+                    }
+            });
+    }
+    });
+            /*Uncomment this entity have enabled*/
+
+            /* $('a[action=category-change-status]').on('click', function(e) {
+             e.preventDefault();
+             $.ajax({
+             type: 'post',
+             dataType: 'json',
+             url: {#'{{ path('admin_category_status', { 'id': entity.id }) }}'#},
+             
+             success: function(response) {
+             if (response.success) {
+             $('i[slide-icon=status]').attr('class', 'icon-thumbs-' + (response.status ? 'up' : 'down'));
+             toastr.success(response.message);
+             } else {
+             toastr.error(response.error.message);
+             }
+             }
+             });
+             });
+             */
+</script>

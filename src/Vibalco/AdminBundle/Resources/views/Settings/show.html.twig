@@ -1,0 +1,60 @@
+<div class="portlet box {{color_portlet}}">
+    <div class="portlet-title">
+
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn {{ color_button_edit }}" action="ajax-modal" href="{{ path('admin_settings_edit', {'id': entity.id}) }}" data-toggle="tooltip" title="{{ 'admin.action.edit' | trans }}"><i class="icon-edit"></i> {{ 'admin.action.edit' | trans }}</a>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <tr><th class="col-md-2">{{'admin.settings.name' | trans}}</th><td>{{ entity.name }}</td></tr>
+                <tr><th>{{'admin.settings.facebook' | trans}}</th><td>{{ entity.facebook }}</td></tr>
+                <tr><th>{{'admin.settings.twitter' | trans}}</th><td>{{ entity.twitter }}</td></tr>
+                <tr><th>{{'admin.settings.tripadvisor' | trans}}</th><td>{{ entity.tripadvisor }}</td></tr>
+                <tr><th>{{'admin.settings.googleplus' | trans}}</th><td>{{ entity.googleplus }}</td></tr>
+
+                <tr><th>{{'admin.settings.email' | trans}}</th><td>{{ entity.email }}</td></tr>
+                <tr><th>{{'admin.settings.address' | trans}}</th><td>{{ entity.address }}</td></tr>
+                <tr><th>{{'admin.settings.phones' | trans}}</th><td>{{ entity.phones }}</td></tr>
+                <tr><th>{{'admin.settings.contactdescription' | trans}}</th><td>{{ entity.contactdescription | raw }}</td></tr>
+                
+                <tr><th>{{'admin.settings.aboutus' | trans}}</th><td>{{ entity.aboutus | raw }}</td></tr>
+
+{#                <tr><th>{{'admin.settings.domain' | trans}}</th><td>{{ entity.domain }}</td></tr>#}
+{#                <tr><th>{{'admin.settings.offline' | trans}}</th><td>{{ entity.offline }}</td></tr>#}
+{#                <tr><th>{{'admin.settings.message' | trans}}</th><td>{{ entity.message | raw }}</td></tr>#}
+                
+                <tr><th>{{'admin.settings.metatitle' | trans}}</th><td>{{ entity.metatitle }}</td></tr>
+                <tr><th>{{'admin.settings.metakeywords' | trans}}</th><td>{{ entity.metakeywords }}</td></tr>
+                <tr><th>{{'admin.settings.metadescription' | trans}}</th><td>{{ entity.metadescription }}</td></tr>
+            </table>
+        </div>                     
+    </div>        
+</div>
+</div>
+
+<script type="text/javascript">
+    $('a[action=ajax-modal]').on('click', function(e) {
+
+        e.preventDefault();
+        var url = $(this).attr('href');
+        var container = $('#admin-entity-viewer');
+        App.blockUI(container, false);
+
+        $.post(url, {}, function(response) {
+
+            //App.unblockUI(container);
+            container.html(response);
+            // App.fixContentHeight(); // fix content height
+            // App.initUniform(); // initialize uniform elements
+            //$('.selected').removeClass('selected warning');
+            //myself.addClass('selected warning');
+        });
+
+
+
+    });
+</script>

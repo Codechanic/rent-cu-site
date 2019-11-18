@@ -1,0 +1,52 @@
+Lo widgets disponibles:
+
+Widget para subir imagen que muestra un preview al editar:
+
+->add('file','file', array('image_path' => 'webPath'))
+
+
+
+Widget para editor de texto: Este widget añade un editor de texto para los contenidos.
+    ->add('biografia','editor')
+
+
+
+
+Widgets datepicker:Widget para selección de la fecha
+ ->add('date','datepicker')
+
+
+          
+
+
+Widgets rangepicker:Widget para selección de un rango de fecha
+    ->add('range', 'rangepicker')
+
+
+
+Widgets select2:Widget de seleccion super tocado..este require que se le especifique la entidad que tiene que listar
+ademas se puede especificar que al selección sea multiple:
+
+        ->add('ofertas','select2',array('class'=>'Vibalco\TestBundle\Entity\Oferta'))
+
+
+    
+
+Widgets  Timepicker: widget para seleccion del hora.
+      ->add('time', 'timepicker')
+
+
+
+Widgets captcha: Añáde validación capcha a un formualrio.
+
+      ->add('captcha', 'genemu_captcha');
+
+
+Además estan disponibles otros widgets(autocomplete,chosen, color,datepicker ,file
+geolocation, image, rating,select2,slider,tinymce
+)
+Para ver como se usar ir a la carpeta de Bundles Gdemo/Formbundle/Rsosurces/doc
+
+
+
+ 

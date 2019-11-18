@@ -1,0 +1,87 @@
+{% spaceless %}
+{% set module = module | lower %}
+
+    {% form_theme form 'AdminBundle:Default:formTemplate.html.twig' %}
+    
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 class="muted">{{'admin.action.add' | trans}} {% if text is defined %}{{text}}{% else %}{{module}}{% endif %}</h3>
+            </div>
+
+
+            <div class="modal-body">
+                <div>
+                    <div class="scroller"   data-always-visible="1" data-rail-visible1="1">
+                        <form class="form-horizontal " id="form-{{ module }}-new" action="{{ path('admin_'~module~'_create') }}" method="post" {{ form_enctype(form) }}>
+                            {{ form_widget(form) }} 
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a action="cancel-{{ module }}" data-dismiss="modal" class="btn {{color_button_cancel}}" ><i class="icon-list"></i> {{ 'admin.action.cancel' | trans }}</a>
+                <a action="accept-{{ module }}" class="btn {{color_button_acept}}" ><i class="icon-save"> </i>{{ 'admin.action.accept' | trans }}</a>
+            </div>
+        </div>
+    </div>
+    <style>
+        .cke_reset{
+            padding-left: 5px;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+
+
+        $('#form-{{ module }}-new').ajaxForm({
+            dataType: 'json',
+            success: function(response) {
+
+                if (response.success) {
+                    $('#{{ module }}-modal').modal('hide');
+                    $('#table-{{ module }}s').dataTable().fnDraw(false);
+                    toastr['success'](response.message, '{{ 'app.message.succesfully' | trans }}');
+                } else {
+                    toastr['error'](response.error.message, '{{ 'app.message.error' | trans }}');
+                }
+            }
+        });
+
+
+
+        $('a[action=accept-{{ module }}]').on('click', function() {
+            $('#form-{{ module }}-new').submit();
+        });
+
+    </script>
+    
+    <script type="text/javascript">
+        {#if ($('.editor').length>0) {
+            $('.editor').summernote({
+                height: 200, // set editor height
+                focus: true,
+            });
+        }#}
+        
+        if ($('select.select2').length>0) {
+            jQuery(document).ready(function() {
+                 $('select.select2').select2();
+            });
+        }        
+        
+        if ($('input.datepicker').length>0) {
+            jQuery(document).ready(function() {
+                $('input.datepicker').datepicker({
+                    rtl: App.isRTL(),
+                    autoclose: true
+                });
+                $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+            });
+        }
+    </script>
+{% endspaceless %}    

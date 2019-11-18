@@ -1,0 +1,119 @@
+{% spaceless %}
+{% set module = module | lower %}
+
+    <div id="portlet-{{ module }}" class="portlet box {{color_portlet}}">
+        <div class="portlet-title">
+            <div class="caption"> <i class="icon-list"></i>
+
+
+
+
+            </div>
+            <div class="actions">
+                <a action="ajax-modal" class="btn {{color_button_new}}" data-title="New" href="{{ path('admin_'~module~'_new') }}"> 
+                    <i class="icon-plus"></i> {{ 'admin.action.new' | trans }}
+                </a>
+                <div class="btn-group">
+                    <a data-toggle="dropdown" href="#" class="btn blue dropdown-toggle">
+                        {{ 'admin.action.columns' | trans }}
+                        <i class="icon-angle-down"></i>
+                    </a>
+
+                    {% if (data | length)>0 %}
+                        <div class="dropdown-menu hold-on-click dropdown-checkboxes pull-right" id="sample_2_column_toggler">
+                            {% for value,key in data %}
+                                <label><div class="checker"><span class="checked"><input type="checkbox" data-column="{{key}}" checked=""></span></div>{{value}}</label>
+
+
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+        <div class="portlet-body">
+
+            {{ datatable({
+            'id': 'table-'~module~'s',
+            'module': module,
+            'type' : 'long',             
+            'js': {
+                'sAjaxSource': path('admin_'~module~'_grid'),
+                'sPaginationType': 'bootstrap',
+                'oLanguage': {
+                    'sSearch': '<span class="add-on"><i class="icon-search"></i></span>',
+                    'sLength': 'Show _MENU_'
+                }
+            }
+        }) | raw }}            
+        </div>
+    </div>
+
+
+
+    <div class="dropdown dropdown-preview contextmenu" id="contextmenu-{{ module }}" style="display: none">
+        <ul class="dropdown-menu">
+            <li>
+                <a class="view" title="{{ 'admin.action.detail' | trans }}" href="#" tabindex="-1">
+                    <i class="icon-list"></i> {{ 'admin.action.detail' | trans }}
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="modal fade" id="{{ module }}-modal" ></div>
+
+    <script type="text/javascript">
+
+        if (jQuery().select2) {
+            $('select').select2({
+                placeholder: "Select",
+                allowClear: true
+            });
+        }
+       var UIModals_{{ module }} = function() {
+
+        var initModals_{{ module }} = function() {
+            $.fn.modalmanager.defaults.resize = true;
+            $.fn.modalmanager.defaults.spinner = '<div class="loading-spinner fade" style="width: 200px; margin-left: -100px;"><img src="{{ asset('assets/img/ajax-modal-loading.gif') }}" align="middle">&nbsp;<span style="font-weight:300; color: #eee; font-size: 18px; font-family:Open Sans;">&nbsp;Loading...</div>';
+
+            var $modal = $('#{{ module }}-modal');
+
+            $('a[action=ajax-modal]').on('click', function(e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                // create the backdrop and wait for next modal to be triggered
+                /*$('body').modalmanager('loading');*/
+
+                setTimeout(function() {
+                    $modal.load(url, '', function() {
+                        $modal.modal();
+                    });
+                }, 500);
+            });
+        };
+
+        return {
+            //main function to initiate the module
+            init: function() {
+                initModals_{{ module }}();
+            }
+
+        };
+
+    }();
+
+
+    $(document).ready(function() {
+        UIModals_{{ module }}.init();  
+
+      
+    });
+
+
+
+
+    </script>
+{% endspaceless %}

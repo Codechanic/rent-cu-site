@@ -1,0 +1,7 @@
+Para que salgan los mensajes de validacion que desees predeterminados poner encima del atributo la anotacion
+con la que vallas a validar y el mensaje en caso de error.Esos mesajes se traducen en ficheros llamados:
+validators.en.yml
+
+@Assert\NotBlank(message = "galery.galery.errors.name")
+
+Crear validaores proios aun en contrucción.

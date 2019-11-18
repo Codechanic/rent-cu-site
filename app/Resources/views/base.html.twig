@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% spaceless %}
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}{{ 'front.title' | trans }}{% endblock %} | RENT.CU</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        {% block meta %}
+            <meta name="title" content="{% block meta_title %}{{ appconfig.data.metatitle }}{% endblock meta_title %}"/>
+            <meta name="description" content="{% block meta_description %}{{ appconfig.data.metadescription }}{% endblock meta_description %}"/>
+            <meta name="keywords" content="{% block meta_keywords %}{{ appconfig.data.metakeywords }}{% endblock meta_keywords %}" />
+        {% endblock meta %}
+        
+        <meta content="VIBALCO" name="author"/>
+
+        {% block stylesheets %}{% endblock %}
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}" >
+        
+        <script type="text/javascript" src="{{ asset('vendor/jquery-1.11.1.js') }}"></script>
+{#        <script type="text/javascript" src="{{ asset('vendor/jquery-migrate-1.2.1.min.js') }}"></script>#}
+        <script type="text/javascript" src="{{ asset('vendor/bootstrap-3.1.0/js/bootstrap.min.js') }}"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('require', 'GTM-PKZ5T42');
+  ga('create', 'UA-92492520-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<style>.async-hide { opacity: 0 !important} </style>
+<script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
+h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
+(a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+})(window,document.documentElement,'async-hide','dataLayer',4000,
+{'GTM-PKZ5T42':true});</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-T6WG7P4');</script>
+<!-- End Google Tag Manager -->
+    </head>
+    <body class="{% block class_body %}{% endblock%}" {% block class_properties %}{% endblock%}>
+     <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T6WG7P4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+    {% block body %}{% endblock %}
+    {% block footer %}{% endblock %}
+
+    {% block javascripts %}{% endblock %}
+</body>
+</html>
+{% endspaceless %}

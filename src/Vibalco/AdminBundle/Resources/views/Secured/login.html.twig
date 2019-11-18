@@ -1,0 +1,78 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Login{% endblock %}
+
+{% block stylesheets %}
+   {% stylesheets  output="assets/css/login.css" filter='yui_css'
+            'vendor/bootstrap/css/bootstrap.css'
+            'vendor/font-awesome/css/font-awesome.css'
+            'vendor/themes/style-metronic.css'
+            'vendor/themes/style.css'
+            'vendor/themes/style-responsive.css'
+            'vendor/themes/themes/default.css'
+            'vendor/themes/pages/login.css'
+            %}
+            <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+            {% endstylesheets %}
+
+{% endblock %}
+
+{% block class_body %}login{% endblock%}
+
+{% block body %}
+<div class="logo" >
+    <img class="img-responsive" src="{{ asset('logo.png') }}" alt="RENT.CU LOGO"/>
+</div>
+
+<div class="login content">  
+    
+    <div class="row">
+    
+    <form class="form-horizontal login-form" action="{{ path("_security_check") }}" id="login" method="post">
+        <h3 class="form-title text-center">{{ 'admin.write_user_passwd' | trans }}</h3>
+
+        <div class="form-group">
+            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+            <label class="col-md-4 control-label">{{ 'admin.user.entity' | trans }}</label>
+            <div class="col-md-8">
+                <div class="input-icon">
+                    <i class="icon-user"></i>
+                    <input class="form-control" type="text" placeholder="{{ 'admin.user.entity' | trans | lower }}" name="_username"/>
+                
+                </div>
+            </div>
+       </div>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label">{{ 'admin.user.column.password' | trans }}</label>
+             <div class="col-md-8">
+                <div class="input-icon">
+                    <i class="icon-lock"></i>
+                    <input class="form-control" type="password" placeholder="{{ 'admin.user.column.password' | trans | lower }}" name="_password"/>
+                
+                </div>
+            </div>
+        </div>                
+
+        {% if error %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close"></button>
+            <strong>Error!</strong> {{ 'admin.bad_credential' | trans }}
+        </div>
+        {% endif %}
+
+        <div class="form-actions">     
+            {#<label class="checkbox">
+                <div class="checker"><span><input type="checkbox" name="remember" value="1"></span></div> {{ 'admin.remember_me' | trans }}
+            </label>#}
+            <button type="submit" class="btn blue pull-right">
+                {{ 'admin.login_button' | trans }} <i class="m-icon-swapright m-icon-white"></i>
+            </button>            
+        </div>
+    </form>
+</div>
+</div>
+<div class="copyright">
+    <span style="color: #000;">&copy; {{ 'now' | date('Y') }} - Vibalco Team Framework</span>
+</div>     
+{% endblock %}

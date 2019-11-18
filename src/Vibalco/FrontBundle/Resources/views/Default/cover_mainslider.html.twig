@@ -1,0 +1,51 @@
+{% if promos is not empty %}
+    <!-- Jssor Slider Begin -->
+    <!-- You can move inline styles to css file or css block. -->
+    <div id="cover_mainslider" class="jssor_main_container">
+
+        <!-- Slides Container -->
+        <div class="jssor_slides" data-u="slides">
+            {% for promo in promos %}
+            <div>
+                <div data-u=image>
+                    <img src="{{ asset( promo.webpath )}}" alt="{{ promo.name }}"/>
+                    {% if promo.isnew %}
+                    <img class="newtag" src="{{asset('bundles/front/images/new.png')}}"/>
+                    {% endif %}
+                </div>
+                {% set url = promo.url or promo.product ? path('redirectpromo', {'concept' : 'promo', 'id' : promo.id }) : '#' %}
+                <div data-u="thumb">
+                    <a href="{{ url }}">
+                        <span>{{ promo.name }}</span>
+                        <div>{{ promo.description | truncate(130, true) | trim | raw }}</div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- ThumbnailNavigator Skin Begin -->
+        <div data-u="thumbnavigator" class="sliderb-T">
+            <div class="jssortnback">
+            </div>
+            <!-- Thumbnail Item Skin Begin -->
+            <div data-u="slides">
+                <div class="jssortnproto" data-u="prototype">
+                    <thumbnailtemplate class="jssortntemplate"></thumbnailtemplate>
+                </div>
+            </div>
+            <!-- Thumbnail Item Skin End -->
+        </div>
+        <!-- ThumbnailNavigator Skin End -->
+        
+        <!-- Bullet Navigator Skin Begin -->
+        <!-- bullet navigator container -->
+        <div data-u="navigator" class="jssorb01">
+            <!-- bullet navigator item prototype -->
+            <div data-u="prototype" ></div>
+        </div>
+        <!-- Bullet Navigator Skin End -->
+        
+        </div>
+    <!-- Jssor Slider End -->
+{% endif %}
