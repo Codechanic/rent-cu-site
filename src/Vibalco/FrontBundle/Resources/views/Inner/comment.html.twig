@@ -1,0 +1,11 @@
+<ul class="list-unstyled comments">
+    {% for comment in comments %}
+        <li class="comment-item list-data">
+            <div class="comment-content">
+                <span class="name"> <b>{{ comment.name }} </b></span>
+                <span class="text"><em>{{ comment.text }}</em></span>
+            </div>
+        </li>
+        <li class="list-separator"></li>
+    {% endfor %}
+</ul>

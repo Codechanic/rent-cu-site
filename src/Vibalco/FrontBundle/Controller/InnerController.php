@@ -318,4 +318,23 @@ class InnerController extends Controller {
 
         return array('fm' => $fm);
     }
+
+    /**
+     * @Route("/homestay/{slug}/comment", name="homestay_comment")
+     * @Template
+     */
+    public function commentAction($slug) {
+
+        $em = $this->getDoctrine()->getManager();
+        $homestay = $em->getRepository('MainBundle:Homestay')
+            ->findOneBy(array('slug' => $slug));
+        $comments = $em->getRepository('FrontBundle:Comment')
+            ->findBy(array(
+                'homestay' => $homestay,
+                'enabled' => true
+            ));
+        return array(
+            'comments' => $comments
+        );
+    }
 }

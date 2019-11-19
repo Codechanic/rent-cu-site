@@ -111,21 +111,21 @@ window.addEventListener('load', function () {
     //todo validate data
     if(text.value.length < 5) {
       valid = false;
-      text.classList.add('has-error');
+      text.parentNode.classList.add('has-error');
     }
     if(name.value.length < 5) {
       valid = false;
-      name.classList.add('has-error');
+      name.parentNode.classList.add('has-error');
     }
     if(!mailRegex.test(email.value)) {
       valid = false;
-      email.classList.add('has-error');
+      email.parentNode.classList.add('has-error');
     }
 
     if( valid === true){
-          text.classList.remove('has-error');
-          email.classList.remove('has-error');
-          name.classList.remove('has-error');
+          text.parentNode.classList.remove('has-error');
+          email.parentNode.classList.remove('has-error');
+          name.parentNode.classList.remove('has-error');
       var formData = new FormData();
       formData.append('name', name.value);
       formData.append('email', email.value);

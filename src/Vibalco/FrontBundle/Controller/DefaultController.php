@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Vibalco\AdminBundle\Entity\User;
 use Vibalco\FrontBundle\Entity\Comment;
@@ -350,9 +351,20 @@ class DefaultController extends Controller {
             $comment->setHomestay($homeStay);
             $em->persist($comment);
             $em->flush();
+            $mensaje = $this->get('translator')->trans('news.messages.registred');
+            $message = \Swift_Message::newInstance()
+                            ->setSubject($entity->getTitle())
+                            ->setFrom(array($this->get('service_container')->getParameter('mailer_sender_email') => $this->get('service_container')->getParameter('mailer_sender_name')))
+                            ->setTo('booking@rent.cu')
+                  
+                            ->setBody(
+                            'Se ha realizado un comentario a una casa', 'text/html'
+                            )
+                    ;
+                    $this->get('mailer')->send($message);
             return new JsonResponse();
         }  catch (\Exception $exception) {
-            return new JsonResponse($exception->getMessage(), JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse($exception->getMessage(), 500);
         }
 
     }
@@ -366,10 +378,11 @@ class DefaultController extends Controller {
                 $username = $request->get('_username');
                 $password = $request->get('_password');
                 $em = $this->getDoctrine()->getManager();
-                $encoder = $this->get('security.password_encoder');
-                $user = $em->getRepository(User::class)->loadUserByUsername($username);
+                $user = $em->getRepository('AdminBundle:User')->loadUserByUsername($username);
+                $encoder = $this->get('security.encoder_factory')->getEncoder($user);
                 if (!empty($user)) {
-                    $isValid = $encoder->isPasswordValid($user, $password);
+                    $isValid = $encoder->isPasswordValid($encoder->encodePassword($password, $user->getSalt()), $password, $user->getSalt());
+//                    $isValid = $encoder->isPasswordValid($user, $password);
                     if (!$isValid) {
                         return new JsonResponse(array('Bad Credentials'), 400);
                     }
