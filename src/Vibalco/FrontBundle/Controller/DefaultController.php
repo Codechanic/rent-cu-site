@@ -388,11 +388,14 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/token", name="_security_token", methods={"POST"})
+     * @Route("/token", name="_security_token", methods={"POST", "OPTIONS"})
      */
     public function tokenAction(Request $request){
         if ($request->isXmlHttpRequest()) {
             try {
+                if ($request->getMethod() === 'OPTIONS') {
+                    return new JsonResponse(null,200);
+                }
                 $username = $request->get('_username');
                 $password = $request->get('_password');
                 $em = $this->getDoctrine()->getManager();
@@ -418,7 +421,7 @@ class DefaultController extends Controller {
                 return new JsonResponse(array('Bad Credentials'), 400);
             }
         } else {
-            return new RedirectResponse($this->get('router')->generate('homepage'));
+            return new RedirectResponse($this->get('router')->generate('homestays'));
         }
     }
     
