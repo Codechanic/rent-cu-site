@@ -27,8 +27,18 @@
                 {% render controller('FrontBundle:Default:cover_filter') %}
             </div>  
         </div>                                        
-        {% include 'FrontBundle:Default:fragm_applicant.html.twig'%}
+        {% include 'FrontBundle:Default:fragm_applicant.html.twig'%} 
         {% include 'FrontBundle:Default:fragm_sociallinks.html.twig'%}
+         <div class="row bg-bottom2top front-box-shadow">
+            <div class="badge-lateral">
+                <b class="floatingtag">{{ 'front.applicant.weather' | trans }}</b>
+                <img class="img-responsive" src="{{ asset('bundles/front/images/bbadge.png') }}" alt="{{ 'front.applicant.header' | trans }}"/>
+            </div>
+            <div id="forecast-container">
+                
+            </div>  
+         </div>
+       
     </aside>
 {% endblock pagecontent %}
 

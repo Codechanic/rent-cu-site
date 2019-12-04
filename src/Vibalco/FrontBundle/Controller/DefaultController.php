@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Vibalco\AdminBundle\Entity\User;
 use Vibalco\FrontBundle\Entity\Comment;
 use Vibalco\MainBundle\Entity\Applicant;
@@ -370,11 +371,31 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/token", name="_security_token", methods={"POST"})
+     *@Route("/insmet", name="rent.app.insmet", methods={"GET"}, defaults={"_format"="xml"})
+     *@param Request $request
+     */
+    public function getClimateAction(Request $request) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "http://www.insmet.cu/asp/genesis.asp?TB0=RSSFEED");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        $response = new Response();
+        $output = utf8_encode($output);
+        $response->setContent($output);
+        $response->headers->set('Content-Type', 'text/xml');
+        return $response;
+    }
+
+    /**
+     * @Route("/token", name="_security_token", methods={"POST", "OPTIONS"})
      */
     public function tokenAction(Request $request){
         if ($request->isXmlHttpRequest()) {
             try {
+                if ($request->getMethod() === 'OPTIONS') {
+                    return new JsonResponse(null,200);
+                }
                 $username = $request->get('_username');
                 $password = $request->get('_password');
                 $em = $this->getDoctrine()->getManager();
@@ -400,7 +421,7 @@ class DefaultController extends Controller {
                 return new JsonResponse(array('Bad Credentials'), 400);
             }
         } else {
-            return new RedirectResponse($this->get('router')->generate('homepage'));
+            return new RedirectResponse($this->get('router')->generate('homestays'));
         }
     }
     
