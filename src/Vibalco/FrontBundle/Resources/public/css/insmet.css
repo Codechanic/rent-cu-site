@@ -1,0 +1,17 @@
+#forecast-container table tr th {
+    padding-left: 1em;
+    padding-right: 1em;
+    text-align: left;
+    margin-right: 1em;
+}
+
+#forecast-container {
+    font-size: 13px;
+}
+
+#forecast-container .span-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 1em;
+    text-align: center;
+}

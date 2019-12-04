@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Vibalco\AdminBundle\Entity\User;
 use Vibalco\FrontBundle\Entity\Comment;
 use Vibalco\MainBundle\Entity\Applicant;
@@ -367,6 +368,23 @@ class DefaultController extends Controller {
             return new JsonResponse($exception->getMessage(), 500);
         }
 
+    }
+
+    /**
+     *@Route("/insmet", name="rent.app.insmet", methods={"GET"}, defaults={"_format"="xml"})
+     *@param Request $request
+     */
+    public function getClimateAction(Request $request) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "http://www.insmet.cu/asp/genesis.asp?TB0=RSSFEED");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        $response = new Response();
+        $output = utf8_encode($output);
+        $response->setContent($output);
+        $response->headers->set('Content-Type', 'text/xml');
+        return $response;
     }
 
     /**

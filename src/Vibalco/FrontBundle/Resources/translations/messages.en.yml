@@ -125,7 +125,7 @@ front:
             name: Nombre
             email: Correo
             message: Mensaje
-            
+        weather: Forecast
     homestay:
         rooms: Habitaciones
         room: Habitación
