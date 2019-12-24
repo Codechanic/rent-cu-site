@@ -1,0 +1,16 @@
+/app/cache/
+/app/logs/
+/app/config/parameters.yml
+/public_html/bundles/
+/web/bundles/
+/.idea/
+/nbproject/
+/public_html/uploads/
+/web/uploads/
+vendor
+composer.phar
+*.zip
+uploads.zip
+/log-composer.txt
+/update.sql
+havanacity_db_dev.sql

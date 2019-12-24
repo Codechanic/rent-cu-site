@@ -18,6 +18,7 @@ use InvalidArgumentException;
 use Vibalco\AdminBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\Console\Input\InputOption;
+
 /**
  *
  * @author Vibalco Team <admin_madera@gmail.com>
@@ -41,44 +42,45 @@ class AdminCommand extends DoctrineCommand
         if (!$this->getContainer()->has($emServiceName)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'Could not find an entity manager configured with the name "%s". Check your '.
+                    'Could not find an entity manager configured with the name "%s". Check your ' .
                     'application configuration to configure your Doctrine entity managers.', $emName
                 )
             );
         }
-                $em = $this->getContainer()->get($emServiceName);
-          	$adm = $em->getRepository('AdminBundle:User')->findBy(array('username'=>$input->getOption('user')));
-                $role = $em->getRepository('AdminBundle:Role')->findBy(array('role'=>"ROLE_ADMIN"));
-                if(count($role)<=0){
-                    $role = new \Vibalco\AdminBundle\Entity\Role();
-                    $role->setRole("ROLE_ADMIN");
-                    $role->setName("SUPER ADMINISTRATOR");
-                    $em->persist($role);
-	            $em->flush();
-                }
-                $role = $em->getRepository('AdminBundle:Role')->findBy(array('role' => "ROLE_ADMIN"));
-		if(count($adm)<=0){
-                        $name = uniqid();
-                    	$user = new User();
-			$user->setUsername($input->getOption('user'));
-			$user->setName('Generate Username');
-			$user->setEmail($name.'@madera.lh');
-			$user->setPassword($input->getOption('password'));
-                     
-                        
-                        $user->setRoles($role);
-			$this->setSecurePassword($user);                        
-			$em->persist($user);
-	         	$em->flush();
-                }else{
-                    $output->writeln("The user ".$input->getOption('user'). "exists..");
-                }
+        $em = $this->getContainer()->get($emServiceName);
+        $adm = $em->getRepository('AdminBundle:User')->findBy(array('username' => $input->getOption('user')));
+        $role = $em->getRepository('AdminBundle:Role')->findBy(array('role' => "ROLE_ADMIN"));
+        if (count($role) <= 0) {
+            $role = new \Vibalco\AdminBundle\Entity\Role();
+            $role->setRole("ROLE_ADMIN");
+            $role->setName("SUPER ADMINISTRATOR");
+            $em->persist($role);
+            $em->flush();
+        }
+        $role = $em->getRepository('AdminBundle:Role')->findBy(array('role' => "ROLE_ADMIN"));
+        if (count($adm) <= 0) {
+            $name = uniqid();
+            $user = new User();
+            $user->setUsername($input->getOption('user'));
+            $user->setName('Generate Username');
+            $user->setEmail($name . '@madera.lh');
+            $user->setPassword($input->getOption('password'));
+
+
+            $user->setRoles($role);
+            $this->setSecurePassword($user);
+            $em->persist($user);
+            $em->flush();
+        } else {
+            $output->writeln("The user " . $input->getOption('user') . "exists..");
+        }
 
 
     }
 
 
-    protected function setSecurePassword(&$entity) {
+    protected function setSecurePassword(&$entity)
+    {
         $encoder = new MessageDigestPasswordEncoder('sha512', true, 10);
         $password = $encoder->encodePassword($entity->getPassword(), $entity->getSalt());
         $entity->setPassword($password);

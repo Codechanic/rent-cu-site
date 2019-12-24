@@ -76,6 +76,19 @@ class InnerController extends Controller {
         
         return array('entity' => $entity);
     }
+
+    /**
+     *
+     * @Route("/preview/{slug}", name="preview")
+     * @Template()
+     */
+    public function previewAction($slug) {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('MainBundle:Homestay')->findOneBy(array('slug' => $slug));
+
+        return array('entity' => $entity);
+    }
     
     /**
      * 
