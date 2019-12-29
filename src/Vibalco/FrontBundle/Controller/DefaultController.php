@@ -427,12 +427,15 @@ class DefaultController extends Controller
                         return new JsonResponse(array('Bad Credentials'), 400);
                     }
                 }
+                $exp = new \DateTime("+24 hours");
+
                 $key = "secretKey";
                 $roles = $user->getRoles();
                 $token = array(
                     'username' => $user->getUsername(),
                     'sub' => $user->getId(),
-                    'role' => $roles[0]->getRole()
+                    'role' => $roles[0]->getRole(),
+                    'exp' => $exp->getTimestamp()
                 );
 
                 $jwt = JWT::encode($token, $key);
@@ -444,7 +447,7 @@ class DefaultController extends Controller
                         'Access-Control-Allow-Headers' => 'content-type',
                         'Access-Control-Allow-Methods' => 'GET,HEAD,PUT,PATCH,POST,DELETE',
                         'Connection' => 'keep-alive'
-                    ) );
+                    ));
             } catch (\Exception $exception) {
                 return new JsonResponse(array('Bad Credentials'), 400);
             }
@@ -476,7 +479,8 @@ class DefaultController extends Controller
             $username = $request->get('_username');
             $name = $request->get('_name');
             $password = $request->get('_password');
-            $violations = [];
+
+            $violations = array();
             if (empty($username)) {
                 $violations[] = 'username';
             }
@@ -494,7 +498,7 @@ class DefaultController extends Controller
             }
 
             if (count($violations) > 0) {
-                return  new JsonResponse(
+                return new JsonResponse(
                     'Hay campos incorrectos',
                     400
                 );
@@ -525,28 +529,32 @@ class DefaultController extends Controller
                     $user->setPassword($secured);
                     $em->persist($user);
                     $em->flush();
-                    return  new JsonResponse(
+                    return new JsonResponse(
                         $username,
                         201,
                         array(
                             'Access-Control-Allow-Origin' => '*',
                             'Access-Control-Allow-Headers' => 'content-type',
-                            'Access-Control-Allow-Methods' => 'POST',
-                            'Connection' => 'keep-alive'
+                            'Access-Control-Allow-Methods' => 'POST,OPTIONS',
+                            'Connection' => 'close'
                         )
                     );
 
                 } else {
-                    return  new JsonResponse(
+                    return new JsonResponse(
                         'El usuario ya existe',
-                        409
+                        409,
+                        array(
+                            'Access-Control-Allow-Origin' => '*',
+                            'Access-Control-Allow-Headers' => 'content-type',
+                            'Access-Control-Allow-Methods' => 'POST,OPTIONS',
+                            'Connection' => 'close'
+                        )
                     );
                 }
 
-            }
-            catch (Exception $exception)
-            {
-                return  new JsonResponse(
+            } catch (Exception $exception) {
+                return new JsonResponse(
                     $exception->getMessage(),
                     500
                 );
