@@ -5,6 +5,7 @@ namespace Vibalco\MainBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Vibalco\AdminBundle\Entity\User;
 use Vibalco\GalleryBundle\Model\GalleryInterface;
 use Vibalco\MainBundle\Model\CodeInterface;
 
@@ -259,6 +260,28 @@ class Homestay extends BaseImage implements GalleryInterface, CodeInterface {
      * @ORM\ManyToOne(targetEntity="HomestayChain")
      */
     protected $chain;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Vibalco\AdminBundle\Entity\User")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $ownerId;
+
+    /**
+     * @return mixed
+     */
+    public function getOwnerId()
+    {
+        return $this->ownerId;
+    }
+
+    /**
+     * @param \Vibalco\AdminBundle\Entity\User $ownerId
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->ownerId = $ownerId;
+    }
 
     /**
      * Constructor
