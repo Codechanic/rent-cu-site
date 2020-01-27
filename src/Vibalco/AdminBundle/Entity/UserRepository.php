@@ -58,5 +58,26 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
         return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName());
     }
 
+    public function getUserByToken($token) {
+        $q = $this
+            ->createQueryBuilder('u')
+            ->where('u.refreshToken = :token')
+            ->setParameter('token', $token)
+            ->getQuery();
+
+        try {
+            // The Query::getSingleResult() method throws an exception
+            // if there is no record matching the criteria.
+            $user = $q->getSingleResult();
+        } catch (NoResultException $e) {
+            $message = sprintf(
+                'Unable to find an active admin AcmeUserBundle:User object identified by "%s".', $token
+            );
+            throw new UsernameNotFoundException($message, 0, $e);
+        }
+
+        return $user;
+    }
+
     
 }

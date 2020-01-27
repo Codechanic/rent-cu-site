@@ -80,6 +80,10 @@ class PopulateOwnerCommand extends DoctrineCommand
                     }
 
                 } else {
+                    if (count($adm) > 0) {
+                        $homeStay->setOwnerId($adm[0]);
+                    }
+
                     if (empty($email)) {
                         $output->writeln("The house has no email registered");
                     } else {

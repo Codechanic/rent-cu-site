@@ -427,15 +427,24 @@ class DefaultController extends Controller
                         return new JsonResponse(array('Bad Credentials'), 400);
                     }
                 }
-                $exp = new \DateTime("+24 hours");
-
+                $issuedAt = time();
+                $nbf = $issuedAt + 10;
+                $exp = $nbf + 120;
+                $refreshToken = $issuedAt . $username . $user->getSalt();
+                $refreshToken = hash('sha256', $refreshToken);
+                $user->setRefreshToken($refreshToken);
+                $em->persist($user);
+                $em->flush();
                 $key = "secretKey";
                 $roles = $user->getRoles();
                 $token = array(
                     'username' => $user->getUsername(),
                     'sub' => $user->getId(),
                     'role' => $roles[0]->getRole(),
-                    'exp' => $exp->getTimestamp()
+                    'exp' => $exp,
+                    'iat' => $issuedAt,
+                    'nbf' => $nbf,
+                    'refresh_token' => $refreshToken,
                 );
 
                 $jwt = JWT::encode($token, $key);
@@ -454,6 +463,67 @@ class DefaultController extends Controller
         } else {
             return new RedirectResponse($this->get('router')->generate('homestays'));
         }
+    }
+
+    /**
+     * @Route("/refresh", name="_refresh_token", methods={"POST", "OPTIONS"})
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse|Response
+     */
+    public function refreshAction(Request $request) {
+
+        if ($request->getMethod() === 'OPTIONS') {
+            return new Response(
+                null,
+                204,
+                array(
+                    'Access-Control-Allow-Origin' => '*',
+                    'Access-Control-Allow-Headers' => 'content-type',
+                    'Access-Control-Allow-Methods' => 'POST',
+                    'Connection' => 'keep-alive'
+                ));
+        } elseif ($request->getMethod() === 'POST') {
+            try {
+                $token = $request->get('_token');
+                $em = $this->getDoctrine()->getManager();
+                $user = $em->getRepository('AdminBundle:User')->getUserByToken($token);
+                $iat = time();
+                $nbf = $iat + 10;
+                $exp = $nbf + 120;
+                $refreshToken = $iat . $user->getUsername() . $user->getSalt();
+                $refreshToken = hash('sha256', $refreshToken);
+                $user->setRefreshToken($refreshToken);
+                $em->persist($user);
+                $em->flush();
+                $key = "secretKey";
+                $roles = $user->getRoles();
+                $token = array(
+                    'username' => $user->getUsername(),
+                    'sub' => $user->getId(),
+                    'role' => $roles[0]->getRole(),
+                    'exp' => $exp,
+                    'iat' => $iat,
+                    'nbf' => $nbf,
+                    'refresh_token' => $refreshToken,
+                );
+
+                $jwt = JWT::encode($token, $key);
+
+                return new JsonResponse($jwt, 200,
+                    array(
+                        'Access-Control-Allow-Origin' => '*',
+                        'Access-Control-Allow-Headers' => 'content-type',
+                        'Access-Control-Allow-Methods' => 'GET,HEAD,PUT,PATCH,POST,DELETE',
+                        'Connection' => 'keep-alive'
+                    ));
+
+            } catch (\Exception $exception) {
+                return new JsonResponse(array('Bad Credentials'), 400);
+            }
+        } else {
+            return new RedirectResponse($this->get('router')->generate('homestays'));
+        }
+
     }
 
     /**

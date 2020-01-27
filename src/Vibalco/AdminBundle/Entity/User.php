@@ -82,6 +82,12 @@ class User implements AdvancedUserInterface, \Serializable {
     protected $enabled;
 
     /**
+     * @var string $refreshToken
+     * @ORM\Column(name="refresh_token", type="string", nullable=true)
+     */
+    protected $refreshToken;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -361,6 +367,14 @@ class User implements AdvancedUserInterface, \Serializable {
     
     public function setRoles($roles) {
         $this->roles = $roles;
+    }
+
+    public function setRefreshToken($refreshToken) {
+        $this->refreshToken = $refreshToken;
+    }
+
+    public function getRefreshToken() {
+        return $this->refreshToken;
     }
 
 
