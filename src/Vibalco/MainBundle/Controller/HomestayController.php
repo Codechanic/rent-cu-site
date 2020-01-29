@@ -31,6 +31,7 @@ class HomestayController extends AdminManager {
         $qb->from($this->repository, 'p')->orderBy('p.id', 'desc');
         $qb->leftJoin('p.municipality', 'm');
         $qb->leftJoin('p.acommodation', 'a');
+        $qb->andWhere('p.enabled = true');
 
         $datatable = $this->get('datatable')
                 ->setFields(array(

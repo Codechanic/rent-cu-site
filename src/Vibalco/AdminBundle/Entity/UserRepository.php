@@ -61,7 +61,8 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
     public function getUserByToken($token) {
         $q = $this
             ->createQueryBuilder('u')
-            ->where('u.refreshToken = :token')
+            ->innerJoin('u.tokens', 'tokens')
+            ->where('tokens.token = :token')
             ->setParameter('token', $token)
             ->getQuery();
 

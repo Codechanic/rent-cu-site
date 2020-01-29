@@ -2,6 +2,7 @@
 
 namespace Vibalco\AdminBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
@@ -82,10 +83,9 @@ class User implements AdvancedUserInterface, \Serializable {
     protected $enabled;
 
     /**
-     * @var string $refreshToken
-     * @ORM\Column(name="refresh_token", type="string", nullable=true)
+     * @ORM\OneToMany(targetEntity="Vibalco\MainBundle\Entity\RefreshToken", mappedBy="user", cascade={"persist", "remove"})
      */
-    protected $refreshToken;
+    protected $tokens;
 
     /**
      * Get id
@@ -94,6 +94,42 @@ class User implements AdvancedUserInterface, \Serializable {
      */
     public function getId() {
         return $this->id;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTokens()
+    {
+        return $this->tokens;
+    }
+
+    /**
+     * @param ArrayCollection $tokens
+     * @return User
+     */
+    public function setTokens($tokens)
+    {
+        $this->tokens = $tokens;
+        return $this;
+    }
+
+    public function addToken($token)
+    {
+        if (!$this->tokens->contains($token)) {
+            $this->tokens->add($token);
+        }
+        return $token;
+    }
+
+    public function removeToken($token)
+    {
+        if ($this->tokens->contains($token)) {
+            $this->tokens->remove($token);
+            return true;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -111,6 +147,7 @@ class User implements AdvancedUserInterface, \Serializable {
 
     public function __construct() {
         $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tokens = new \Doctrine\Common\Collections\ArrayCollection();
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $this->enabled = true;
     }
@@ -368,16 +405,5 @@ class User implements AdvancedUserInterface, \Serializable {
     public function setRoles($roles) {
         $this->roles = $roles;
     }
-
-    public function setRefreshToken($refreshToken) {
-        $this->refreshToken = $refreshToken;
-    }
-
-    public function getRefreshToken() {
-        return $this->refreshToken;
-    }
-
-
-    
 
 }

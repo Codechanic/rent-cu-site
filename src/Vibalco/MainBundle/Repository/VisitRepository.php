@@ -50,8 +50,11 @@ class VisitRepository extends EntityRepository
         
         $query = $this->getEntityManager()->createQuery(" 
             SELECT v, SUM(v.count) AS ncount
-            FROM MainBundle:Visit v
-            WHERE v.entityclass LIKE '%Homestay%' 
+            FROM MainBundle:Visit v 
+                INNER JOIN MainBundle:Homestay h
+                    WITH v.entityid = h.id
+            WHERE v.entityclass LIKE '%Homestay%'
+                AND h.enabled = true
             GROUP BY v.entityclass, v.entityid
             ORDER BY ncount DESC
         ")
