@@ -410,7 +410,7 @@ class DefaultController extends Controller
                 204,
                 array(
                     'Access-Control-Allow-Origin' => '*',
-                    'Access-Control-Allow-Headers' => 'content-type',
+                    'Access-Control-Allow-Headers' => 'content-type,authorization',
                     'Access-Control-Allow-Methods' => 'POST',
                     'Connection' => 'keep-alive'
                 ));
@@ -428,8 +428,8 @@ class DefaultController extends Controller
                     }
                 }
                 $issuedAt = time();
-                $nbf = $issuedAt + 10;
-                $exp = $nbf + 120;
+                $nbf = $issuedAt;
+                $exp = $nbf + 7200;
                 $refreshToken = $issuedAt . $username . $user->getSalt();
                 $refreshToken = hash('sha256', $refreshToken);
                 $user->setRefreshToken($refreshToken);
@@ -488,8 +488,8 @@ class DefaultController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $user = $em->getRepository('AdminBundle:User')->getUserByToken($token);
                 $iat = time();
-                $nbf = $iat + 10;
-                $exp = $nbf + 120;
+                $nbf = $iat;
+                $exp = $nbf + 7200;
                 $refreshToken = $iat . $user->getUsername() . $user->getSalt();
                 $refreshToken = hash('sha256', $refreshToken);
                 $user->setRefreshToken($refreshToken);
