@@ -411,7 +411,7 @@ class DefaultController extends Controller
                 204,
                 array(
                     'Access-Control-Allow-Origin' => '*',
-                    'Access-Control-Allow-Headers' => 'content-type',
+                    'Access-Control-Allow-Headers' => 'content-type,authorization',
                     'Access-Control-Allow-Methods' => 'POST',
                     'Connection' => 'keep-alive'
                 ));
