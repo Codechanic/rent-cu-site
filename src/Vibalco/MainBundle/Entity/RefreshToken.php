@@ -32,6 +32,29 @@ class RefreshToken
     protected $token;
 
     /**
+     * @return \DateTime
+     */
+    public function getExpires()
+    {
+        return $this->expires;
+    }
+
+    /**
+     * @param mixed $expires
+     * @return RefreshToken
+     */
+    public function setExpires($expires)
+    {
+        $this->expires = $expires;
+        return $this;
+    }
+
+    /**
+     * @ORM\Column(name="expires", type="datetime")
+     */
+    protected $expires;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Vibalco\AdminBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
      */

@@ -429,6 +429,7 @@ class DefaultController extends Controller
                 $refreshToken = new RefreshToken();
                 $refreshToken->setToken($token);
                 $refreshToken->setUser($user);
+                $refreshToken->setExpires($exp);
                 $user->addToken($refreshToken);
                 $em->persist($user);
                 $em->persist($refreshToken);
@@ -493,6 +494,7 @@ class DefaultController extends Controller
                 $token = new RefreshToken();
                 $token->setUser($user);
                 $token->setToken($refreshToken);
+                $token->setExpires($exp);
                 $user->addToken($token);
                 $em->persist($user);
                 $em->persist($token);
