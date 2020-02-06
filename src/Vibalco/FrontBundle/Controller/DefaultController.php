@@ -363,15 +363,8 @@ class DefaultController extends Controller
             $comment->setHomestay($homeStay);
             $em->persist($comment);
             $em->flush();
-            $mensaje = $this->get('translator')->trans('news.messages.registred');
-            $message = \Swift_Message::newInstance()
-                ->setSubject($entity->getTitle())
-                ->setFrom(array($this->get('service_container')->getParameter('mailer_sender_email') => $this->get('service_container')->getParameter('mailer_sender_name')))
-                ->setTo('booking@rent.cu')
-                ->setBody(
-                    'Se ha realizado un comentario a una casa', 'text/html'
-                );
-            $this->get('mailer')->send($message);
+            $body = $this->renderView('FrontBundle:Email:comment.html.twig', array('entity' => $comment));
+            $this->sendMail($body, 'Se ha realizado un comentario');
             return new JsonResponse();
         } catch (\Exception $exception) {
             return new JsonResponse($exception->getMessage(), 500);

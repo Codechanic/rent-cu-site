@@ -342,10 +342,11 @@ class InnerController extends Controller {
         $homestay = $em->getRepository('MainBundle:Homestay')
             ->findOneBy(array('slug' => $slug));
         $comments = $em->getRepository('FrontBundle:Comment')
-            ->findBy(array(
-                'homestay' => $homestay,
-                'enabled' => true
-            ));
+            ->findBy(
+                array( 'homestay' => $homestay, 'enabled' => true),
+                array(),
+                5
+            );
         return array(
             'comments' => $comments
         );

@@ -126,6 +126,11 @@ front:
             email: Correo
             message: Mensaje
         weather: Forecast
+        comment:
+            name: Name
+            email: Email
+            message: Message
+            title: New Comment
     homestay:
         rooms: Habitaciones
         room: Habitación
