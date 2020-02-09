@@ -429,7 +429,9 @@ class DefaultController extends Controller
                 $refreshToken = new RefreshToken();
                 $refreshToken->setToken($token);
                 $refreshToken->setUser($user);
-                $refreshToken->setExpires($exp);
+                $date = new \DateTime();
+                $date->setTimestamp($exp);
+                $refreshToken->setExpires($date);
                 $user->addToken($refreshToken);
                 $em->persist($user);
                 $em->persist($refreshToken);
@@ -494,7 +496,9 @@ class DefaultController extends Controller
                 $token = new RefreshToken();
                 $token->setUser($user);
                 $token->setToken($refreshToken);
-                $token->setExpires($exp);
+                $date = new \DateTime();
+                $date->setTimestamp($exp);
+                $token->setExpires($date);
                 $user->addToken($token);
                 $em->persist($user);
                 $em->persist($token);
