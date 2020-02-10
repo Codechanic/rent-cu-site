@@ -86,27 +86,27 @@ front:
     contactform:
         header: BOOK
         form:
-            name: Nombre
-            email: Correo
-            phone: Teléfono
-            fromdate: Desde
-            todate: Hasta
-            message: Mensaje
-            submit: ENVIAR
+            name: Name
+            email: Email
+            phone: Phone
+            fromdate: Since
+            todate: To
+            message: Message
+            submit: SEND
         message:
-            success: Solicitud enviada
-            internalerror: Error al procesar solicitud
-            error: Error en los campos de solicitud
+            success: Request sent
+            internalerror: An error has prompted processing your request
+            error: You got error on your input information
         email:
-            subject: Nueva Solicitud de Reserva
-            title: Nueva Solicitud de Reserva
-            homestay: Casa
-            fromdate: Desde
-            todate: Hasta
-            name: Nombre
-            email: Correo
-            phone: Teléfono
-            message: Mensaje
+            subject: New Book Request
+            title: New Book Request
+            homestay: Homestay
+            fromdate: Since
+            todate: To
+            name: Name
+            email: Email
+            phone: Phone
+            message: Message
             
     applicant:
         header: GET ANNOUNCED
@@ -116,15 +116,15 @@ front:
             message: Message
             submit: SEND
         message:
-            success: Solicitud enviada
-            internalerror: Error al procesar solicitud
-            error: Error en los campos de solicitud
+            success: Request sent
+            internalerror: An error has prompted processing your request
+            error: You got error on your input information
         email:
-            subject: Nueva Solicitud de Anuncio
-            title: Nueva Solicitud de Anuncio
-            name: Nombre
-            email: Correo
-            message: Mensaje
+            subject: New Announce request
+            title: New Announce request
+            name: Name
+            email: Email
+            message: Message
         weather: Forecast
         comment:
             name: Name
@@ -132,23 +132,23 @@ front:
             message: Message
             title: New Comment
     homestay:
-        rooms: Habitaciones
-        room: Habitación
-        price: Desde
-        breakfast: Desayuno
-        extrabed: Tercera persona
-        childbed: Cama para niño
-        childnotallowed: No se permiten niños
-        childforfree: Sin costo para niños
-        freeservices: Facilidades
-        extracost: Costo adicional
-        notoffered: No disponible
-        description: DESCRIPCIÓN
-        municipality: Localización
+        rooms: Rooms
+        room: Room
+        price: From
+        breakfast: Breakfast
+        extrabed: Third Person
+        childbed: Child bed
+        childnotallowed: Kid not allowed
+        childforfree: No Kid Cost
+        freeservices: Facilities
+        extracost: Extra cost
+        notoffered: Not available
+        description: Description
+        municipality: Locality
         location: Province
-        phones: Teléfonos
-        email: Correo
-        places: Lugares de Interés  
+        phones: Phones
+        email: Email
+        places: Places
         
     homestays:
         rooms: Rooms
@@ -175,35 +175,35 @@ front:
         morerooms: More Room
             
     antiquecar:
-        brand: Marca
-        year: Año
+        brand: Brand
+        year: Year
         color: Color
-        hardcover: Cubierta dura
+        hardcover: Hard Cover
         convertible: Convertible
-        perhour: Por Hora
-        per8hour: Por 8 Horas
-        email: C
-        phones: T
+        perhour: Per Hour
+        per8hour: Per 8 Hour
+        email: E
+        phones: P
         
     antiquecarfilter:
-        header: BÚSQUEDA
-        results: resultados
+        header: SEARCH
+        results: Results
         location: Province
-        morelocations: Más ubicaciones
-        brand: Marca
-        morebrands: Más marcas
-        prices: Precios
-        changeprices: Cambiar Precios
+        morelocations: More Locations
+        brand: Brand
+        morebrands: More brand
+        prices: Prices
+        changeprices: Change Prices
         pricemin: Min
         pricemax: Max
-        search: Búsqueda Personalizada
-        changesearch: Cambiar criterio de búsqueda
-        searchplaceholder: Nombre, descripción...
-        year: Año
-        moreyears: Más años
+        search: Custom search
+        changesearch: Change search criteria
+        searchplaceholder: Name, description...
+        year: Year
+        moreyears: More year
     comment:
         label: Comment
         send: Send
         email: Email
         name: Name
-        list: Commentarios
+        list: comments

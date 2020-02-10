@@ -63,4 +63,17 @@ class VisitRepository extends EntityRepository
         
         return $query->getResult();
     }
+
+    public function clearOutdated($days) {
+        $dql = "
+            DELETE FROM MainBundle:Visit v
+            WHERE v.updateDate < :date
+                AND v.entityclass LIKE '%Homestay%'
+        ";
+        $date = new \DateTime('-' . $days . 'days');
+        $query = $this->getEntityManager()
+            ->createQuery($dql)
+            ->setParameter('date', $date);
+        return $query->execute();
+    }
 }
