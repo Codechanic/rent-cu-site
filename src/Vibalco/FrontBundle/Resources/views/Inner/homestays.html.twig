@@ -2,12 +2,12 @@
 
 {% block title %}{{ 'front.homestays.title' | trans }}{% endblock %}
 
-{% block pagecontent %}   
+{% block pagecontent %}
 <div class="col-md-9 col-md-push-3 left-row-padding body-content">
-    <div class="row bodyrow entity-list">        
+    <div class="row bodyrow entity-list">
     {% for entity in entities %}
         <div class="col-sm-6">
-            <div class="row box-gray front-box-shadow list-box" id='homestay-{{ entity.id }}'>   
+            <div class="row box-gray front-box-shadow list-box" id='homestay-{{ entity.id }}'>
                 <div class="col-sm-7">
                     <div class='entity-content'>
                         <div class="list-data">
@@ -58,7 +58,7 @@
     {% endif %}
     </div>
 </div>
-    
+
 <aside class="col-md-3 col-md-pull-9 right-row-padding">
         <div class="row front-box-shadow lateral-list">
             <div class="badge-lateral">
@@ -67,10 +67,10 @@
             </div>
             <div class="container-fluid">
                 {% render controller("FrontBundle:Inner:homestayfilter") %}
-            </div>  
+            </div>
         </div>
         {% include 'FrontBundle:Default:fragm_sociallinks.html.twig'%}
-    </aside>
+</aside>
 {% endblock pagecontent %}
 
 {% block javascripts %}

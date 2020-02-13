@@ -7,7 +7,7 @@
 {% block meta_keywords %}{{ entity.metakeywords }}{% endblock meta_keywords %}
 
 {% block pagecontent %}
-    <div class="col-md-9 col-md-push-3 left-row-padding body-content homestay-content">
+    <div class="col-md-12 left-row-padding body-content homestay-content">
         <div class="row bodyrow">
             <div class="col-sm-6">
                 <div class="row box bg-top2bottom front-box-shadow homestay-description">
@@ -203,19 +203,6 @@
             </div>
         </div>
     </div>
-
-    <aside class="col-md-3 col-md-pull-9 right-row-padding">
-        <div class="row front-box-shadow lateral-list">
-            <div class="badge-lateral">
-                <b class="floatingtag">{{ 'front.homestayfilter.header' | trans }}</b>
-                <img class="img-responsive" src="{{ asset('bundles/front/images/badge.png') }}"/>
-            </div>
-            <div class="container-fluid">
-                {% render controller("FrontBundle:Inner:homestayfilter", {'id' : entity.id}) %}
-            </div>
-        </div>
-        {% include 'FrontBundle:Default:fragm_sociallinks.html.twig'%}
-    </aside>
 {% endblock pagecontent %}
 
 {% block javascripts %}

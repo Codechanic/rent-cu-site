@@ -1549,3 +1549,9 @@ a:hover {
     flex-direction: column;
     justify-content: flex-start;
 }
+.flex-layout {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
