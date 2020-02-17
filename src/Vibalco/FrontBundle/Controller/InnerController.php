@@ -164,6 +164,29 @@ class InnerController extends Controller {
 
         return array('fm' => $fm);
     }
+
+    /**
+     * @Route("/reviews/{slug}", name="homestay_review")
+     * @Template()
+     */
+    public function reviewsAction($slug)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('MainBundle:Homestay')->findOneBy(array('slug' => $slug));
+
+        $comments = $em->getRepository('FrontBundle:Comment')
+            ->findBy(
+                array( 'homestay' => $entity, 'enabled' => true)
+            );
+
+        if($entity) {
+            $this->registerVisit($entity);
+        }
+
+        return array('entity' => $entity, 'comments' => $comments);
+
+    }
     
     /**
      * Test action TODO delete
