@@ -732,6 +732,7 @@ class DefaultController extends Controller
                     }
 
                 }
+                //wil return 404
                 return new JsonResponse(
                     $id,
                     404,
