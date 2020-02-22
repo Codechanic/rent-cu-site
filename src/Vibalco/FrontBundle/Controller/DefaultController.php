@@ -641,6 +641,118 @@ class DefaultController extends Controller
 
     }
 
+    /**
+     * @Route("/owner/{id}", name="_owner_update", methods={"POST", "OPTIONS"})
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse|Response
+     */
+    public function updateOwnerAction($id, Request $request)
+    {
+        if ($request->getMethod() === 'OPTIONS') {
+            return new Response(
+                null,
+                204,
+                array(
+                    'Access-Control-Allow-Origin' => '*',
+                    'Access-Control-Allow-Headers' => 'content-type',
+                    'Access-Control-Allow-Methods' => 'POST',
+                    'Connection' => 'keep-alive'
+                ));
+        }
+
+        if ($request->getMethod() === 'POST') {
+            $username = $request->get('_username');
+            $name = $request->get('_name');
+            $password = $request->get('_password');
+            $violations = [];
+
+            if (empty($name)) {
+                $violations[] = 'name';
+            }
+
+            if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+                $violations[] = 'username';
+            }
+
+            if (count($violations) > 0) {
+                return new JsonResponse(
+                    'Hay campos incorrectos',
+                    400
+                );
+            }
+
+            try {
+
+                $em = $this->getDoctrine()->getManager();
+                $adm = $em->getRepository('AdminBundle:User')->find($id);
+                if (!empty($adm)) {
+                    $doUpdate = false;
+                    if (!empty($name) && $adm->getName() !== $name) {
+                        $adm->setName($name);
+                        $doUpdate = true;
+                    }
+
+                    if (!empty($username) && $adm->getUsername() !== $username) {
+                        $adm->setUsername($username);
+                        $adm->setEmail($username);
+                        $doUpdate = true;
+                    }
+
+                    if (!empty($password)) {
+                        $adm->setPassword($password);
+                        $secured = $this->getSecurePassword($adm);
+                        $adm->setPassword($secured);
+                        $doUpdate = true;
+                    }
+
+                    if ($doUpdate) {
+                        $em->persist($adm);
+                        $em->flush();
+                        return new JsonResponse(
+                            $username,
+                            206,
+                            array(
+                                'Access-Control-Allow-Origin' => '*',
+                                'Access-Control-Allow-Headers' => 'content-type',
+                                'Access-Control-Allow-Methods' => 'POST,OPTIONS',
+                                'Connection' => 'close'
+                            )
+                        );
+                    } else {
+                        return new JsonResponse(
+                            $username,
+                            204,
+                            array(
+                                'Access-Control-Allow-Origin' => '*',
+                                'Access-Control-Allow-Headers' => 'content-type',
+                                'Access-Control-Allow-Methods' => 'POST,OPTIONS',
+                                'Connection' => 'close'
+                            )
+                        );
+                    }
+
+                }
+                return new JsonResponse(
+                    $id,
+                    404,
+                    array(
+                        'Access-Control-Allow-Origin' => '*',
+                        'Access-Control-Allow-Headers' => 'content-type',
+                        'Access-Control-Allow-Methods' => 'POST,OPTIONS',
+                        'Connection' => 'close'
+                    )
+                );
+
+            } catch (Exception $exception) {
+                return new JsonResponse(
+                    $exception->getMessage(),
+                    500
+                );
+            }
+        }
+
+    }
+
     protected function getSecurePassword($entity)
     {
         $encoder = new MessageDigestPasswordEncoder('sha512', true, 10);
