@@ -6,204 +6,242 @@
 {% block meta_description %}{{ entity.metadescription }}{% endblock meta_description %}
 {% block meta_keywords %}{{ entity.metakeywords }}{% endblock meta_keywords %}
 
-{% block pagecontent %}
-    <div class="col-md-12 left-row-padding body-content homestay-content">
-        <div class="row bodyrow">
-            <div class="col-sm-6">
-                <div class="row box bg-top2bottom front-box-shadow homestay-description">
-                    <div class="col-md-12">
-                        <h1>{{ entity.name }}</h1>
-                        <blockquote>
-                            <span>{{ entity.acommodation }} <b>{{ entity.rooms }} {{ (entity.rooms > 1 ? 'front.homestay.rooms' : 'front.homestay.room') | trans }}</b></span>
-                        </blockquote>
+{% block body %}
+    <header>
+        <div>
+            <div class="container" id="logorow">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <a href="{{ path('index') }}">
+                            <img class="coverlogo" src="{{ asset("bundles/front/images/logo.png") }}" alt="LOGO"/>
+                        </a>
                     </div>
-                    <div class="col-md-12">
-                        <div class="row prices">
-                            <div class="price-container col-md-5">
-                                <h4><span>{{ 'front.homestay.price' | trans }}</span>{{ entity.getMinPrice() | number_format(0) }}<i>.{{ (entity.getMinPrice() * 100) | number_format(0, '', '') | slice(-2)  }} CUC</i></h4>
+                    <div class="col-md-offset-2 col-sm-3" id="col-form-search">
+                        {#<form class="form-search" action="#" method="GET">
+                            <div class="controls-row">
+                                <div class="control-group text-left">
+                                    <label class="control-label" for="inputSearch"><i>{{ 'front.header.form-search' | trans }}</i></label>
+                                    <div class="controls input-icon right">
+                                        <i class="icon-search"></i>
+                                        <input type="text" id="inputSearch" class="input-medium form-control" name="criteria"/>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-7">
-                                {% if entity.breakfastprice is not null %}<div><i class="icon-angle-right"></i>{{ 'front.homestay.breakfast' | trans }}: <b>{{ entity.breakfastprice | number_format(2) }}</b> CUC</div>{% endif %}
-                                {% if entity.extrabedprice is not null %}<div><i class="icon-angle-right"></i>{{ 'front.homestay.extrabed' | trans }}: <b>{{ entity.extrabedprice | number_format(2) }}</b> CUC</div>{% endif %}
-                                {% if entity.bedchildprice is null %}
-                                    <div><i class="icon-angle-right"></i>{{ 'front.homestay.childnotallowed' | trans }}</div>
-                                {% elseif entity.bedchildprice == 0 %}
-                                    <div><i class="icon-angle-right"></i>{{ 'front.homestay.childforfree' | trans }}</div>
-                                {% else %}
-                                    <div><i class="icon-angle-right"></i>{{ 'front.homestay.childbed' | trans }}: <b>{{ entity.bedchildprice | number_format(2) }}</b> CUC</div>
-                                {% endif %}
-                            </div>
-                        </div>
+                        </form>#}
                     </div>
-                    <div class="col-md-12 service-list">
-                        {% set showfree = false %}
-                        {% set showextra = false %}
-                        {% set shownotoff = false %}
-
-                        {% set classfree = '' %}
-                        {% set classextra = '' %}
-                        {% set classnotoff = '' %}
-
-                        {% if entity.freeservices is not empty%}
-                            {% set showfree = true %}
-                            {% set classfree = 'active' %}
-                        {% endif %}
-
-                        {% if entity.extracosts is not empty%}
-                            {% set showextra = true %}
-                            {% set classextra = showfree ? '' : 'active' %}
-                        {% endif %}
-
-                        {% if entity.notoffereds is not empty%}
-                            {% set shownotoff = true %}
-                            {% set classnotoff = showfree or showextra ? '' : 'active' %}
-                        {% endif %}
-
-                        <ul class="nav nav-pills">
-                            {% if showfree %}<li class="{{ classfree }} col-md-4"><a href="#freeservices" data-toggle="tab">{{ 'front.homestay.freeservices' | trans }}</a></li>{% endif %}
-                            {% if showextra %}<li class="{{ classextra }} col-md-4"><a href="#extracost" data-toggle="tab">{{ 'front.homestay.extracost' | trans }}</a></li>{% endif %}
-                            {% if shownotoff %}<li class="{{ classnotoff }} col-md-4"><a href="#notoffered" data-toggle="tab">{{ 'front.homestay.notoffered' | trans }}</a></li>{% endif %}
-                        </ul>
-                        <div class="row tab-content">
-                            {% if showfree %}
-                                <div class="tab-pane {{ classfree }}" id="freeservices">
-                                    <div class="scroller">
-                                        <div class="col-md-12">
-                                            <ul class="list-unstyled">
-                                                {% for service in entity.freeservices %}
-                                                    <li><i class="icon-ok"></i> {{ service.name }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                            {% if showextra %}
-                                <div class="tab-pane {{ classextra }}" id="extracost">
-                                    <div class="scroller">
-                                        <div class="col-md-offset-4 col-md-8">
-                                            <ul class="list-unstyled">
-                                                {% for service in entity.extracosts %}
-                                                    <li><i class="icon-ok"></i> {{ service.name }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                            {% if shownotoff %}
-                                <div class="tab-pane {{ classnotoff }}" id="notoffered">
-                                    <div class="scroller">
-                                        <div class="col-md-offset-8 col-md-4">
-                                            <ul class="list-unstyled">
-                                                {% for service in entity.notoffereds %}
-                                                    <li><i class="icon-ok"></i> {{ service.name }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
+                    <div class="col-sm-5 top-promo">
+                        {% render controller("FrontBundle:Default:cover_toppromo") %}
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-6 colmainslider">
-                <div>
-                    {% render controller("FrontBundle:Inner:homestayslider", { 'id' : entity.id } ) %}
                 </div>
             </div>
         </div>
+        {% render controller("FrontBundle:Default:cover_stripslider") %}
+    </header>
+    <div class="body">
+        <div class="container">
+            <div class="row flex-layout">
+                {% block pagecontent %}
+                    <div class="col-md-12 left-row-padding body-content homestay-content">
+                        <div class="row bodyrow">
+                            <div class="col-sm-6">
+                                <div class="row box bg-top2bottom front-box-shadow homestay-description">
+                                    <div class="col-md-12">
+                                        <h1>{{ entity.name }}</h1>
+                                        <blockquote>
+                                            <span>{{ entity.acommodation }} <b>{{ entity.rooms }} {{ (entity.rooms > 1 ? 'front.homestay.rooms' : 'front.homestay.room') | trans }}</b></span>
+                                        </blockquote>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row prices">
+                                            <div class="price-container col-md-5">
+                                                <h4><span>{{ 'front.homestay.price' | trans }}</span>{{ entity.getMinPrice() | number_format(0) }}<i>.{{ (entity.getMinPrice() * 100) | number_format(0, '', '') | slice(-2)  }} CUC</i></h4>
+                                            </div>
+                                            <div class="col-md-7">
+                                                {% if entity.breakfastprice is not null %}<div><i class="icon-angle-right"></i>{{ 'front.homestay.breakfast' | trans }}: <b>{{ entity.breakfastprice | number_format(2) }}</b> CUC</div>{% endif %}
+                                                {% if entity.extrabedprice is not null %}<div><i class="icon-angle-right"></i>{{ 'front.homestay.extrabed' | trans }}: <b>{{ entity.extrabedprice | number_format(2) }}</b> CUC</div>{% endif %}
+                                                {% if entity.bedchildprice is null %}
+                                                    <div><i class="icon-angle-right"></i>{{ 'front.homestay.childnotallowed' | trans }}</div>
+                                                {% elseif entity.bedchildprice == 0 %}
+                                                    <div><i class="icon-angle-right"></i>{{ 'front.homestay.childforfree' | trans }}</div>
+                                                {% else %}
+                                                    <div><i class="icon-angle-right"></i>{{ 'front.homestay.childbed' | trans }}: <b>{{ entity.bedchildprice | number_format(2) }}</b> CUC</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 service-list">
+                                        {% set showfree = false %}
+                                        {% set showextra = false %}
+                                        {% set shownotoff = false %}
 
-        <div class="row bodyrow">
-            <div class="col-sm-8">
-                <div class="row box-gray bg-top2bottom front-box-shadow description-box">
-                    <div class="badge-front">
-                        <b class="floatingtag">{{ 'front.homestay.description' | trans }}</b>
-                        <img class="img-responsive" src="{{ asset('bundles/front/images/badge.png') }}" alt="{{ 'front.homestay.description' | trans }}"/>
-                    </div>
-                    <div class="container-fluid description-content">
-                        {{ entity.description | raw }}
-                    </div>
-                </div>
-                <div class="row box-gray bg-top2bottom front-box-shadow description-box places">
-                    <div class="badge-front">
-                        <b class="floatingtag">{{ 'front.homestay.places' | trans }}</b>
-                        <img class="img-responsive" src="{{ asset('bundles/front/images/badge.png') }}" alt="{{ 'front.homestay.places' | trans }}"/>
-                    </div>
-                    <div class="container-fluid description-content">
-                        <ul class="list-unstyled">
-                            {% for place in entity.places %}
-                                <li class="col-md-6"><i class="icon-ok"></i> {{ place.name }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-                <div class="row box bg-top2bottom front-box-shadow location-box">
-                    <blockquote class="location-contact {{ entity.hasLatLng ? 'col-md-6' : 'col-md-12' }}">
-                        <h3><i class="icon-map-marker"></i> {{ 'front.homestay.location' | trans }}</h3>
-                        <address class="margin-bottom-40">
-                            <b>{{ entity.address }}</b> <br>
-                            {{ entity.municipality }}{% if entity.municipality %}, {{ entity.municipality.province }}{% endif %}
-                        </address>
-                        {% if entity.showcontact %}
-                            <address  class="margin-bottom-40">
-                                {{ 'front.homestay.phones' | trans }}: {{ entity.phones }} <br>
-                                {{ 'front.homestay.email' | trans }}: <a href="mailto:{{ entity.email }}">{{ entity.email }}</a>
-                            </address>
-                        {% endif %}
-                    </blockquote>
-                    {% if entity.hasLatLng %}
-                        <div class="location-map col-md-6">
-                            <div id="map"></div>
+                                        {% set classfree = '' %}
+                                        {% set classextra = '' %}
+                                        {% set classnotoff = '' %}
+
+                                        {% if entity.freeservices is not empty%}
+                                            {% set showfree = true %}
+                                            {% set classfree = 'active' %}
+                                        {% endif %}
+
+                                        {% if entity.extracosts is not empty%}
+                                            {% set showextra = true %}
+                                            {% set classextra = showfree ? '' : 'active' %}
+                                        {% endif %}
+
+                                        {% if entity.notoffereds is not empty%}
+                                            {% set shownotoff = true %}
+                                            {% set classnotoff = showfree or showextra ? '' : 'active' %}
+                                        {% endif %}
+
+                                        <ul class="nav nav-pills">
+                                            {% if showfree %}<li class="{{ classfree }} col-md-4"><a href="#freeservices" data-toggle="tab">{{ 'front.homestay.freeservices' | trans }}</a></li>{% endif %}
+                                            {% if showextra %}<li class="{{ classextra }} col-md-4"><a href="#extracost" data-toggle="tab">{{ 'front.homestay.extracost' | trans }}</a></li>{% endif %}
+                                            {% if shownotoff %}<li class="{{ classnotoff }} col-md-4"><a href="#notoffered" data-toggle="tab">{{ 'front.homestay.notoffered' | trans }}</a></li>{% endif %}
+                                        </ul>
+                                        <div class="row tab-content">
+                                            {% if showfree %}
+                                                <div class="tab-pane {{ classfree }}" id="freeservices">
+                                                    <div class="scroller">
+                                                        <div class="col-md-12">
+                                                            <ul class="list-unstyled">
+                                                                {% for service in entity.freeservices %}
+                                                                    <li><i class="icon-ok"></i> {{ service.name }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            {% if showextra %}
+                                                <div class="tab-pane {{ classextra }}" id="extracost">
+                                                    <div class="scroller">
+                                                        <div class="col-md-offset-4 col-md-8">
+                                                            <ul class="list-unstyled">
+                                                                {% for service in entity.extracosts %}
+                                                                    <li><i class="icon-ok"></i> {{ service.name }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            {% if shownotoff %}
+                                                <div class="tab-pane {{ classnotoff }}" id="notoffered">
+                                                    <div class="scroller">
+                                                        <div class="col-md-offset-8 col-md-4">
+                                                            <ul class="list-unstyled">
+                                                                {% for service in entity.notoffereds %}
+                                                                    <li><i class="icon-ok"></i> {{ service.name }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 colmainslider">
+                                <div>
+                                    {% render controller("FrontBundle:Inner:homestayslider", { 'id' : entity.id } ) %}
+                                </div>
+                            </div>
                         </div>
-                    {% endif %}
-                </div>
-                <div class="row box-gray bg-top2bottom front-box-shadow description-box location-box comments">
-                    <div class="comments col-md-12 margin-top-10">
-                        <form class="comment-form" id="comment-form" data-home="{{ entity.id }}"  data-locale="{{ app.request.locale }}">
-                            <div class="form-group">
-                                <label for="comment-name">{{ 'front.comment.name' | trans }}</label>
-                                <input type="email" class="form-control" id="comment-name"/>
+
+                        <div class="row bodyrow">
+                            <div class="col-sm-8">
+                                <div class="row box-gray bg-top2bottom front-box-shadow description-box">
+                                    <div class="badge-front">
+                                        <b class="floatingtag">{{ 'front.homestay.description' | trans }}</b>
+                                        <img class="img-responsive" src="{{ asset('bundles/front/images/badge.png') }}" alt="{{ 'front.homestay.description' | trans }}"/>
+                                    </div>
+                                    <div class="container-fluid description-content">
+                                        {{ entity.description | raw }}
+                                    </div>
+                                </div>
+                                <div class="row box-gray bg-top2bottom front-box-shadow description-box places">
+                                    <div class="badge-front">
+                                        <b class="floatingtag">{{ 'front.homestay.places' | trans }}</b>
+                                        <img class="img-responsive" src="{{ asset('bundles/front/images/badge.png') }}" alt="{{ 'front.homestay.places' | trans }}"/>
+                                    </div>
+                                    <div class="container-fluid description-content">
+                                        <ul class="list-unstyled">
+                                            {% for place in entity.places %}
+                                                <li class="col-md-6"><i class="icon-ok"></i> {{ place.name }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row box bg-top2bottom front-box-shadow location-box">
+                                    <blockquote class="location-contact {{ entity.hasLatLng ? 'col-md-6' : 'col-md-12' }}">
+                                        <h3><i class="icon-map-marker"></i> {{ 'front.homestay.location' | trans }}</h3>
+                                        <address class="margin-bottom-40">
+                                            <b>{{ entity.address }}</b> <br>
+                                            {{ entity.municipality }}{% if entity.municipality %}, {{ entity.municipality.province }}{% endif %}
+                                        </address>
+                                        {% if entity.showcontact %}
+                                            <address  class="margin-bottom-40">
+                                                {{ 'front.homestay.phones' | trans }}: {{ entity.phones }} <br>
+                                                {{ 'front.homestay.email' | trans }}: <a href="mailto:{{ entity.email }}">{{ entity.email }}</a>
+                                            </address>
+                                        {% endif %}
+                                    </blockquote>
+                                    {% if entity.hasLatLng %}
+                                        <div class="location-map col-md-6">
+                                            <div id="map"></div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="row box-gray bg-top2bottom front-box-shadow description-box location-box comments">
+                                    <div class="comments col-md-12 margin-top-10">
+                                        <form class="comment-form" id="comment-form" data-home="{{ entity.id }}"  data-locale="{{ app.request.locale }}">
+                                            <div class="form-group">
+                                                <label for="comment-name">{{ 'front.comment.name' | trans }}</label>
+                                                <input type="email" class="form-control" id="comment-name"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="comment-email">{{ 'front.comment.email' | trans }}</label>
+                                                <input type="email" class="form-control" id="comment-email"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="comment-text">{{ 'front.comment.label' | trans }}</label>
+                                                <textarea class="comment-text form-control" id="comment-text"></textarea>
+                                            </div>
+                                            <div class="form-actions">
+                                                <button class="btn blueimg" id="send-button" type="button">{{ 'front.comment.send' | trans }}</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="comment-email">{{ 'front.comment.email' | trans }}</label>
-                                <input type="email" class="form-control" id="comment-email"/>
+                            <div class="col-sm-4">
+                                <div class="row box bg-top2bottom front-box-shadow right-box">
+                                    <div class="badge-lateral">
+                                        <b class="floatingtag">{{ 'front.contactform.header' | trans }}</b>
+                                        <img class="img-responsive" src="{{ asset('bundles/front/images/bbadge.png') }}" alt="{{ 'front.applicant.header' | trans }}"/>
+                                    </div>
+                                    <div class="container-fluid" id="contactform-container">
+                                        {% render controller('FrontBundle:Inner:homestay_contactform', {'slug' : entity.slug }) %}
+                                    </div>
+                                </div>
+                                <div class="row box bg-top2bottom front-box-shadow right-box">
+                                    <div class="badge-lateral">
+                                        <b class="floatingtag">{{ 'front.comment.list' | trans }}</b>
+                                        <img class="img-responsive" src="{{ asset('bundles/front/images/bbadge.png') }}" alt="{{ 'front.applicant.header' | trans }}"/>
+                                    </div>
+                                    <div class="container-fluid" id="comment-container">
+                                        {% render controller('FrontBundle:Inner:comment', {'slug' : entity.slug }) %}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="comment-text">{{ 'front.comment.label' | trans }}</label>
-                                <textarea class="comment-text form-control" id="comment-text"></textarea>
-                            </div>
-                            <div class="form-actions">
-                                <button class="btn blueimg" id="send-button" type="button">{{ 'front.comment.send' | trans }}</button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="row box bg-top2bottom front-box-shadow right-box">
-                    <div class="badge-lateral">
-                        <b class="floatingtag">{{ 'front.contactform.header' | trans }}</b>
-                        <img class="img-responsive" src="{{ asset('bundles/front/images/bbadge.png') }}" alt="{{ 'front.applicant.header' | trans }}"/>
-                    </div>
-                    <div class="container-fluid" id="contactform-container">
-                        {% render controller('FrontBundle:Inner:homestay_contactform', {'slug' : entity.slug }) %}
-                    </div>
-                </div>
-                <div class="row box bg-top2bottom front-box-shadow right-box">
-                    <div class="badge-lateral">
-                        <b class="floatingtag">{{ 'front.comment.list' | trans }}</b>
-                        <img class="img-responsive" src="{{ asset('bundles/front/images/bbadge.png') }}" alt="{{ 'front.applicant.header' | trans }}"/>
-                    </div>
-                    <div class="container-fluid" id="comment-container">
-                        {% render controller('FrontBundle:Inner:comment', {'slug' : entity.slug }) %}
-                    </div>
-                </div>
+                {% endblock pagecontent %}
             </div>
         </div>
     </div>
-{% endblock pagecontent %}
+{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
