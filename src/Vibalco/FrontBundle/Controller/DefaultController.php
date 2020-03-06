@@ -445,7 +445,7 @@ class DefaultController extends Controller
                     'exp' => $exp,
                     'iat' => $issuedAt,
                     'nbf' => $nbf,
-                    'refresh_token' => $refreshToken,
+                    'refresh_token' => $refreshToken->getToken(),
                 );
 
                 $jwt = JWT::encode($token, $key);
