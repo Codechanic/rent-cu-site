@@ -642,7 +642,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/owner/{id}", name="_owner_update", methods={"POST", "OPTIONS"})
+     * @Route("/password/{id}", name="_owner_update_password", methods={"POST", "OPTIONS"})
      * @param Request $request
      * @return JsonResponse|RedirectResponse|Response
      */
@@ -660,56 +660,41 @@ class DefaultController extends Controller
                 ));
         }
 
-        if ($request->getMethod() === 'POST') {
-            $username = $request->get('_username');
-            $name = $request->get('_name');
+        if ($request->getMethod() === 'POST') {        
             $password = $request->get('_password');
-            $violations = [];
-
-            if (empty($name)) {
-                $violations[] = 'name';
-            }
-
-            if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
-                $violations[] = 'username';
-            }
-
-            if (count($violations) > 0) {
-                return new JsonResponse(
-                    'Hay campos incorrectos',
-                    400
-                );
-            }
-
+            $oldPassword = $request->get('_old_password');
+            $all = apache_request_headers();
+            $header = $all['Authorization'];
             try {
 
+                $tokenBearer = explode(' ', $header);
+                $token = end($tokenBearer);
+                $key = "secretKey";
+                $credentials = JWT::decode($token, $key, array('HS256'));
+                if (intval($credentials->sub) !== intval($id)) {
+                    return new JsonResponse('Wrong Credentials', 401);
+                }
                 $em = $this->getDoctrine()->getManager();
                 $adm = $em->getRepository('AdminBundle:User')->find($id);
                 if (!empty($adm)) {
                     $doUpdate = false;
-                    if (!empty($name) && $adm->getName() !== $name) {
-                        $adm->setName($name);
-                        $doUpdate = true;
-                    }
-
-                    if (!empty($username) && $adm->getUsername() !== $username) {
-                        $adm->setUsername($username);
-                        $adm->setEmail($username);
-                        $doUpdate = true;
-                    }
-
-                    if (!empty($password)) {
-                        $adm->setPassword($password);
-                        $secured = $this->getSecurePassword($adm);
-                        $adm->setPassword($secured);
-                        $doUpdate = true;
+                    if (!empty($password) && !empty($oldPassword)) {
+                        if($this->checkPassword($adm, $oldPassword)) {
+                            $adm->setPassword($password);
+                            $secured = $this->getSecurePassword($adm);
+                            $adm->setPassword($secured);
+                            $doUpdate = true;
+                        } else {
+                            return new JsonResponse('', 401);
+                        }
+                        
                     }
 
                     if ($doUpdate) {
                         $em->persist($adm);
                         $em->flush();
                         return new JsonResponse(
-                            $username,
+                            $id,
                             206,
                             array(
                                 'Access-Control-Allow-Origin' => '*',
@@ -720,7 +705,7 @@ class DefaultController extends Controller
                         );
                     } else {
                         return new JsonResponse(
-                            $username,
+                            $id,
                             204,
                             array(
                                 'Access-Control-Allow-Origin' => '*',
@@ -759,6 +744,13 @@ class DefaultController extends Controller
         $encoder = new MessageDigestPasswordEncoder('sha512', true, 10);
         $password = $encoder->encodePassword($entity->getPassword(), $entity->getSalt());
         return $password;
+    }
+
+    protected function checkPassword($entity, $password) {
+        $encoder = new MessageDigestPasswordEncoder('sha512', true, 10);
+        $encodedPassword = $encoder->encodePassword($password, $entity->getSalt());
+        return $encodedPassword === $entity->getPassword();
+
     }
 
     private function findPromos($class, $count)
