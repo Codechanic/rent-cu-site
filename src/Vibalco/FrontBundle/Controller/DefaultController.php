@@ -417,9 +417,14 @@ class DefaultController extends Controller
                 $encoder = $this->get('security.encoder_factory')->getEncoder($user);
                 if (!empty($user)) {
                     $isValid = $encoder->isPasswordValid($encoder->encodePassword($password, $user->getSalt()), $password, $user->getSalt());
-                    if (!$isValid) {
+
+                    $isValid = $isValid && $this->checkPassword($user, $password);
+                    
+                } else {
+                    $isValid = false;
+                }
+                if (!$isValid) {
                         return new JsonResponse(array('Bad Credentials'), 400);
-                    }
                 }
                 $issuedAt = time();
                 $nbf = $issuedAt;
