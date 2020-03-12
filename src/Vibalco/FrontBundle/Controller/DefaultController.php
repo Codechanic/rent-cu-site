@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Vibalco\AdminBundle\Entity\User;
 use Vibalco\FrontBundle\Entity\Comment;
 use Vibalco\MainBundle\Entity\Applicant;
@@ -398,16 +399,18 @@ class DefaultController extends Controller
      */
     public function tokenAction(Request $request)
     {
+        $headers = array(
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Headers' => 'content-type',
+            'Access-Control-Allow-Methods' => 'GET,HEAD,PUT,PATCH,POST,DELETE',
+            'Connection' => 'keep-alive'
+        );
+
         if ($request->getMethod() === 'OPTIONS') {
             return new Response(
                 null,
                 204,
-                array(
-                    'Access-Control-Allow-Origin' => '*',
-                    'Access-Control-Allow-Headers' => 'content-type,authorization',
-                    'Access-Control-Allow-Methods' => 'POST',
-                    'Connection' => 'keep-alive'
-                ));
+                $headers);
         } elseif ($request->getMethod() === 'POST') {
             try {
                 $username = $request->get('_username');
@@ -419,12 +422,12 @@ class DefaultController extends Controller
                     $isValid = $encoder->isPasswordValid($encoder->encodePassword($password, $user->getSalt()), $password, $user->getSalt());
 
                     $isValid = $isValid && $this->checkPassword($user, $password);
-                    
+
                 } else {
                     $isValid = false;
                 }
                 if (!$isValid) {
-                        return new JsonResponse(array('Bad Credentials'), 400);
+                    return new JsonResponse(array('Bad Credentials'), 401, $headers);
                 }
                 $issuedAt = time();
                 $nbf = $issuedAt;
@@ -456,15 +459,11 @@ class DefaultController extends Controller
                 $jwt = JWT::encode($token, $key);
 
                 // Angular applications need these headers set in the response
-                return new JsonResponse($jwt, 200,
-                    array(
-                        'Access-Control-Allow-Origin' => '*',
-                        'Access-Control-Allow-Headers' => 'content-type',
-                        'Access-Control-Allow-Methods' => 'GET,HEAD,PUT,PATCH,POST,DELETE',
-                        'Connection' => 'keep-alive'
-                    ));
+                return new JsonResponse($jwt, 200, $headers);
+            } catch (UsernameNotFoundException $exception) {
+                return new JsonResponse(array('Bad credentials'), 401, $headers);
             } catch (\Exception $exception) {
-                return new JsonResponse(array('Bad Credentials'), 400);
+                return new JsonResponse(array($exception->getMessage()), 500, $headers);
             }
         } else {
             return new RedirectResponse($this->get('router')->generate('homestays'));
@@ -476,7 +475,8 @@ class DefaultController extends Controller
      * @param Request $request
      * @return JsonResponse|RedirectResponse|Response
      */
-    public function refreshAction(Request $request) {
+    public function refreshAction(Request $request)
+    {
 
         if ($request->getMethod() === 'OPTIONS') {
             return new Response(
@@ -484,7 +484,7 @@ class DefaultController extends Controller
                 204,
                 array(
                     'Access-Control-Allow-Origin' => '*',
-                    'Access-Control-Allow-Headers' => 'content-type',
+                    'Access-Control-Allow-Headers' => 'content-type,authorization',
                     'Access-Control-Allow-Methods' => 'POST',
                     'Connection' => 'keep-alive'
                 ));
@@ -552,7 +552,7 @@ class DefaultController extends Controller
                 204,
                 array(
                     'Access-Control-Allow-Origin' => '*',
-                    'Access-Control-Allow-Headers' => 'content-type',
+                    'Access-Control-Allow-Headers' => 'content-type,access-control-allow-headers',
                     'Access-Control-Allow-Methods' => 'POST',
                     'Connection' => 'keep-alive'
                 ));
@@ -659,13 +659,13 @@ class DefaultController extends Controller
                 204,
                 array(
                     'Access-Control-Allow-Origin' => '*',
-                    'Access-Control-Allow-Headers' => 'content-type',
+                    'Access-Control-Allow-Headers' => 'content-type,access-control-allow-origin,access-control-allow-headers,authorization',
                     'Access-Control-Allow-Methods' => 'POST',
                     'Connection' => 'keep-alive'
                 ));
         }
 
-        if ($request->getMethod() === 'POST') {        
+        if ($request->getMethod() === 'POST') {
             $password = $request->get('_password');
             $oldPassword = $request->get('_old_password');
             $all = apache_request_headers();
@@ -684,7 +684,7 @@ class DefaultController extends Controller
                 if (!empty($adm)) {
                     $doUpdate = false;
                     if (!empty($password) && !empty($oldPassword)) {
-                        if($this->checkPassword($adm, $oldPassword)) {
+                        if ($this->checkPassword($adm, $oldPassword)) {
                             $adm->setPassword($password);
                             $secured = $this->getSecurePassword($adm);
                             $adm->setPassword($secured);
@@ -692,7 +692,7 @@ class DefaultController extends Controller
                         } else {
                             return new JsonResponse('', 401);
                         }
-                        
+
                     }
 
                     if ($doUpdate) {
@@ -751,7 +751,8 @@ class DefaultController extends Controller
         return $password;
     }
 
-    protected function checkPassword($entity, $password) {
+    protected function checkPassword($entity, $password)
+    {
         $encoder = new MessageDigestPasswordEncoder('sha512', true, 10);
         $encodedPassword = $encoder->encodePassword($password, $entity->getSalt());
         return $encodedPassword === $entity->getPassword();
