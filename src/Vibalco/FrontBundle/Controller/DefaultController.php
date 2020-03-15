@@ -406,6 +406,8 @@ class DefaultController extends Controller
             'Connection' => 'keep-alive'
         );
 
+        $key = $this->get('service_container')->getParameter('secret');
+
         if ($request->getMethod() === 'OPTIONS') {
             return new Response(
                 null,
@@ -444,7 +446,6 @@ class DefaultController extends Controller
                 $em->persist($user);
                 $em->persist($refreshToken);
                 $em->flush();
-                $key = "secretKey";
                 $roles = $user->getRoles();
                 $token = array(
                     'username' => $user->getUsername(),
@@ -490,6 +491,7 @@ class DefaultController extends Controller
                 ));
         } elseif ($request->getMethod() === 'POST') {
             try {
+                $key = $this->get('service_container')->getParameter('secret');
                 $_token = $request->get('_token');
                 $em = $this->getDoctrine()->getManager();
                 $user = $em->getRepository('AdminBundle:User')->getUserByToken($_token);
@@ -674,7 +676,7 @@ class DefaultController extends Controller
 
                 $tokenBearer = explode(' ', $header);
                 $token = end($tokenBearer);
-                $key = "secretKey";
+                $key = $this->get('service_container')->getParameter('secret');
                 $credentials = JWT::decode($token, $key, array('HS256'));
                 if (intval($credentials->sub) !== intval($id)) {
                     return new JsonResponse('Wrong Credentials', 401);
