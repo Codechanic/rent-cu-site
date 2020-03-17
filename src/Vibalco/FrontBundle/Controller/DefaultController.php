@@ -28,6 +28,12 @@ use Vibalco\MainBundle\Form\ContactUsType;
  */
 class DefaultController extends Controller
 {
+    protected $headers = array(
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Headers' => 'content-type,access-control-allow-origin,access-control-allow-headers,authorization',
+        'Access-Control-Allow-Methods' => 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        'Connection' => 'keep-alive'
+    );
 
     /**
      *
@@ -399,12 +405,6 @@ class DefaultController extends Controller
      */
     public function tokenAction(Request $request)
     {
-        $headers = array(
-            'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Headers' => 'content-type',
-            'Access-Control-Allow-Methods' => 'GET,HEAD,PUT,PATCH,POST,DELETE',
-            'Connection' => 'keep-alive'
-        );
 
         $key = $this->get('service_container')->getParameter('secret');
 
@@ -412,7 +412,7 @@ class DefaultController extends Controller
             return new Response(
                 null,
                 204,
-                $headers);
+                $this->headers);
         } elseif ($request->getMethod() === 'POST') {
             try {
                 $username = $request->get('_username');
@@ -429,7 +429,7 @@ class DefaultController extends Controller
                     $isValid = false;
                 }
                 if (!$isValid) {
-                    return new JsonResponse(array('Bad Credentials'), 401, $headers);
+                    return new JsonResponse(array('Bad Credentials'), 401, $this->headers);
                 }
                 $issuedAt = time();
                 $nbf = $issuedAt;
@@ -460,11 +460,11 @@ class DefaultController extends Controller
                 $jwt = JWT::encode($token, $key);
 
                 // Angular applications need these headers set in the response
-                return new JsonResponse($jwt, 200, $headers);
+                return new JsonResponse($jwt, 200, $this->headers);
             } catch (UsernameNotFoundException $exception) {
-                return new JsonResponse(array('Bad credentials'), 401, $headers);
+                return new JsonResponse(array('Bad credentials'), 401, $this->headers);
             } catch (\Exception $exception) {
-                return new JsonResponse(array($exception->getMessage()), 500, $headers);
+                return new JsonResponse(array($exception->getMessage()), 500, $this->headers);
             }
         } else {
             return new RedirectResponse($this->get('router')->generate('homestays'));
@@ -483,12 +483,7 @@ class DefaultController extends Controller
             return new Response(
                 null,
                 204,
-                array(
-                    'Access-Control-Allow-Origin' => '*',
-                    'Access-Control-Allow-Headers' => 'content-type,authorization',
-                    'Access-Control-Allow-Methods' => 'POST',
-                    'Connection' => 'keep-alive'
-                ));
+                $this->headers);
         } elseif ($request->getMethod() === 'POST') {
             try {
                 $key = $this->get('service_container')->getParameter('secret');
@@ -510,7 +505,6 @@ class DefaultController extends Controller
                 $em->persist($user);
                 $em->persist($token);
                 $em->flush();
-                $key = "secretKey";
                 $roles = $user->getRoles();
                 $token = array(
                     'username' => $user->getUsername(),
@@ -525,15 +519,10 @@ class DefaultController extends Controller
                 $jwt = JWT::encode($token, $key);
 
                 return new JsonResponse($jwt, 200,
-                    array(
-                        'Access-Control-Allow-Origin' => '*',
-                        'Access-Control-Allow-Headers' => 'content-type',
-                        'Access-Control-Allow-Methods' => 'GET,HEAD,PUT,PATCH,POST,DELETE',
-                        'Connection' => 'keep-alive'
-                    ));
+                    $this->headers);
 
             } catch (\Exception $exception) {
-                return new JsonResponse(array('Bad Credentials'), 400);
+                return new JsonResponse(array('Bad Credentials'), 400, $this->headers);
             }
         } else {
             return new RedirectResponse($this->get('router')->generate('homestays'));
@@ -659,12 +648,7 @@ class DefaultController extends Controller
             return new Response(
                 null,
                 204,
-                array(
-                    'Access-Control-Allow-Origin' => '*',
-                    'Access-Control-Allow-Headers' => 'content-type,access-control-allow-origin,access-control-allow-headers,authorization',
-                    'Access-Control-Allow-Methods' => 'POST',
-                    'Connection' => 'keep-alive'
-                ));
+                $this->headers);
         }
 
         if ($request->getMethod() === 'POST') {
@@ -692,7 +676,7 @@ class DefaultController extends Controller
                             $adm->setPassword($secured);
                             $doUpdate = true;
                         } else {
-                            return new JsonResponse('', 401);
+                            return new JsonResponse('', 401, $this->headers);
                         }
 
                     }
@@ -739,7 +723,8 @@ class DefaultController extends Controller
             } catch (Exception $exception) {
                 return new JsonResponse(
                     $exception->getMessage(),
-                    500
+                    500,
+                    $this->headers
                 );
             }
         }

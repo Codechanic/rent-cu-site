@@ -195,45 +195,12 @@
                                 </div>
                                 <div class="row box-gray bg-top2bottom front-box-shadow description-box location-box comments">
                                     <div class="comments col-md-12 margin-top-10">
-                                        <form class="comment-form" id="comment-form" data-home="{{ entity.id }}"  data-locale="{{ app.request.locale }}">
-                                            <div class="form-group">
-                                                <label for="comment-name">{{ 'front.comment.name' | trans }}</label>
-                                                <input type="email" class="form-control" id="comment-name"/>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="comment-email">{{ 'front.comment.email' | trans }}</label>
-                                                <input type="email" class="form-control" id="comment-email"/>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="comment-text">{{ 'front.comment.label' | trans }}</label>
-                                                <textarea class="comment-text form-control" id="comment-text"></textarea>
-                                            </div>
-                                            <div class="form-actions">
-                                                <button class="btn blueimg" id="send-button" type="button">{{ 'front.comment.send' | trans }}</button>
-                                            </div>
-                                        </form>
+                                        
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <div class="row box bg-top2bottom front-box-shadow right-box">
-                                    <div class="badge-lateral">
-                                        <b class="floatingtag">{{ 'front.contactform.header' | trans }}</b>
-                                        <img class="img-responsive" src="{{ asset('bundles/front/images/bbadge.png') }}" alt="{{ 'front.applicant.header' | trans }}"/>
-                                    </div>
-                                    <div class="container-fluid" id="contactform-container">
-                                        {% render controller('FrontBundle:Inner:homestay_contactform', {'slug' : entity.slug }) %}
-                                    </div>
-                                </div>
-                                <div class="row box bg-top2bottom front-box-shadow right-box">
-                                    <div class="badge-lateral">
-                                        <b class="floatingtag">{{ 'front.comment.list' | trans }}</b>
-                                        <img class="img-responsive" src="{{ asset('bundles/front/images/bbadge.png') }}" alt="{{ 'front.applicant.header' | trans }}"/>
-                                    </div>
-                                    <div class="container-fluid" id="comment-container">
-                                        {% render controller('FrontBundle:Inner:comment', {'slug' : entity.slug }) %}
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

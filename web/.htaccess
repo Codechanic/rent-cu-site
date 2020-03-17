@@ -50,3 +50,9 @@ DirectoryIndex app.php
         # RedirectTemp cannot be used instead
     </IfModule>
 </IfModule>
+
+<IfModule mod_headers.c>
+            Header set Access-Control-Allow-Origin "http://manager.rent.cu"
+            Header set Access-Control-Allow-Headers "content-type,access-control-allow-origin,access-control-allow-headers,authorization"
+            Header set Access-Control-Allow-Credentials "true"
+</IfModule>
