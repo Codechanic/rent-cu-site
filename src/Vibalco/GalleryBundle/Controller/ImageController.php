@@ -2,6 +2,7 @@
 
 namespace Vibalco\GalleryBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Vibalco\GalleryBundle\Entity\Image;
 use Vibalco\GalleryBundle\Form\ImageType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -64,8 +65,7 @@ class ImageController extends Controller {
             }
         }
 
-        echo json_encode($result);
-        die;
+        return new JsonResponse($result);
     }
 
     /**

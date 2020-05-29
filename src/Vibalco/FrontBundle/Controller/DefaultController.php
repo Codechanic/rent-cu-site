@@ -16,6 +16,8 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Vibalco\AdminBundle\Entity\User;
 use Vibalco\FrontBundle\Entity\Comment;
+use Vibalco\GalleryBundle\Entity\Image;
+use Vibalco\GalleryBundle\Form\ImageType;
 use Vibalco\MainBundle\Entity\Applicant;
 use Vibalco\MainBundle\Entity\ContactUs;
 use Vibalco\MainBundle\Entity\RefreshToken;
@@ -663,7 +665,7 @@ class DefaultController extends Controller
                 $key = $this->get('service_container')->getParameter('secret');
                 $credentials = JWT::decode($token, $key, array('HS256'));
                 if (intval($credentials->sub) !== intval($id)) {
-                    return new JsonResponse('Wrong Credentials', 401);
+                    return new JsonResponse('Wrong Credentials', 401, $this->headers);
                 }
                 $em = $this->getDoctrine()->getManager();
                 $adm = $em->getRepository('AdminBundle:User')->find($id);
@@ -729,6 +731,59 @@ class DefaultController extends Controller
             }
         }
 
+    }
+
+    /**
+     * @Route("/image/{id}/upload", name="admin_ajax_image_create", methods={"POST", "OPTIONS"})
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse|Response
+     */
+    public function uploadImageAction($id, Request $request) {
+        if ($request->getMethod() === 'OPTIONS') {
+            return new Response(
+                null,
+                204,
+                $this->headers);
+        }
+        if ($request->getMethod() === 'POST') {
+            try{
+                $all = apache_request_headers();
+                $header = $all['Authorization'];
+                $tokenBearer = explode(' ', $header);
+                $token = end($tokenBearer);
+                $key = $this->get('service_container')->getParameter('secret');
+                $credentials = JWT::decode($token, $key, array('HS256'));
+                if (intval($credentials->sub) <= 0) {
+                    return new JsonResponse('Wrong Credentials', 401, $this->headers);
+                }
+                $em = $this->getDoctrine()->getManager();
+                $entity = new Image();
+                $form = $this->createForm(new ImageType(), $entity);
+                $form->submit($request);
+
+                if (!$form->isValid()) {
+                    $result['success'] = false;
+                    $result['error'] = array('cause' => 'Invalid',
+                        'errors' => $this->get('admin.util')->getFormErrors($entity),
+                        'message' => 'Opps, existen campos con valores incorrectos.'
+                    );
+                    return new JsonResponse($result, 400, $this->headers);
+                } else {
+                    try {
+                        $entity->setOwner('homestay_' . $id);
+                        $em->persist($entity);
+                        $em->flush();
+                        return new JsonResponse(array('id' => $entity->getId(), 'absolute' => $entity->getPath()), 200, $this->headers);
+                    } catch (\Exception $ex) {
+                        return new JsonResponse(array('cause' => 'Exception', 'message' => $ex->getMessage()), 500, $this->headers);
+                    }
+                }
+            } catch (Exception $exception) {
+                return new JsonResponse(array($exception->getMessage()), 500, $this->headers);
+            }
+        }
+        return new JsonResponse(array(), 301, $this->headers);
     }
 
     protected function getSecurePassword($entity)
