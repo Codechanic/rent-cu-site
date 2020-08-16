@@ -81,6 +81,10 @@ class User implements AdvancedUserInterface, \Serializable {
      * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
     protected $enabled;
+    /**
+     * @var @ORM\Column(name="activation_token", type="string")
+     */
+    protected $activationToken;
 
     /**
      * @ORM\OneToMany(targetEntity="Vibalco\MainBundle\Entity\RefreshToken", mappedBy="user", cascade={"persist", "remove"})
@@ -404,6 +408,21 @@ class User implements AdvancedUserInterface, \Serializable {
     
     public function setRoles($roles) {
         $this->roles = $roles;
+    }
+
+    /**
+     * Set activation token
+     * @param $token
+     */
+    public function setActivationToken($token) {
+        $this->activationToken = $token;
+    }
+
+    /**Get Activation Token
+     * @return mixed
+     */
+    public function getActivationToken() {
+        return $this->activationToken;
     }
 
 }

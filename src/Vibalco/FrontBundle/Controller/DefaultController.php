@@ -604,8 +604,10 @@ class DefaultController extends Controller
                     $user->setRoles($role);
                     $secured = $this->getSecurePassword($user);
                     $user->setPassword($secured);
+                    $user->setEnabled(false);
                     $em->persist($user);
                     $em->flush();
+                    $this->sendRegisterMail($user);
                     return new JsonResponse(
                         $username,
                         201,
@@ -660,14 +662,13 @@ class DefaultController extends Controller
             $all = apache_request_headers();
             $header = $all['Authorization'];
             try {
-
                 $tokenBearer = explode(' ', $header);
                 $token = end($tokenBearer);
                 $key = $this->get('service_container')->getParameter('secret');
                 $credentials = JWT::decode($token, $key, array('HS256'));
                 if (intval($credentials->sub) !== intval($id)) {
                     return new JsonResponse('Wrong Credentials',
-                    401, $this->headers);
+                        401, $this->headers);
                 }
                 $em = $this->getDoctrine()->getManager();
                 $adm = $em->getRepository('AdminBundle:User')->find($id);
@@ -741,14 +742,15 @@ class DefaultController extends Controller
      * @param Request $request
      * @return JsonResponse|RedirectResponse|Response
      */
-    public function uploadImageAction($id, Request $request) {
+    public function uploadImageAction($id, Request $request)
+    {
         if ($request->getMethod() === 'OPTIONS') {
             return new Response(
                 null, 204, $this->headers
             );
         }
         if ($request->getMethod() === 'POST') {
-            try{
+            try {
                 $all = apache_request_headers();
                 $header = $all['Authorization'];
                 $tokenBearer = explode(' ', $header);
@@ -813,7 +815,7 @@ class DefaultController extends Controller
             );
         }
         if ($request->getMethod() === 'POST') {
-            try{
+            try {
                 $all = apache_request_headers();
                 $header = $all['Authorization'];
                 $tokenBearer = explode(' ', $header);
@@ -837,7 +839,7 @@ class DefaultController extends Controller
                 } else {
                     try {
                         $paths = array();
-                        $files = $form['images']->getData();                        
+                        $files = $form['images']->getData();
                         foreach ($files as $file) {
                             $image = new Image();
                             $image->setImage($file);
@@ -849,7 +851,7 @@ class DefaultController extends Controller
                         }
                         $em->flush();
 
-                        return new JsonResponse($paths , 200, $this->headers);
+                        return new JsonResponse($paths, 200, $this->headers);
                     } catch (\Exception $ex) {
                         return new JsonResponse(
                             array(
@@ -867,6 +869,34 @@ class DefaultController extends Controller
         }
 
         return new JsonResponse(array(), 301, $this->headers);
+    }
+
+    /**
+     * @Route("/activation", name="admin_activation_account", methods={"GET"})
+     * @param Request $request
+     * @return RedirectResponse|Response
+     * @throws Exception
+     */
+    public function activationAction(Request $request)
+    {
+        try {
+            $token = $request->query->get('token');
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository('AdminBundle:User')->findOneBy(array(
+                'activationToken' => $token
+            ));
+            if (!empty($user)) {
+                $user->setEnabled(true);
+                $user->setActivationToken(null);
+                $em->persist($user);
+                $em->flush();
+                return $this->render('FrontBundle:Default:activation_page.html.twig');
+            }
+
+            return $this->redirect('/');
+        } catch (Exception $exception) {
+            return $this->redirect('/');
+        }
     }
 
     protected function getSecurePassword($entity)
@@ -939,6 +969,43 @@ class DefaultController extends Controller
                 unset($to[$key]);
             }
         }
+
+        if (!empty($from) && count($to) > 0) {
+            $modif_msg = \Swift_Message::newInstance()
+                ->setSubject($subject)
+                ->setFrom($from)
+                ->setTo($to)
+                ->setContentType("text/html")
+                ->setBody($body);
+
+            $this->get('mailer')->send($modif_msg);
+        }
+    }
+
+    /**
+     * Send register email
+     * @param User $entity
+     */
+    protected function sendRegisterMail(User $entity)
+    {
+        $container = $this->get('service_container');
+        $subject = $this->get('translator')->trans("front.applicant.register.subject");
+        $url = $this->generateUrl('admin_activation_account');
+        $url = $container->getParameter('domain_site') . $url . '?token=' . $entity->getActivationToken();
+        $body = $this->renderView('FrontBundle:Email:register.html.twig', array('entity' => $entity, 'url' => $url));
+        $config = $this->get('config');
+        $settings = $config->getData();
+        $from = $settings->getAdminemail();
+        $to = array($settings->getEmail());
+        $register = $container->getParameter('register_contact');
+
+        foreach ($to as $key => $v) {
+            if (empty($v)) {
+                unset($to[$key]);
+            }
+        }
+
+        $to = array_merge($to, array($entity->getEmail(), $register));
 
         if (!empty($from) && count($to) > 0) {
             $modif_msg = \Swift_Message::newInstance()
