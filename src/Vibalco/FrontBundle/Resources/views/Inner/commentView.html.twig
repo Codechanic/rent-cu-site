@@ -1,0 +1,21 @@
+{% extends "FrontBundle::layout.html.twig" %}
+
+{% block title %}{{ 'front.applicant.comment.list.title' | trans }}{% endblock %}
+
+{% block pagecontent %}
+    <div id="aboutus">
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="col-md-12">
+            {% for comment in comments %}
+                <div class="row aboutus-content">
+                    <div class="col-md-12">
+                        <div class="space20"></div>
+                        <h3 class="form-section">{{ comment.name }}</h3>
+                        <p>{{ comment.text }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <!-- END PAGE CONTENT-->
+    </div>
+{% endblock pagecontent %}

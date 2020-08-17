@@ -8,4 +8,7 @@
         </li>
         <li class="list-separator"></li>
     {% endfor %}
+    {% if amount > 5 %}
+        <a href="{{ path('homestay_comment_view', {'slug' : homestay.slug }) }}">{{ 'front.applicant.comment.list.more' | trans }}</a>
+    {% endif %}
 </ul>

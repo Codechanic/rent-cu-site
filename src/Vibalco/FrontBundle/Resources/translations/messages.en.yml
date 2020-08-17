@@ -2,8 +2,13 @@ front:
     home.title: COVER
     homestays.title: HOMESTAYS
     antiquecars.title: ANTIQUE CARS
-    contactus.title: CONTACT US   
-    
+    contactus.title: CONTACT US
+    error:
+        not_found:
+            title: Page not found
+            message: We can not locate the resource you are looking for
+            home: Return to home
+
     social.header: FOLLOW US
     
     email.footer: This report has been send by
@@ -141,6 +146,9 @@ front:
             email: Email
             message: Message
             title: New Comment
+            list:
+                title: Comments
+                more: See more
     homestay:
         rooms: Rooms
         room: Room

@@ -1,62 +1,20 @@
-<!DOCTYPE html>
-<!-- 
-Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.0
-Version: 1.5.2
-Author: KeenThemes
-Website: http://www.keenthemes.com/
-Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
--->
-<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
-<!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
-    <!-- BEGIN HEAD -->
-    <head>
-        <meta charset="utf-8" />
-        <title>Metronic | Extra - 404 Page Option 2</title>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <meta content="" name="description" />
-        <meta content="" name="author" />
-        <meta name="MobileOptimized" content="320">
-        <!-- BEGIN GLOBAL MANDATORY STYLES -->          
-        <link href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">        
-        <link href="{{ asset('vendor/bootstrap/css/bootstrap.css') }}" rel="stylesheet">                
-        <link href="{{ asset('vendor/uniform/css/uniform.default.css') }}" rel="stylesheet" type="text/css">
-        <!-- END GLOBAL MANDATORY STYLES -->
-        <!-- BEGIN THEME STYLES --> 
-        <link href="{{ asset('vendor/themes/style-metronic.css') }}" rel="stylesheet" type="text/css">
-        <link href="{{ asset('vendor/themes/style.css') }}" rel="stylesheet" type="text/css">
-        <link href="{{ asset('vendor/themes/style-responsive.css') }}" rel="stylesheet" type="text/css">
-        <link href="{{ asset('vendor/themes/plugins.css') }}" rel="stylesheet" type="text/css">
+{% extends "FrontBundle::layout.html.twig" %}
 
-        <link href="{{ asset('vendor/themes/themes/'~theme~'.css') }}" rel="stylesheet" type="text/css">
-        <link href="{{ asset('vendor/pages/error.css') }}" rel="stylesheet" type="text/css">
+{% block title %}{{ 'front.global.account.title' | trans }}{% endblock %}
 
-
-        <!-- END THEME STYLES -->
-        <link rel="shortcut icon" href="favicon.ico" />
-    </head>
-    <!-- END HEAD -->
-    <!-- BEGIN BODY -->
-    <body class="page-500-full-page">
-        <div class="row">
-            <div class="col-md-12 page-404">
-                <div class="number">
-                    500
-                </div>
-                <div class="details">
-                    <h3>Oops!  You're lost.</h3>
-                    <p>
-                        We can not find the page you're looking for.<br />
-                        <a href="{{path("index")}}">Return home</a> or try the search bar below.
-                    </p>
-                
+{% block pagecontent %}
+    <div id="aboutus">
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="col-md-12">
+            <div class="row aboutus-content">
+                <div class="col-md-12">
+                    <div class="space20"></div>
+                    <h3 class="form-section">{{ 'front.error.not_found.title' | trans }}</h3>
+                    <p>{{ 'front.error.not_found.message' | trans }}</p>
+                    <a href="{{path("index")}}">{{ 'front.error.not_found.home' | trans }}</a>
                 </div>
             </div>
         </div>
-
-   
-        <!-- END JAVASCRIPTS -->
-    </body>
-    <!-- END BODY -->
-</html>
+        <!-- END PAGE CONTENT-->
+    </div>
+{% endblock pagecontent %}

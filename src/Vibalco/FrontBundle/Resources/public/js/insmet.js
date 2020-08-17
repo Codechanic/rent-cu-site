@@ -63,7 +63,7 @@ window.addEventListener('load', function () {
   AjaxClient.get(insmetUrl, undefined)
     .then(function (response) {
       var xml = response;
-      if (xml != null) {
+      if (xml !== null && xml !== '') {
         var list = xml.getElementsByTagName('item');
         var forecast = [];
         for (let node of list) {
@@ -82,6 +82,7 @@ window.addEventListener('load', function () {
               obj[tagName] = child.innerHTML;
             }
           }
+
           forecast.push(obj);
         }
 
@@ -100,11 +101,8 @@ window.addEventListener('load', function () {
           container.appendChild(divNode);
           forecast.push(item);
         }
-
         handler();
         var interval = setInterval(handler, 5000);
-
-
       }
 
     })

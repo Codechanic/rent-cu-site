@@ -367,8 +367,34 @@ class InnerController extends Controller {
         $comments = $em->getRepository('FrontBundle:Comment')
             ->findBy(
                 array( 'homestay' => $homestay, 'enabled' => true),
-                array(),
-                5
+                array()
+            );
+        $amount = count($comments);
+        $slice = $comments;
+        if ($amount > 5) {
+            $slice = array_slice($comments, 0, 5);
+        }
+
+        return array(
+            'comments' => $slice,
+            'homestay' => $homestay,
+            'amount' => $amount
+        );
+    }
+
+    /**
+     * @Route("/homestay/{slug}/comments/view", name="homestay_comment_view")
+     * @Template
+     */
+    public function commentViewAction($slug)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $homestay = $em->getRepository('MainBundle:Homestay')
+            ->findOneBy(array('slug' => $slug));
+        $comments = $em->getRepository('FrontBundle:Comment')
+            ->findBy(
+                array( 'homestay' => $homestay, 'enabled' => true),
+                array()
             );
         return array(
             'comments' => $comments

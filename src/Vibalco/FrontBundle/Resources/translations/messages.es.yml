@@ -2,7 +2,12 @@ front:
     home.title: PORTADA
     homestays.title: CASAS
     antiquecars.title: AUTOS ANTIGUOS
-    contactus.title: CONTÁCTENOS      
+    contactus.title: CONTÁCTENOS
+    error:
+        not_found:
+            title: Página no encontrada
+            message: No podemos encontrar la página solicitada
+            home: Inicio
     
     social.header: SÍGUENOS
     
@@ -141,6 +146,9 @@ front:
             email: Email
             message: Mensaje
             title: Nuevo Comentario
+            list:
+                title: Comentarios
+                more: Ver más
 
     homestay:
         rooms: Habitaciones
