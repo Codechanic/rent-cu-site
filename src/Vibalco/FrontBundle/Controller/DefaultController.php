@@ -21,6 +21,7 @@ use Vibalco\GalleryBundle\Form\ImageType;
 use Vibalco\GalleryBundle\Form\MultipleImageType;
 use Vibalco\MainBundle\Entity\Applicant;
 use Vibalco\MainBundle\Entity\ContactUs;
+use Vibalco\MainBundle\Entity\Homestay;
 use Vibalco\MainBundle\Entity\RefreshToken;
 use Vibalco\MainBundle\Entity\Subscriber;
 use Vibalco\MainBundle\Form\ApplicantType;
@@ -373,8 +374,7 @@ class DefaultController extends Controller
             $comment->setHomestay($homeStay);
             $em->persist($comment);
             $em->flush();
-            $body = $this->renderView('FrontBundle:Email:comment.html.twig', array('entity' => $comment));
-            $this->sendMail($body, 'Se ha realizado un comentario');
+            $this->sendCommentMail($homeStay, $comment);
             return new JsonResponse();
         } catch (\Exception $exception) {
             return new JsonResponse($exception->getMessage(), 500);
@@ -605,6 +605,13 @@ class DefaultController extends Controller
                     $secured = $this->getSecurePassword($user);
                     $user->setPassword($secured);
                     $user->setEnabled(false);
+                    $token = array(
+                        'username' => $username,
+                        'time' => time()
+                    );
+                    $key = $this->get('service_container')->getParameter('secret');
+                    $hash = JWT::encode($token, $key);
+                    $user->setActivationToken($hash);
                     $em->persist($user);
                     $em->flush();
                     $this->sendRegisterMail($user);
@@ -1017,5 +1024,36 @@ class DefaultController extends Controller
 
             $this->get('mailer')->send($modif_msg);
         }
+    }
+
+    protected function sendCommentMail(Homestay $house, Comment $comment)
+    {
+        $container = $this->get('service_container');
+        $body = $this->renderView('FrontBundle:Email:comment.html.twig', array('entity' => $comment, 'homestay' => $house));
+        $config = $this->get('config');
+        $settings = $config->getData();
+        $from = $settings->getAdminemail();
+        $to = array($settings->getEmail());
+        $register = $container->getParameter('register_contact');
+
+        foreach ($to as $key => $v) {
+            if (empty($v)) {
+                unset($to[$key]);
+            }
+        }
+
+        $to = array_merge($to, array($register));
+
+        if (!empty($from) && count($to) > 0) {
+            $modif_msg = \Swift_Message::newInstance()
+                ->setSubject('Se ha realizado un comentario')
+                ->setFrom($from)
+                ->setTo($to)
+                ->setContentType("text/html")
+                ->setBody($body);
+
+            $this->get('mailer')->send($modif_msg);
+        }
+
     }
 }
