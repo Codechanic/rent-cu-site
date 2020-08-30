@@ -164,9 +164,6 @@ services:
     tags:
         - { name: twig.extension }
 
-
-
-
-
-
-        
+ currencyexchange:
+     class: Vibalco\MainBundle\Service\ConvExchangeService
+     arguments: [%free_currency%, @doctrine.orm.entity_manager]

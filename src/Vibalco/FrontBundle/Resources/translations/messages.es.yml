@@ -141,6 +141,9 @@ front:
             message: Sus datos se han registrado correctamente, el equipo de Rent.cu revisara la información  introducida por usted y en un termino de 24 a 72 hrs le enviara  un correo  con  el  enlace desde donde usted podrá visualizar la publicación de su propiedad.
             apply: Active su cuenta
         weather: Clima
+        currency: Cambio de moneda
+        currency_update: Actualizado
+        currency_failed: Información no disponible
         comment:
             name: Nombre
             email: Email

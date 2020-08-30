@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
  * @author yosbel
  */
 class FilterManager {
+
+    const ROOMS_PARAM = 'rooms';
     
     private $session;
     private $em;
@@ -270,8 +272,10 @@ class FilterManager {
      * @return ResultSet (FilterEntity entity, int filter_count) 
      */
     public function getParamCounts($param, $count = 5) {
-        $rep =  $this->em->getRepository($this->repository);        
-        return $rep->countByFilterParam($this, $param, $count);
+        $rep =  $this->em->getRepository($this->repository);
+        $list = $rep->countByFilterParam($this, $param, $count);
+        $list = $this->postProcessList($list, $param);
+        return $list;
     }
     
     public function isMultiple($key) {
@@ -282,5 +286,15 @@ class FilterManager {
     public function isEntity($key) {
         $keys = $this->getAllowedKeys();
         return is_array($keys[$key]) && isset($keys[$key]['class']); 
+    }
+
+    private function postProcessList($list, $param) {
+        $result = $list;
+        if ($param === self::ROOMS_PARAM) {
+            uasort($result, function ($a, $b) {
+                return $a['entity']->getRooms() - $b['entity']->getRooms();
+            });
+        }
+        return $result;
     }
 }

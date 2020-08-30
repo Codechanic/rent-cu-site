@@ -1,0 +1,24 @@
+<div class="row bg-bottom2top front-box-shadow">
+    <div class="badge-lateral">
+        <b class="floatingtag">{{ 'front.applicant.currency' | trans }}</b>
+        <img class="img-responsive" src="{{ asset('bundles/front/images/bbadge.png') }}" alt="{{ 'front.applicant.currency' | trans }}"/>
+    </div>
+    <div id="currency-exchange">
+        <ul class="list-unstyled">
+            {% if success %}
+            <li>
+                <ul class="list-unstyled">
+                    {% for rate in rates %}
+                        <li>{{ base ~ ' - ' ~ rate.amount ~ ' ' ~ rate.currency }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li>
+                {{ 'front.applicant.currency_update' | trans ~ ': ' ~ updated | date('Y-m-d') }}
+            </li>
+            {% else %}
+                {{ header | trans }}
+            {% endif %}
+        </ul>
+    </div>
+</div>

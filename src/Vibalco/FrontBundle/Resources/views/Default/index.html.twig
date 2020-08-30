@@ -33,10 +33,10 @@
                 <b class="floatingtag">{{ 'front.applicant.weather' | trans }}</b>
                 <img class="img-responsive" src="{{ asset('bundles/front/images/bbadge.png') }}" alt="{{ 'front.applicant.header' | trans }}"/>
             </div>
-            <div id="forecast-container">
-                
-            </div>  
+            <div id="forecast-container" class="js-forecast_container"></div>
          </div>
+
+        {% render controller("FrontBundle:Inner:currencyExchange") %}
        
     </aside>
 {% endblock pagecontent %}

@@ -87,57 +87,15 @@ var AjaxClient = {
     }))
   }
 }
-window.addEventListener('load', function () {
-  // var url = "http://localhost/met/genesis.xml";
-  // var url = "http://www.insmet.cu/asp/genesis.asp?TB0=RSSFEED";
-  AjaxClient.get(insmetUrl, undefined)
-    .then(function (response) {
-      var xml = response;
-      if (xml !== null && xml !== '') {
-        var list = xml.getElementsByTagName('item');
-        var forecast = [];
-        for (let node of list) {
-          let obj = {};
-          let children = node.children;
-          for (let child of children) {
-            let tagName = child.tagName.toLowerCase();
-            var nodeDiv = document.createElement('div');
-            if (tagName === 'description') {
-              var str = child.childNodes[0].data;
-              str = str.replace('T máxima (°C)', 'máxima');
-              str = str.replace('T minima (°C)', 'mínima');
-              nodeDiv.innerHTML = str;
-              obj[tagName] = nodeDiv.innerHTML;
-            } else {
-              obj[tagName] = child.innerHTML;
-            }
-          }
 
-          forecast.push(obj);
-        }
-
-        forecast.pop();
-        var handler = function () {
-          var item = forecast.shift();
-          var container = document.getElementById('forecast-container');
-          container.innerHTML = "";
-          var textNode = document.createTextNode(item.title);
-          var spanNode = document.createElement('div');
-          spanNode.classList.add('span-title');
-          spanNode.appendChild(textNode);
-          var divNode = document.createElement('div');
-          divNode.innerHTML = item.description;
-          container.appendChild(spanNode);
-          container.appendChild(divNode);
-          forecast.push(item);
-        }
-        handler();
-        var interval = setInterval(handler, 5000);
-      }
-
-    })
-    .catch(function () {
-      var container = document.getElementById('forecast-container');
-      container.innerHTML = "Información no disponible";
-    })
-})
+onmessage = function (event) {
+  if (event.data) {
+    AjaxClient.get(event.data, undefined)
+      .then(function (response) {
+        postMessage(response);
+      })
+      .catch(function () {
+        postMessage(false);
+      })
+  }
+}
