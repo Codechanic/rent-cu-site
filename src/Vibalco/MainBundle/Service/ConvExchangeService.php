@@ -52,7 +52,7 @@ class ConvExchangeService implements IExchangeService
                 $json = curl_exec($ch);
                 $eer = curl_error($ch);
                 if ($eer) {
-                    var_dump($eer);
+                    throw new \Exception($eer);
                 }
                 curl_close($ch);
                 if (!empty($json)) {

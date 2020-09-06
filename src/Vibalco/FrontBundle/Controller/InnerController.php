@@ -402,14 +402,22 @@ class InnerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $homestay = $em->getRepository('MainBundle:Homestay')
-            ->findOneBy(array('slug' => $slug));
-        $comments = $em->getRepository('FrontBundle:Comment')
-            ->findBy(
-                array('homestay' => $homestay, 'enabled' => true),
-                array()
-            );
+            ->findOneBy(array('slug' => $slug, 'enabled' => true));
+
+        $commentQuery = $em->getRepository('FrontBundle:Comment')
+            ->getCommentByHomestayQuery($homestay);
+
+        $paginator = $this->get('ideup.simple_paginator');
+        $paginator->setItemsPerPage(7);
+        $paginator->setMaxPagerItems(5);
+
+        $entities = $paginator->paginate($commentQuery)
+            ->getResult();
+
         return array(
-            'comments' => $comments
+            'comments' => $entities,
+            'paginator' => $paginator,
+            'slug' => $homestay->getSlug()
         );
     }
 

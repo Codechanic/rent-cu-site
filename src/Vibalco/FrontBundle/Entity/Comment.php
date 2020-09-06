@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class Comment
  * @ORM\Table(name="comment")
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Vibalco\FrontBundle\Entity\CommentRepository")
  * @package Vibalco\FrontBundle\Entity
  */
 class Comment

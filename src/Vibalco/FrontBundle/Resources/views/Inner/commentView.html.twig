@@ -2,20 +2,38 @@
 
 {% block title %}{{ 'front.applicant.comment.list.title' | trans }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset('bundles/front/css/commentPage.css') }}"/>
+{% endblock %}
+
 {% block pagecontent %}
     <div id="aboutus">
         <!-- BEGIN PAGE CONTENT-->
         <div class="col-md-12">
             {% for comment in comments %}
-                <div class="row aboutus-content">
+                <div class="row aboutus-content comment-view">
                     <div class="col-md-12">
                         <div class="space20"></div>
-                        <h3 class="form-section">{{ comment.name }}</h3>
-                        <p>{{ comment.text }}</p>
+                        <h5 class="form-section">{{ comment.name }}</h5>
+                        <blockquote class="blockquote"><i>{{ comment.text }}</i></blockquote>
                     </div>
                 </div>
             {% endfor %}
         </div>
+        {% if paginator.itemsPerPage < paginator.totalItems %}
+            <div id="paginator" class="col-sm-12">
+                {% set template = 'FrontBundle:Inner:bootstrap-simple-paginator-list-view.html.twig' %}
+                {{ simple_paginator_render('homestay_comment_view', null, {
+                    'previousPageText': '«',
+                    'nextPageText': '»',
+                    'currentClass': 'active',
+                    'routeParams': {
+                        'slug': slug
+                    }
+                }, template) }}
+            </div>
+        {% endif %}
         <!-- END PAGE CONTENT-->
     </div>
 {% endblock pagecontent %}
