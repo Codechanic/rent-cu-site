@@ -1,9 +1,9 @@
 {
  
-    "name": "symfony/framework-standard-edition",
+    "name": "condechanic/rent_site",
     "license": "MIT",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "The RENT.CU project for management rent houses.",
     "autoload": {
         "psr-0": { "": "src/" }
     },
