@@ -1,9 +1,9 @@
 {% extends "FrontBundle::layout.html.twig" %}
 
 {% block pagecontent %}
-    <div class="col-md-9 col-md-push-3 left-row-padding body-content">
+    <div class="col-md-9 col-12 col-md-push-3 col-sm-push-3 left-row-padding body-content">
         <div class="row bodyrow">
-            <div class="col-sm-7 colmainslider">
+            <div class="col-sm-7 colmainslider px-sm-5">
                 <div>
                     {% render controller("FrontBundle:Default:cover_mainslider") %}
                 </div>
@@ -17,7 +17,7 @@
 
         {% render controller('FrontBundle:Default:cover_visitslider') %}
     </div>
-    <aside class="col-md-3 col-md-pull-9 right-row-padding">
+    <aside class="col-md-3 col-12 col-md-pull-9 col-md-pull-9 right-row-padding flex-sm-aside">
         <div class="row front-box-shadow lateral-list">
             <div class="badge-lateral">
                 <b class="floatingtag">{{ 'front.coverfilter.header' | trans }}</b>
@@ -62,6 +62,6 @@
                     }
                 });
             }
-        });        
+        });
     </script>
 {% endblock javascripts %}

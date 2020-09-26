@@ -1535,15 +1535,6 @@ a:hover {
     display: none;
 }
 
-@media (max-width: 768px) {
-    #navbar-search {
-        display: block;
-        margin: 17px;
-        position: relative;
-        float: left;
-        cursor: pointer;
-    }
-}
 .comment-content {
     display: flex;
     flex-direction: column;
@@ -1554,4 +1545,37 @@ a:hover {
     display: flex;
     justify-content: center;
     flex-direction: row;
+}
+
+@media (max-width: 768px) {
+    #navbar-search {
+        display: block;
+        margin: 17px;
+        position: relative;
+        float: left;
+        cursor: pointer;
+    }
+}
+
+@media(max-width: 767px) {
+    .right-row-padding {
+        padding-right: 0;
+    }
+    .flex-sm-aside {
+        display: flex;
+        flex-direction: column;
+        width: 98%;
+    }
+
+    .px-sm-5 {
+        padding: 0 5rem;
+    }
+
+    .body-content .cslider.m-l-sm-5 {
+        margin-left: 5rem;
+    }
+
+    .flex-layout {
+        flex-direction: column;
+    }
 }
